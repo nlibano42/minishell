@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exebash.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 13:33:24 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/11/23 23:50:05 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/11/30 21:38:48 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,14 @@ void    exec_stack(struct t_stack *stack)
 
     tmp = stack;
 	i = 0;
+	/*REORDER_STACK AQUÍ*/
+	//if(exit_cmd_in_stack(stack) > 0)
+	//	stack = reorder_stack(tmp, stack);
     while(tmp != NULL)
     {
-        if (str_cmp(tmp->pipe.input, "^C") == 0) //no funciona para cerrar función y seguir en minishell (usar señales?)
-			break ;
+        if (str_cmp(tmp->pipe.input, "^C") == 0) // ctrl + c. no funciona para cerrar función y seguir en minishell (usar señales?)
+			//break ; //ejecutar
+			exit(1); 
         child_launch(tmp->pipe.input, tmp->pipe.envi, tmp);
         tmp = tmp->next;
         i++;
