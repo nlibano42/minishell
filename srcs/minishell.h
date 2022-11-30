@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:19:59 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/07/05 12:19:59 by xbasabe-         ###   ########.fr       */
+/*   Updated: 2022/11/30 21:43:08 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,13 +135,12 @@ void            free_node_content(struct t_stack *node);
 
 int			str_cmp(char *str1, char *str2);
 
-
 //reorder
-void    mov_last(struct t_stack *node, struct t_stack *stack);
-int     exit_cmd_in_stack(struct t_stack *stack);
-struct t_stack *reorder_stack(struct t_stack *stack);
-struct t_stack *jump_to(struct t_stack *stack, int to);
-//void    jump_to(struct t_stack *stack, int to);
-struct t_stack *stack_first(struct t_stack *stack);
+ void    mov_last(struct t_stack *node, struct t_stack *stack);
+ int     exit_cmd_in_stack(struct t_stack *stack);
+ struct t_stack *reorder_stack(struct t_stack *stack);
+ struct t_stack *jump_to(struct t_stack *stack, int to);
+ //void    jump_to(struct t_stack *stack, int to);
+ struct t_stack *stack_first(struct t_stack *stack);
 
 #endif

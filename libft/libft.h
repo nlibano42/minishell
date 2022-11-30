@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:06:39 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/02/08 13:11:41 by xbasabe-         ###   ########.fr       */
+/*   Updated: 2022/11/28 01:54:25 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 # include <stdarg.h>
 
 int				ft_integer(const char *str);
-long			ft_atoi(const char *str);
-int				ft_strlen(const char *str);
+int				ft_atoi(const char *str);
+size_t			ft_strlen(const char *str);
 int				aux_len(char **str);
 void			ft_strintcpy(int *dst, int *stack_a, int size);
 char			**ft_malloc_error(char **tab);
@@ -43,6 +43,8 @@ void            ft_free_str(char **str);
 int	ft_char_in_set(char c, char const *set);
 char	        *ft_strtrim(char const *s1, char const *set);
 size_t	ft_strncpy(char *dst, const char *src, int init);
+size_t	ft_strcpy(char *dst, char *src);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 size_t	ft_strcpy(char *dst, char *src);
 
 #endif

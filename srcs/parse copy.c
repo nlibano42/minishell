@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   parse copy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/22 11:54:39 by xbasabe-         #+#    #+#             */
-/*   Updated: 2022/11/24 01:46:06 by nlibano-         ###   ########.fr       */
+/*   Created: 2022/06/22 11:54:39 by xbasabe-          #+#    #+#             */
+/*   Updated: 2022/11/23 23:54:37 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ char	*literal(char *input)
 
 /*ESTE ES EL PARSER*/
 
-char	*parse(char *txt)
+char	*new_parse(char *txt)
 {
 	int	count[2];
 	int	flags[2];
@@ -103,13 +103,12 @@ char	*parse(char *txt)
 	flags[0] = 1;
 	flags[1] = 1;
 	quote_d_count(txt, count);
-	//if ( (txt = quote_in_or_out_loop(txt, count, flags)) == NULL)
-	if ( (txt = new_quote_in_or_out_loop(txt, count, flags)) == NULL)
+	if ( (txt = quote_in_or_out_loop(txt, count, flags)) == NULL)
 		return("echo -Minishell: echo: opened quotes");
 	return(txt);
 }
 
-char	*quote_in_or_out_loop(char *txt, int *count, int *flags)
+char	*new_quote_in_or_out_loop(char *txt, int *count, int *flags)
 {
 	int	i;
 	int *j;
@@ -123,12 +122,18 @@ char	*quote_in_or_out_loop(char *txt, int *count, int *flags)
 			if((count[1] % 2 == 0 && count[1] > 0) && flags[0] != -1)//dentro, entramos simples (ignorar dentro las dobles)
 			//if(flags[1] == 1 && flags[0] == 1) //además fuera de simples
 			{
-				//if(flags[0] != -1) //además fuera de dobles
-				//if(count[1] % 2 != 0 || count[0] > 0)
-				//{
-					if (inside_simple(txt, flags, count, j) == 1)
+				flip_flag(txt, flags, count, 1);
+				write(1, "simple in\n", 10);
+				while(txt[i] != 39) // 39 es el ascii de '
+				{
+					if (txt[i] == '\0')
 						return(NULL);
-				//}
+		
+					write(1,".", 1);
+					i++;
+				}
+				flip_flag(txt, flags, count, 1);
+				write(1, "\nsimple out\n", 11);
 			}
 		}
 		else if(txt[i] == 34) //34 es el ascci de ""
@@ -136,21 +141,43 @@ char	*quote_in_or_out_loop(char *txt, int *count, int *flags)
 			if((count[0] % 2 == 0 && count[0] > 0) && flags[1] != -1) //dentro, entramos dobles (ignorar dentro las simples)
 			//if (flags[0] == 1 && flags[1] == 1)
 			{	
-				//if (flags[1] != -1) //ademas fuera de simples
-				//{
-					if (inside_doble(txt, flags, count, j) == 1)
+				flip_flag(txt, flags, count, 0);
+				write(1, "doble in\n", 9);
+				while(txt[i] != 34)
+				{
+		
+					if (txt[i] == 36) //36 es el ascci de $
+					{
+						txt = expand_vble(txt, j);
+						i = i + (ft_strlen(txt) - size);
+						size = ft_strlen(txt);
+			
+					}
+					if (txt[i] == '\0')
+					{
 						return(NULL);
-				//}
+					}
+					write(1,".", 1);
+					i++;
+				}
+				flip_flag(txt, flags, count, 0);
 			}
 		}
 		else if (txt[i] == 36) //36 es el ascci de $
 			txt = expand_vble(txt, j);
 		i++;
 	}
-//	printf("   -> parse loop ::%s::\n", txt); //al final deberiamos tener ya el txt parseado, ojo con el trim, entre comillas se respetan los espacios
+	printf("   -> parse loop ::%s::\n", txt); //al final deberiamos tener ya el txt parseado, ojo con el trim, entre comillas se respetan los espacios
 	if (count[0] > 0 || count[1] > 0)
 		return(NULL);
 	return(txt);
+}
+
+void	flip_flag(char *txt, int *flags, int *count, int *j, int f)
+{
+	flags[f] = flags[f] * -1;
+	count[f]--;
+	remove_quote(txt, i);
 }
 
 int	inside_simple(char *txt, int *flags, int *count, int *j)
@@ -302,82 +329,4 @@ char    *search_vble_env(char *txt, int init)
 	vble[j] = '\0';
 	//tratar error, si no se encuentr la variable
 	return (getenv((const char*)vble));
-}
-
-char	*new_quote_in_or_out_loop(char *txt, int *count, int *flags)
-{
-	int	i;
-	int *j;
-
-	i = 0;
-	j = &i;
-	while(txt[i] != '\0')
-	{
-		if(txt[i] == 39) // simples ' 39 ascci de '
-		{	
-			if((count[1] % 2 == 0 && count[1] > 0) && flags[0] != -1)//dentro, entramos simples (ignorar dentro las dobles)
-			//if(flags[1] == 1 && flags[0] == 1) //además fuera de simples
-			{
-				flip_flag(txt, flags, count, i, 1);
-				write(1, "simple in\n", 10);
-				while(txt[i] != 39) // 39 es el ascii de '
-				{
-					if (txt[i] == '\0')
-						return(NULL);
-		
-					write(1,".", 1);
-					i++;
-				}
-				flip_flag(txt, flags, count, i, 1);
-				write(1, "\nsimple out\n", 11);
-			}
-		}
-		else if(txt[i] == 34) //34 es el ascci de ""
-		{
-			if((count[0] % 2 == 0 && count[0] > 0) && flags[1] != -1) //dentro, entramos dobles (ignorar dentro las simples)
-			//if (flags[0] == 1 && flags[1] == 1)
-			{	
-				flip_flag(txt, flags, count, i, 0);
-				write(1, "doble in\n", 9);
-				while(txt[i] != 34)
-				{
-		
-					if (txt[i] == 36) //36 es el ascci de $
-					{
-						int size;
-						size = ft_strlen(txt);
-						txt = expand_vble(txt, j);
-						i = i + (ft_strlen(txt) - size);
-						size = ft_strlen(txt);
-			
-					}
-					if (txt[i] == '\0')
-					{
-						return(NULL);
-					}
-					write(1,".", 1);
-					i++;
-				}
-				flip_flag(txt, flags, count, i, 0);
-				write(1, "doble out\n", 9);
-			}
-		}
-		else if (txt[i] == 36) //36 es el ascci de $
-			txt = expand_vble(txt, j);
-		i++;
-	}
-	printf("   -> parse loop ::%s::\n", txt); //al final deberiamos tener ya el txt parseado, ojo con el trim, entre comillas se respetan los espacios
-	if (count[0] > 0 || count[1] > 0)
-		return(NULL);
-	return(txt);
-}
-
-void	flip_flag(char *txt, int *flags, int *count, int i, int f)
-{
-	int init;
-	
-	init = i;
-	flags[f] = flags[f] * -1;
-	count[f]--;
-	remove_quote(txt, init);
 }

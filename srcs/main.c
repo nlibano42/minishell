@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/08 11:33:47 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/08 11:33:47 by marvin           ###   ########.fr       */
+/*   Created: 2022/06/08 11:33:47 by xbasabe-          #+#    #+#             */
+/*   Updated: 2022/11/24 00:40:43 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,32 +27,33 @@ void	clear(char **intro)
 
 int	main(int argc, char **argv, char **env)
 {
-	char	*input;
-	char	**tokens;
-	char	**envi;
-	struct t_stack *stack;
+	char			*input;
+	char			**tokens;
+//	char			**envi;
+	struct t_stack	*stack;
 
 	(void)argc;
 	(void)argv;
-	envi = env; //crear una copia?
+//	envi = env; //crear una copia?
 	while (1)
 	{
 		input = readline("MiniShell: ");
 		add_history(input);
 		if (ft_strlen(input) > 0)
 		{
-			tokens = ft_split(input, ' ');
+			tokens = ft_split(input, ' '); //aqui iria el lexer. crear los tokens o en pipe stack
 			if (str_cmp(tokens[0], "exit") == 0 || str_cmp(tokens[0], "EXIT") == 0)
 			{
+				//deleteAllNodes(stack);
 				clear(tokens);
 				free(input);
 				break ;
 			}
-			stack = pipe_stack(input, envi); //crear la pila de ejecución
+//			stack = pipe_stack(input, envi); //crear la pila de ejecución
+			stack = pipe_stack(input, env); //crear la pila de ejecución
+			//redirect_pipes(stack); //cambiar el orden de la pila, redireccionar los pipes
 			exec_stack(stack); //ejecutar la pila
 		}
-		while(stack != NULL)
-			stack = stack->prev;
 		deleteAllNodes(stack);
 		free(input);
 		clear(tokens);
