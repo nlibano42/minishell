@@ -6,7 +6,7 @@
 #    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/07 14:52:36 by marvin            #+#    #+#              #
-#    Updated: 2022/11/25 00:16:47 by nlibano-         ###   ########.fr        #
+#    Updated: 2022/11/30 21:26:13 by nlibano-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ OBJSDIR		= objs
 EXTLIB		= libft
 
 
-SRCS		= main.c builtin.c parse.c exebash.c stack.c in_out.c cd.c execv.c lexer.c\
+SRCS		= main.c builtin.c parse.c exebash.c stack.c in_out.c cd.c execv.c lexer.c reorder.c\
 
 # Compiler options
 CC			= gcc
