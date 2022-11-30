@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:19:59 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/07/05 12:19:59 by xbasabe-         ###   ########.fr       */
+/*   Updated: 2022/11/30 21:43:08 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,11 @@ char    *search_vble_env(char *txt, int init);
 char	*parse(char *txt);
 int	    OLD_quote_in_or_out(char *txt, int ini);
 void    flag_check(int flag, int *flags);
-char *expand_vble(char *txt, int *init);
+char *expand_vble(char *txt, int init);
 char    *quote_in_or_out_loop(char *txt, int *count, int *flags);
 char    *expand_loop(char *txt);
-int     inside_simple(char *txt, int *flags, int *count, int *i);
-int     inside_doble(char *txt, int *flags, int *count, int *i);
+int     inside_simple(char *txt, int *flags, int *count, int i);
+int     inside_doble(char *txt, int *flags, int *count, int i);
 
 char	*new_quote_in_or_out_loop(char *txt, int *count, int *flags);
 void	flip_flag(char *txt, int *flags, int *count, int i, int f);
@@ -134,5 +134,13 @@ void            deleteAllNodes(struct t_stack *start);
 void            free_node_content(struct t_stack *node);
 
 int			str_cmp(char *str1, char *str2);
+
+//reorder
+ void    mov_last(struct t_stack *node, struct t_stack *stack);
+ int     exit_cmd_in_stack(struct t_stack *stack);
+ struct t_stack *reorder_stack(struct t_stack *stack);
+ struct t_stack *jump_to(struct t_stack *stack, int to);
+ //void    jump_to(struct t_stack *stack, int to);
+ struct t_stack *stack_first(struct t_stack *stack);
 
 #endif
