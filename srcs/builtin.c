@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 10:40:03 by marvin            #+#    #+#             */
-/*   Updated: 2022/06/15 10:40:03 by marvin           ###   ########.fr       */
+/*   Updated: 2022/11/30 19:24:12 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,47 +14,21 @@
 
 int	echo(struct t_stack *node)
 {
-	//int	i;
-	int	n;
 	char *output;
 
-	//i = 0;
-	n = 0;
-
-	//Si imprimimos el input falta quitar el echo
 	if (node->pipe.arg[0] == NULL)
 	{
 		fd_putstr_out("\n", node);
 		return (1);
 	}
+	output = parse(node->pipe.input);
 	if (str_cmp(node->pipe.arg[0], "-n") == 0)
+		fd_putstr_out(&output[8], node);
+	else
 	{
-		n = 1;
-		//i = 1;
-	}
-	/*
-	while(node->pipe.arg[i]) //este bucle imprime palabras, trimea siempre
-	{
-		parse(node->pipe.arg[i]);
-		fd_putstr_out(node->pipe.arg[i], node);
-		i++;
-		if (node->pipe.arg[i])
-			fd_putstr_out(" ", node);
-		
-	}
-	*/
-
-	//fd_putstr_out(node->pipe.input, node);
-	output = node->pipe.input; //antes de imprimir saltar la primera palabra y no imprimir echo
-	output++;
-	output++;
-	output++;
-	output++;
-	output++;
-	fd_putstr_out(output, node);
-	
-	if (n == 0)
+		fd_putstr_out(&output[5], node);
 		fd_putstr_out("\n", node);
+	}
 	return (0);
 }
 
@@ -81,30 +55,94 @@ void	pwd(char **envi, struct t_stack *node)
 		var = ft_split(envi[i], '=');
 		if (str_cmp(var[0], "PWD") == 0)
 		{
-			fd_putstr_out(envi[i], node); //falta quitar el PWD= de delante
+			fd_putstr_out(var[1], node);
 			fd_putstr_out("\n", node);
+			free (var);
 			break;
 		}
 		i++;
-		clear(var);
+		free (var);
 	}
-	clear(var);
+}
+
+char	**sort_env(char **env)
+{
+	char	**sort;
+	char	*tmp;
+	int		i;
+	int		j;
+
+	sort = env;
+	i = -1;
+	while (sort[++i])
+	{
+		j = -1;
+		while (sort[++j])
+		if (ft_strncmp(sort[i], sort[j], ft_strlen(sort[i])) < 0)
+		{
+			tmp = sort[i];
+			sort[i] = sort[j];
+			sort[j] = tmp;
+		}
+	}
+	return (sort);
+}
+
+void	export_no_args(char **env)
+{
+	int		i;
+	char	**sort;
+	char	**split;
+
+	sort = sort_env(env);
+	i = -1;
+	while (sort[++i])
+		if (ft_strncmp(sort[i], "_=", 2) != 0)
+		{
+			split = ft_split(sort[i], '=');
+			printf("declare -x %s=\"%s\"\n", split[0], split[1]);
+			free (split);
+		}
 }
 
 void	export(char *input, char **envi)
 {
 	int		i;
+	int		j;
+	int		exist;
 	char	**var;
 	char	**arguments;
 
-	i = 0;
 	arguments = ft_split(input, ' ');
 	if (!arguments[1])
 	{
-		clear(arguments);
+		export_no_args(envi);
+		free(arguments);
 		return ;
 	}
-	if ((ft_str2len(arguments) == 3)) //1export 2vble 3valor
+	i = 0;
+	while (arguments[++i])
+	{
+		var = ft_split(arguments[i], '=');
+		j = -1;
+		exist = 0;
+		while (envi[++j])
+		{
+			if (str_cmp(envi[j], var[0]) == 0)
+			{
+				envi[i] = arguments[i];
+				exist = 1;
+				break ;
+			}
+		}
+		if (exist == 0)
+		{
+		//	envi[j] = arguments[j];
+		// si env es un struct, podriamos añadir al final.
+//seg.fault			envi[j] = stradd(envi[j], arguments[i]);
+		}
+	}
+/*	if ((ft_str2len(arguments) == 3)) //1export 2vble 3valor
 		while (envi[i])
 		{
 			var = ft_split(envi[i], '=');
@@ -112,19 +150,19 @@ void	export(char *input, char **envi)
 			{
 				envi[i] = stradd(var[0], "=");
 				envi[i] = stradd(envi[i], arguments[2]);
-				clear(var);
-				clear(arguments);
+				free(var);
+				free(arguments);
 				return ;
 			}
 			i++;
-			//clear(var);
+			free(var);
 		}
 	if ((ft_str2len(arguments) == 4))
 		envi = str2add(envi, input);
 	//opcion de añadir  variable
+*/
 	
-	clear(var);
-	clear(arguments);
+	free(arguments);
 }
 
 void	unset(char *input, char **envi)
@@ -147,7 +185,8 @@ void	unset(char *input, char **envi)
 				envi[i] = envi[i + 1];
 				i++;
 			}
-			envi[i] = '\0';
+//			envi[i] = '\0';
+			envi[i] = NULL;
 			clear(var);
 			return ;
 		}

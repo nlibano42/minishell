@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/17 17:03:32 by marvin            #+#    #+#             */
-/*   Updated: 2022/10/17 17:03:32 by marvin           ###   ########.fr       */
+/*   Created: 2022/10/17 17:03:32 by xbasabe-          #+#    #+#             */
+/*   Updated: 2022/11/24 01:02:03 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ void    create_cmds(struct t_stack *node)
         //ft_strcpy(node->pipe.arg[i - 1] , words[i]);
         i++;
     }
-    node->pipe.arg[i - 1] = '\0';
+//    node->pipe.arg[i - 1] = '\0';
+	node->pipe.arg[i - 1] = NULL;
 
     cmd_path(node);
     //printf("create cmds: cmd '%s', arg '%s', path '%s'\n", node->pipe.cmd, node->pipe.arg[0], node->pipe.ext_path);

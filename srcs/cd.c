@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nlibano- <nlibano-@student.42urduliz.com>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/23 23:45:22 by nlibano-          #+#    #+#             */
+/*   Updated: 2022/11/24 01:01:14 by nlibano-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char    *active_dir(char **envi)
@@ -169,6 +181,7 @@ void	cd(char *input, char **envi, struct t_stack *node)
 	char	**var;
 	int		i;
 
+old_dir = NULL;
 	i = 0;
 	while (envi[i]) //get active dir
 	{
