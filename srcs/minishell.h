@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:19:59 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/11/30 21:43:08 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/01 11:23:59 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,28 @@
 # include <sys/wait.h>
 # include <errno.h>
 
+typedef struct s_env
+{
+	char	*name;
+	char	*val;
+	char	*next;
+}	t_env;
+
+typedef struct s_shell
+{
+	struct t_env	*env;
+	int				quit;
+	int				fork;
+}	t_shell;
+
 typedef struct s_pipe
 {
-    char    *input;
-    int     p[2];
-    char    **envi;
-    char    *ext_path;
-    char    *cmd;
-    char    **arg;
+    char	*input;
+    int		p[2];
+    char	**envi; //esto hay que quitar. trasladar todo a struct
+    char			*ext_path;
+    char			*cmd;
+    char			**arg;
     //pid_t   node_pid;
 } t_pipe;
 

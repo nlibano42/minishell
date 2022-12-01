@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 11:33:47 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/11/24 00:40:43 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/01 11:24:03 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,53 @@ void	clear(char **intro)
 	free (intro);
 }
 
+void	wait_signal(t_shell **shell)
+{
+	while (1)
+	{
+		signal(SIGQUIT, sighandler);
+		signal(SIGINT, sighandler);
+		if ((*shell)->quit == 0)
+			printf("Minishell> ");
+		(*shell)->quit = 0;
+		(*shell)->fork = 0;
+		if (
+	}
+}
+
+void	init_env(t_shell **shell, char **env)
+{
+	int		i;
+	char	*split;
+	t_shell	*new;
+
+	i = -1;
+	while (env[++i])
+	{
+		split = ft_split(env[i], '=');
+		new = ft_lstnew(env[0], env[1]);
+		ft_lstadd_back((*shell)->env, new);
+	}
+}
+
 int	main(int argc, char **argv, char **env)
 {
-	char			*input;
-	char			**tokens;
+//	char			*input;
+//	char			**tokens;
 //	char			**envi;
-	struct t_stack	*stack;
+//	struct t_stack	*stack;
+	t_shell			*shell;
 
 	(void)argc;
 	(void)argv;
-//	envi = env; //crear una copia?
+	init_env(&shell, env);
+	shell->quit = 0;
+	wait_signal(&shell);
+
+
+
+
+/*
 	while (1)
 	{
 		input = readline("MiniShell: ");
@@ -58,5 +95,6 @@ int	main(int argc, char **argv, char **env)
 		free(input);
 		clear(tokens);
 	}
+*/
 	return (0);
 }
