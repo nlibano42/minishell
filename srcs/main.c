@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 11:33:47 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/02 01:57:09 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/02 02:09:05 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,15 +78,15 @@ int	main(int argc, char **argv, char **env)
 	signal(SIGINT, sighandler);
 	while (1)
 	{
-		input = readline("MiniShell: ");
+		input = readline("MiniShell $> ");
 		add_history(input);
 		if (ft_strlen(input) > 0)
 		{
 			tokens = ft_split(input, ' '); //aqui iria el lexer. crear los tokens o en pipe stack
 			if (str_cmp(tokens[0], "exit") == 0 || str_cmp(tokens[0], "EXIT") == 0)
 			{
-				//deleteAllNodes(stack);
-				clear(tokens);
+				deleteAllNodes(stack);
+				free(tokens);
 				free(input);
 				break ;
 			}
@@ -96,7 +96,7 @@ int	main(int argc, char **argv, char **env)
 		}
 		deleteAllNodes(stack);
 		free(input);
-		clear(tokens);
+		free(tokens);
 	}
 
 	return (0);
