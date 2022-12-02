@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 11:33:47 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/01 11:24:03 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/02 01:57:09 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,15 @@ void	clear(char **intro)
 	free (intro);
 }
 
-void	wait_signal(t_shell **shell)
+void	sighandler(int sig)
+{
+	if (sig == SIGQUIT)
+		g_shell.quit = 4;
+	if (sig == SIGINT)
+		g_shell.quit = 1;
+}
+
+/*void	wait_signal(t_shell **shell)
 {
 	while (1)
 	{
@@ -37,9 +45,9 @@ void	wait_signal(t_shell **shell)
 		(*shell)->fork = 0;
 		if (
 	}
-}
+}*/
 
-void	init_env(t_shell **shell, char **env)
+/*void	init_env(t_shell **shell, char **env)
 {
 	int		i;
 	char	*split;
@@ -53,25 +61,21 @@ void	init_env(t_shell **shell, char **env)
 		ft_lstadd_back((*shell)->env, new);
 	}
 }
-
+*/
 int	main(int argc, char **argv, char **env)
 {
-//	char			*input;
-//	char			**tokens;
-//	char			**envi;
-//	struct t_stack	*stack;
-	t_shell			*shell;
+	char			*input;
+	char			**tokens;
+	t_stack	*stack;
+//	t_shell			*shell;
 
 	(void)argc;
 	(void)argv;
-	init_env(&shell, env);
-	shell->quit = 0;
-	wait_signal(&shell);
-
-
-
-
-/*
+	//init_env(&shell, env);
+//	stack->pipe.quit = 0;
+	//wait_signal(&shell);
+	signal(SIGQUIT, sighandler);
+	signal(SIGINT, sighandler);
 	while (1)
 	{
 		input = readline("MiniShell: ");
@@ -86,7 +90,6 @@ int	main(int argc, char **argv, char **env)
 				free(input);
 				break ;
 			}
-//			stack = pipe_stack(input, envi); //crear la pila de ejecución
 			stack = pipe_stack(input, env); //crear la pila de ejecución
 			//redirect_pipes(stack); //cambiar el orden de la pila, redireccionar los pipes
 			exec_stack(stack); //ejecutar la pila
@@ -95,6 +98,6 @@ int	main(int argc, char **argv, char **env)
 		free(input);
 		clear(tokens);
 	}
-*/
+
 	return (0);
 }

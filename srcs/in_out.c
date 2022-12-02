@@ -6,13 +6,13 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 14:05:17 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/11/23 23:51:36 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/02 01:29:12 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	fd_putstr_out(char *str, struct t_stack *node)
+int	fd_putstr_out(char *str, t_stack *node)
 {
 	if (node->next == NULL)
 	{
@@ -39,9 +39,9 @@ int	fd_putstr_out(char *str, struct t_stack *node)
 	return (0);
 }
 
-void    redirect_pipes(struct t_stack *stack) //reformular la funcion para cambiar orden del stack si tenemos < 0 >
+void    redirect_pipes(t_stack *stack) //reformular la funcion para cambiar orden del stack si tenemos < 0 >
 {
-	struct t_stack *node;
+	t_stack *node;
 
 	node = stack;
 	if (node->next == NULL)

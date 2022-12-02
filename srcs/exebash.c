@@ -6,15 +6,15 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 13:33:24 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/11/30 21:38:48 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/02 01:27:09 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void exec_in_child(char *input, char **envi, struct t_stack *stack)
+void exec_in_child(char *input, char **envi, t_stack *stack)
 {
-	struct t_stack *node;
+	t_stack *node;
 
 	node = stack;
 	if (node->next != NULL) // send stdout to the pipe to next comand
@@ -38,10 +38,10 @@ void exec_in_child(char *input, char **envi, struct t_stack *stack)
 	}
 }
 
-pid_t	child_launch(char *input, char **envi, struct t_stack *stack)
+pid_t	child_launch(char *input, char **envi, t_stack *stack)
 {
 	pid_t	ch_pid;
-	struct t_stack *node;
+	t_stack *node;
 	
 	node = stack;
 	ch_pid = fork();
@@ -69,9 +69,9 @@ pid_t	child_launch(char *input, char **envi, struct t_stack *stack)
 	return (ch_pid);
 }
 
-void    exec_stack(struct t_stack *stack)
+void    exec_stack(t_stack *stack)
 {
-    struct t_stack  *tmp;
+    t_stack  *tmp;
     int             i;
 
     tmp = stack;

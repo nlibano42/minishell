@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 17:03:32 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/11/24 01:02:03 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/02 01:59:25 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char * no_blancks(char *txt)
     return(ret);
 }
 
-void    create_cmds(struct t_stack *node)
+void    create_cmds(t_stack *node)
 {
     char            line[999];
     char            **words;
@@ -63,7 +63,7 @@ void    create_cmds(struct t_stack *node)
     //free(line);
 }
 
-void cmd_path(struct t_stack *node) //si el cmd viene con ruta
+void cmd_path(t_stack *node) //si el cmd viene con ruta
 {
     char ruta[999];
     char comand[999];
@@ -103,7 +103,7 @@ void cmd_path(struct t_stack *node) //si el cmd viene con ruta
 }
 
 
-void    relative_path(struct t_stack *node) //expandir una ruta relativa ../ o ./
+void    relative_path(t_stack *node) //expandir una ruta relativa ../ o ./
 {
     if (node->pipe.ext_path[0] == '.' && node->pipe.ext_path[1] == '/')
         exp_act_path(node);
@@ -112,7 +112,7 @@ void    relative_path(struct t_stack *node) //expandir una ruta relativa ../ o .
     
 }
 
-void    exp_act_path(struct t_stack *node) //expandir path actuak ./
+void    exp_act_path(t_stack *node) //expandir path actuak ./
 {
     char    *exp_dir;
 
@@ -122,7 +122,7 @@ void    exp_act_path(struct t_stack *node) //expandir path actuak ./
     node->pipe.ext_path = exp_dir;
 }
 
-void    exp_up_path(struct t_stack *node) //exoandir directorio arriba ../
+void    exp_up_path(t_stack *node) //exoandir directorio arriba ../
 {
     char    *exp_dir;
     char    *tmp;

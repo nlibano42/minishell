@@ -6,7 +6,7 @@
 /*   By: nlibano- <nlibano-@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 23:45:22 by nlibano-          #+#    #+#             */
-/*   Updated: 2022/11/24 01:01:14 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/02 01:29:42 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char    *old_dir(char **envi)
     return(var[1]);
 }
 
-int    init_cd(char *input, char **envi, struct t_stack *node)
+int    init_cd(char *input, char **envi, t_stack *node)
 {
     //char    **tokens;
     //int     i;
@@ -92,7 +92,7 @@ int    init_cd(char *input, char **envi, struct t_stack *node)
     //    node->pipe.arg = stradd(node->pipe.arg, tokens[i++]);
 }
 
-void    update_pwd(char **envi, struct t_stack *node) //modifica en envi no pasa a sistema para los no built in
+void    update_pwd(char **envi, t_stack *node) //modifica en envi no pasa a sistema para los no built in
 {
 	int		i;
     char    **line;
@@ -140,7 +140,7 @@ void    update_oldpwd(char **envi, char *old_dir) //modifica en envi no pasa a s
 	}
 }
 
-void    expand_relative(char **envi, struct t_stack *node)
+void    expand_relative(char **envi, t_stack *node)
 {
     char    *exp_dir;
 
@@ -150,7 +150,7 @@ void    expand_relative(char **envi, struct t_stack *node)
     node->pipe.arg[0] = exp_dir;
 }
 
-void    expand_relative2(char **envi, struct t_stack *node)
+void    expand_relative2(char **envi, t_stack *node)
 {
     char    *exp_dir;
     char    *tmp;
@@ -175,7 +175,7 @@ void    expand_relative2(char **envi, struct t_stack *node)
     node->pipe.arg[0] = exp_dir;
 }
 
-void	cd(char *input, char **envi, struct t_stack *node)
+void	cd(char *input, char **envi, t_stack *node)
 {
 	char	*old_dir;
 	char	**var;

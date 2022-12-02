@@ -6,16 +6,16 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 11:39:07 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/11/23 23:57:11 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/02 02:00:25 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-struct t_stack *pipe_stack(char * input, char **envi)
+t_stack *pipe_stack(char * input, char **envi)
 {
-    struct t_stack  *stack;
-    struct t_stack  *tmp_node;
+    t_stack  *stack;
+    t_stack  *tmp_node;
     char            **tokens;
     int             i;
     
@@ -39,11 +39,11 @@ struct t_stack *pipe_stack(char * input, char **envi)
     return (stack);
 }
 
-struct t_stack  *create_node(char *txt, char **envi) 
+t_stack  *create_node(char *txt, char **envi) 
 {
-    struct t_stack  *node;
+    t_stack  *node;
 
-    node = (struct t_stack *)malloc(sizeof(struct t_stack));
+    node = (t_stack *)malloc(sizeof(t_stack));
     node->pipe.input = txt;
     node->pipe.envi = envi;
     node->pipe.cmd = NULL;
@@ -55,15 +55,15 @@ struct t_stack  *create_node(char *txt, char **envi)
     return(node);
 }
 
-void    insert_f_pipe(struct t_stack *node, struct t_stack *stack) //first MAL!!
+void    insert_f_pipe(t_stack *node, t_stack *stack) //first MAL!!
 {
     node->next = stack;
     //stack->next = node;
 }
 
-void    insert_l_pipe(struct t_stack *node, struct t_stack *stack) //last
+void    insert_l_pipe(t_stack *node, t_stack *stack) //last
 {
-    struct t_stack  *temp;
+    t_stack  *temp;
     
     if (stack->next == NULL)
     {
@@ -80,9 +80,9 @@ void    insert_l_pipe(struct t_stack *node, struct t_stack *stack) //last
     }
 }
 
-void    free_stack(struct t_stack *stack)
+void    free_stack(t_stack *stack)
 {
-    //struct t_stack  *tmp;
+    //t_stack  *tmp;
 
     
     if (stack->next == NULL)
@@ -104,7 +104,7 @@ void    free_stack(struct t_stack *stack)
     } */
 }
 
-void    free_node(struct t_stack *node)
+void    free_node(t_stack *node)
 {
     if (node == NULL)
         return ;
@@ -120,7 +120,7 @@ void    free_node(struct t_stack *node)
     free(node);
 }
 
-void    free_node_content(struct t_stack *node)
+void    free_node_content(t_stack *node)
 {
     if (node == NULL)
         return ;
@@ -130,9 +130,9 @@ void    free_node_content(struct t_stack *node)
     free(node->pipe.input); //lo podemos liberar en lexerc al crear cmds
 }
 
-void deleteAllNodes(struct t_stack *start)
+void deleteAllNodes(t_stack *start)
 {
-    struct t_stack * temp;
+    t_stack * temp;
 
     while (start != NULL)
     { 

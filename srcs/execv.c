@@ -6,13 +6,13 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 13:33:24 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/11/23 23:51:53 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/02 01:30:01 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	launch(char *intro, char **envi, struct t_stack *node)
+int	launch(char *intro, char **envi, t_stack *node)
 {
 	const char	*path;
 	char *const	*arguments;
