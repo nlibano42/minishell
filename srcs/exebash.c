@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 13:33:24 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/02 17:32:59 by marvin           ###   ########.fr       */
+/*   Updated: 2022/12/02 21:24:32 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void exec_in_child(char *input, char **envi, t_stack *stack)
 		exit(0); //close the process, it will be excecuted in the parent
 	if(is_built(input) == 1)
 	{
+		sig_handler(2);
 		if (launch(input, envi, node) == -1) //get path and launch execve. -1 = error
 		{
 			fd_putstr_out("-Minishell: ", node); //printf para que salga siempre en pantalla?

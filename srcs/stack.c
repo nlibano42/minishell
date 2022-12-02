@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 11:39:07 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/02 02:00:25 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/02 23:05:17 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_stack *pipe_stack(char * input, char **envi)
         i++;
     }
     
-    free(tokens);
+    clear(tokens);
     return (stack);
 }
 

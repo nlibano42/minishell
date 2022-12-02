@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 17:03:32 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/02 02:35:27 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/02 23:06:32 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,9 @@ void    create_cmds(t_stack *node)
     
     ft_strcpy(line, node->pipe.input);
     words = ft_split(line, ' ');
-    node->pipe.arg = (char **)malloc(sizeof(char*) * (ft_str2len(words)));
+    node->pipe.arg = (char **)malloc(sizeof(char*) * (ft_str2len(words)) + 1);
+	if (!node->pipe.arg)
+		return ;
     node->pipe.cmd = words[0];
     
     i = 0;

@@ -157,7 +157,7 @@ void	cd(char *input, char **envi, t_stack *node)
 	char	*old_dir;
 	char	**var;
 	int		i;
-
+old_dir=NULL;
 	i = 0;
 	while (envi[i]) //get active dir
 	{
@@ -168,7 +168,7 @@ void	cd(char *input, char **envi, t_stack *node)
             break ;
         }
 		i++;
-		clear(var);
+		free(var);
 	}
     if (init_cd(input, envi, node) == 0)
         update_pwd(envi, node);

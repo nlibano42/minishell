@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 11:33:47 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/02 02:09:05 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/02 23:07:07 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,22 @@ int	main(int argc, char **argv, char **env)
 	char	**tokens;
 	char	**envi;
 	t_stack	*stack;
-	struct sigaction	s_sigaction;
 
 	(void)argc;
 	(void)argv;
+	stack = NULL;
 	envi = env;
-	s_sigaction.sa_sigaction = sig_handler;
-	s_sigaction.sa_flags = 0;
-	sigaction(SIGINT, &s_sigaction, 0);
-	sigaction(SIGTSTP, &s_sigaction, 0);
+	sig_handler(1);
 	while (1)
 	{
-		input = readline("MiniShell: ");
+		input = readline("MiniShell $> ");
 		add_history(input);
+		if (!input)
+			sig_handler(3);
 		if (ft_strlen(input) > 0)
 		{
 			tokens = ft_split(input, ' ');
-			if (str_cmp(tokens[0], "exit") == 0 || str_cmp(tokens[0], "EXIT") == 0)
+			if (str_cmp(tokens[0], "exit") == 0)
 			{
 				clear(tokens);
 				free(input);

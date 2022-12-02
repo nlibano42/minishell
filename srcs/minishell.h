@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:19:59 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/02 01:56:44 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/02 21:34:28 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 # define MINISHELL_H
 
 # include <stdio.h>
-# include <./readline/readline.h>
-# include <./readline/history.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <stdbool.h>
+//# include <stdbool.h>
 # include <stdlib.h>
 # include "../libft/libft.h"
 # include <stddef.h>
@@ -26,7 +28,7 @@
 # include <dirent.h>
 # include <sys/wait.h>
 # include <errno.h>
-#include <signal.h>
+# include <signal.h>
 
 typedef struct s_env
 {
@@ -67,7 +69,9 @@ typedef struct	s_shell
 	int		quit;
 }	t_shell;
 
-t_shell	g_shell;
+//t_shell	g_shell;
+int	g_num_quit;
+
 //builtin
 int			echo(t_stack *stack);
 void		env(char **envi, t_stack *node);
@@ -168,6 +172,7 @@ int			str_cmp(char *str1, char *str2);
  t_stack *stack_first(t_stack *stack);
 
 //signals
-void	sig_handler(int signum, siginfo_t *info, void *context);
+//void	sig_handler(int signum, siginfo_t *info, void *context);
+void 	sig_handler(int sig);
 
 #endif
