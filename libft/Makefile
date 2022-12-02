@@ -6,11 +6,11 @@
 #    By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/07 11:05:52 by rchallie          #+#    #+#              #
-#    Updated: 2022/11/28 01:55:39 by nlibano-         ###   ########.fr        #
+#    Updated: 2022/12/02 18:34:49 by nlibano-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS			=	ft_atoi.c ft_split.c ft_strlcpy.c ft_strtok.c chain.c ft_strtrim.c ft_strncmp.c ft_strlen.c\
+SRCS			=	ft_atoi.c ft_split.c ft_strlcpy.c ft_strtok.c ft_strtrim.c ft_strncmp.c ft_strlen.c\
 				
 OBJS			= $(SRCS:.c=.o)
 

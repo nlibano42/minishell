@@ -6,11 +6,11 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:18:15 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/07/05 12:18:15 by xbasabe-         ###   ########.fr       */
+/*   Updated: 2022/12/02 22:16:41 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
 char	*stradd(char *s1, char *s2)
 {
@@ -22,7 +22,9 @@ char	*stradd(char *s1, char *s2)
 	len = (ft_strlen((const char*)s1) + ft_strlen((const char *)s2) + 1);
 	i = ft_strlen((const char *)s1);
 	j = 0;
-	united = (char *)malloc(sizeof(char) * len);
+	united = (char *)malloc(sizeof(char) * len + 1);
+	if (!united)
+		return (NULL);
 	ft_strcpy(united, s1);
 	j = 0;
 	while (i < len)
@@ -35,27 +37,27 @@ char	*stradd(char *s1, char *s2)
 	return (united);
 }
 
+
 char	**str2add(char **s1, char *s2)
 {
 	char	**united;
 	int		len;
 	int		i;
 
-	len = (ft_str2len(s1) + 1);
-	printf("len %d\n", len);
-	i = 0;
-	united = (char **)malloc(sizeof(char *) * len);
-	while (i < len)
-	{
+	len = (ft_str2len(s1));
+	united = (char **)malloc(sizeof(char *) * (len + 1) + 1);
+	if (!united)
+		return (NULL);
+	i = -1;
+	while (s1[++i])
+		//united[i] = s1[i];
 		ft_strcpy(united[i],s1[i]);
-		//ft_strcpy(united[i],(const char*)s1[i]);
-		//printf("%s", united[i]);
-		//printf(">>'%s'<<", s1[i]);
-		i++;
-	}
 	ft_strcpy(united[i],s2);
+	//united[i] = s2;
+	united[i + 1] = NULL;
 	return (united);
 }
+
 
 int	str_cmp(char *str1, char *str2)
 {
