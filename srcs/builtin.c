@@ -6,13 +6,13 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 10:40:03 by marvin            #+#    #+#             */
-/*   Updated: 2022/11/30 19:24:12 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/02 01:26:36 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	echo(struct t_stack *node)
+int	echo(t_stack *node)
 {
 	char *output;
 
@@ -32,7 +32,7 @@ int	echo(struct t_stack *node)
 	return (0);
 }
 
-void	env(char **envi, struct t_stack *node)
+void	env(char **envi, t_stack *node)
 {
 	int	i;
 
@@ -44,7 +44,7 @@ void	env(char **envi, struct t_stack *node)
 	}
 }
 
-void	pwd(char **envi, struct t_stack *node)
+void	pwd(char **envi, t_stack *node)
 {
 	int		i;
 	char	**var;
@@ -196,14 +196,14 @@ void	unset(char *input, char **envi)
 	return ;
 }
 
-void	exit_kill(struct t_stack *node)
+void	exit_kill(t_stack *node)
 {
 	//kill(node->pipe.node_pid, SIGKILL);
 	deleteAllNodes(node);
 	exit(0);
 }
 
-int	exec_built_in(char *input, char **envi, struct t_stack *node) //reconvertir en exec in parent y sacar echo para el caso de comillas sin cerrar
+int	exec_built_in(char *input, char **envi, t_stack *node) //reconvertir en exec in parent y sacar echo para el caso de comillas sin cerrar
 {
 	char	**tokens;
 
