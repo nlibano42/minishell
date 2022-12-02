@@ -6,16 +6,16 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:54:17 by marvin            #+#    #+#             */
-/*   Updated: 2022/11/30 21:34:06 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/02 01:31:16 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    mov_last(struct t_stack *node, struct t_stack *stack)
+void    mov_last(t_stack *node, t_stack *stack)
 {
-    struct t_stack  *last;
-    struct t_stack  *tmp;
+    t_stack  *last;
+    t_stack  *tmp;
 
     (void)stack;
     tmp = node; // tmp = stack; ??
@@ -25,10 +25,10 @@ void    mov_last(struct t_stack *node, struct t_stack *stack)
     tmp->next = last;
 }
 
-int exit_cmd_in_stack(struct t_stack *stack)
+int exit_cmd_in_stack(t_stack *stack)
 {
     int i;
-    struct t_stack *tmp;
+    t_stack *tmp;
 
     i = 0;
     tmp = stack;
@@ -43,11 +43,11 @@ int exit_cmd_in_stack(struct t_stack *stack)
 }
 
 
-struct t_stack *jump_to(struct t_stack *stack, int to)
+t_stack *jump_to(t_stack *stack, int to)
 {
     //saltar en la cola de comandos hasta el cmd siguiente al exit la posicion to
     int i;
-    struct t_stack *jump;
+    t_stack *jump;
     
     i = 0;
     to++;
@@ -61,9 +61,9 @@ struct t_stack *jump_to(struct t_stack *stack, int to)
     return(jump);
 }
 
-struct t_stack *stack_first(struct t_stack *stack)
+t_stack *stack_first(t_stack *stack)
 {
-    struct t_stack *jump;
+    t_stack *jump;
     
     jump = stack;
     while(jump != NULL)
@@ -74,7 +74,7 @@ struct t_stack *stack_first(struct t_stack *stack)
     return(jump);
 }
 
-struct t_stack *reorder_stack(struct t_stack *stack) // que debe hacer?
+t_stack *reorder_stack(t_stack *stack) // que debe hacer?
 {
     int i;
 
