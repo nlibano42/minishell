@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:18:15 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/07/05 12:18:15 by xbasabe-         ###   ########.fr       */
+/*   Updated: 2022/12/02 18:22:33 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,14 @@ char	**str2add(char **s1, char *s2)
 	int		len;
 	int		i;
 
-	len = (ft_str2len(s1) + 2);
-	i = 0;
-	united = (char **)malloc(sizeof(char *) * len);
-	while (s1[i])
-	{
+	len = (ft_str2len(s1));
+	united = (char **)malloc(sizeof(char *) * (len + 1) + 1);
+	if (!united)
+		return (NULL);
+	i = -1;
+	while (s1[++i])
 		//united[i] = s1[i];
 		ft_strcpy(united[i],s1[i]);
-		i++;
-	}
 	ft_strcpy(united[i],s2);
 	//united[i] = s2;
 	united[i + 1] = '\0';
