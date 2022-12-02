@@ -41,7 +41,6 @@ void    create_cmds(t_stack *node)
     char            **words;
     int             i;
     
-    //line = NULL;
     ft_strcpy(line, node->pipe.input);
     words = ft_split(line, ' ');
     node->pipe.arg = (char **)malloc(sizeof(char*) * (ft_str2len(words)));

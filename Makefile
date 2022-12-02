@@ -17,11 +17,11 @@ OBJSDIR		= objs
 EXTLIB		= libft
 
 
-SRCS		= main.c builtin.c parse.c exebash.c stack.c in_out.c cd.c execv.c lexer.c reorder.c\
+SRCS		= main.c builtin.c parse.c exebash.c stack.c in_out.c cd.c execv.c lexer.c reorder.c signals.c\
 
 # Compiler options
 CC			= gcc
-CFLAGS		= -Wall -Wextra -Werror -g3 #-fsanitize=address
+CFLAGS		= -Wall -Wextra -Werror -g3 -fsanitize=address
 DFLAG		= -lreadline
 
 ###################################################

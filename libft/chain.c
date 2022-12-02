@@ -35,27 +35,28 @@ char	*stradd(char *s1, char *s2)
 	return (united);
 }
 
+
 char	**str2add(char **s1, char *s2)
 {
 	char	**united;
 	int		len;
 	int		i;
 
-	len = (ft_str2len(s1) + 1);
-	printf("len %d\n", len);
+	len = (ft_str2len(s1) + 2);
 	i = 0;
 	united = (char **)malloc(sizeof(char *) * len);
-	while (i < len)
+	while (s1[i])
 	{
+		//united[i] = s1[i];
 		ft_strcpy(united[i],s1[i]);
-		//ft_strcpy(united[i],(const char*)s1[i]);
-		//printf("%s", united[i]);
-		//printf(">>'%s'<<", s1[i]);
 		i++;
 	}
 	ft_strcpy(united[i],s2);
+	//united[i] = s2;
+	united[i + 1] = '\0';
 	return (united);
 }
+
 
 int	str_cmp(char *str1, char *str2)
 {

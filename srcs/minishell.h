@@ -26,6 +26,7 @@
 # include <dirent.h>
 # include <sys/wait.h>
 # include <errno.h>
+#include <signal.h>
 
 typedef struct s_env
 {
@@ -165,5 +166,8 @@ int			str_cmp(char *str1, char *str2);
  t_stack *jump_to(t_stack *stack, int to);
  //void    jump_to(t_stack *stack, int to);
  t_stack *stack_first(t_stack *stack);
+
+//signals
+void	sig_handler(int signum, siginfo_t *info, void *context);
 
 #endif

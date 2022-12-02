@@ -300,7 +300,8 @@ char    *search_vble_env(char *txt, int init)
 		init++;
 	}
 	vble[j] = '\0';
-	//tratar error, si no se encuentr la variable
+	if(str_cmp(vble, "?") == 0) //$? devuleve el exit status de la ultima ejecución
+		return("0"); //status;
 	return (getenv((const char*)vble));
 }
 
