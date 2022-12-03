@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nlibano- <nlibano-@student.42urduliz.com>  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/23 23:45:22 by nlibano-          #+#    #+#             */
-/*   Updated: 2022/12/02 01:29:42 by nlibano-         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 char    *active_dir(char **envi)
@@ -54,69 +42,54 @@ char    *old_dir(char **envi)
 
 int    init_cd(char *input, char **envi, t_stack *node)
 {
-    //char    **tokens;
-    //int     i;
-
     (void) input;
-    //tokens = ft_split(input, ' ');
-    //node->pipe.cmd = tokens[0];
-    //ver si tenemos rutas relativas: ./ o ../ 
-    if (node->pipe.arg[0] == NULL) //solo cd, sin argumentos, lleva a  home
+    if (node->pipe.arg[0] == NULL)
         node->pipe.arg[0] = getenv("HOME"); //ir a HOME definido en envi asi vamos a la del env
-
     else if (node->pipe.arg[0])
     {
-        //node->pipe.arg = tokens[1];
         if (node->pipe.arg[0][0] == '.' && node->pipe.arg[0][1] == '/')
             expand_relative(envi, node);
-        if (node->pipe.cmd[0] == '.' && node->pipe.cmd[1] == '.' && node->pipe.cmd[2] == '/')
+        if (node->pipe.arg[0][0] == '.' && node->pipe.arg[0][1] == '.' && node->pipe.arg[0][2] == '/')
             expand_relative2(envi, node);
         if (strcmp(node->pipe.arg[0], "-") == 0 && !node->pipe.arg[1])  //usar los valores de node->pipe.arg cd - nos devuelve a la capreta donde estabamos
-        {
             node->pipe.arg[0] = old_dir(envi);
-            printf("Volvemos a %s\n", node->pipe.arg[0]);
-            return (1);
-        }
     }
     else if(node->pipe.arg[2] != NULL)
     {
-        //printf("-Minishell: cd: too many arguments\n");
         fd_putstr_out("-Minishell: cd: too many arguments\n", node);
         return (1);
     }
-    
     return (0);
-    
-    //i = 2;
-    //while(tokens[i])
-    //    node->pipe.arg = stradd(node->pipe.arg, tokens[i++]);
 }
 
 void    update_pwd(char **envi, t_stack *node) //modifica en envi no pasa a sistema para los no built in
 {
-	int		i;
-    char    **line;
-    DIR		*dp;
+	char *new_input;
+    char **var;
+    char **envi_var;
+    int    j;
 
-	if ((dp = opendir((const char*)node->pipe.arg)) == NULL)  //comprobar que el directorio existe
+    if(access((const char*)node->pipe.arg[0], F_OK) == -1) //comprobar que hay acceso al directorio
 	{
-		printf("-Minishell: cd: %s: No such file or directory\n", node->pipe.arg[0]); 
+		printf("-Minishell: cd: %s: No such file or directory\n", node->pipe.arg[0]); //NO es ft_putstr_out, se imprime siempre
 		return ; //handle error
 	}
-    i = 0;
-	while (envi[i])
+    new_input = stradd("PWD=", node->pipe.arg[0]);
+    var = ft_split(new_input, '=');
+	j = -1;
+	while (envi[++j])
 	{
-		line = ft_split(envi[i], '=');
-		if (str_cmp("PWD", line[0]) == 0)
+		//cojer de env y de arg hasta el = y compara, comparar el nombre de vble
+		envi_var = ft_split(envi[j], '=');
+		if (str_cmp(envi_var[0], var[0]) == 0) 
 		{
-            envi[i] = "PWD";
-            envi[i] = stradd(envi[i], "=");
-			envi[i] = stradd(envi[i], node->pipe.arg[0]);
-            clear(line);
-			return ;
+			ft_strcpy(envi[j], new_input);
+			clear(envi_var);
+			break ;
 		}
-		i++;
+		clear(envi_var);
 	}
+    clear(var);
 }
 
 void    update_oldpwd(char **envi, char *old_dir) //modifica en envi no pasa a sistema para los no built in
@@ -130,14 +103,17 @@ void    update_oldpwd(char **envi, char *old_dir) //modifica en envi no pasa a s
 		line = ft_split(envi[i], '=');
 		if (str_cmp("OLDPWD", line[0]) == 0)
 		{
-            envi[i] = "OLDPWD";
+            //envi[i] = "OLDPWD";
+            ft_strcpy(envi[i], "OLDPWD");
             envi[i] = stradd(envi[i], "=");
 			envi[i] = stradd(envi[i], old_dir);
+            
             clear(line);
 			return ;
 		}
 		i++;
 	}
+    clear(line);
 }
 
 void    expand_relative(char **envi, t_stack *node)
@@ -172,6 +148,7 @@ void    expand_relative2(char **envi, t_stack *node)
     node->pipe.arg[0]++;
     exp_dir = tmp;
     exp_dir = stradd(exp_dir, node->pipe.arg[0]);
+    printf("Expand ../ --> %s\n", exp_dir);
     node->pipe.arg[0] = exp_dir;
 }
 
@@ -180,8 +157,7 @@ void	cd(char *input, char **envi, t_stack *node)
 	char	*old_dir;
 	char	**var;
 	int		i;
-
-old_dir = NULL;
+old_dir=NULL;
 	i = 0;
 	while (envi[i]) //get active dir
 	{
@@ -192,7 +168,7 @@ old_dir = NULL;
             break ;
         }
 		i++;
-		clear(var);
+		free(var);
 	}
     if (init_cd(input, envi, node) == 0)
         update_pwd(envi, node);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execv.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 13:33:24 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/02 01:30:01 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/02 21:19:35 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ int	launch(char *intro, char **envi, t_stack *node)
 		free((char *)path);
 		return(-1) ;
 	}
-	//path = stradd((char *)path, "/");
-	//path = stradd((char *)path, tokens[0]);
 	execve(path, arguments, envi);
 	return(0);
 }

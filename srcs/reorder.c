@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:54:17 by marvin            #+#    #+#             */
-/*   Updated: 2022/12/02 01:31:16 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/02 16:56:45 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ t_stack *jump_to(t_stack *stack, int to)
         jump = jump->next;
         i++;
     }
-    free(stack);
     return(jump);
 }
 
@@ -74,12 +73,12 @@ t_stack *stack_first(t_stack *stack)
     return(jump);
 }
 
-t_stack *reorder_stack(t_stack *stack) // que debe hacer?
+t_stack *reorder_stack(t_stack *stack)
 {
     int i;
 
     i = exit_cmd_in_stack(stack);
-    if (i != 0) //si tenemos un cmd exit se ejecutan los comandos que estén despues, saltamoms hasta el cmd siguiente en el stack
+    if (i != 0) //si tenemos un cmd exit se ejecutan los comandos que estén despues, saltamos hasta el cmd siguiente en el stack
         return(jump_to(stack, i));
     return(stack);
 }

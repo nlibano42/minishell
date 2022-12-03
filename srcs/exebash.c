@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 13:33:24 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/02 01:27:09 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/02 21:24:32 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,15 @@ void exec_in_child(char *input, char **envi, t_stack *stack)
 	close(node->pipe.p[1]);
 	if (is_built(input) == 0)
 		exit(0); //close the process, it will be excecuted in the parent
-	//printf("exec child input '%s'.\n", node->pipe.input);
 	if(is_built(input) == 1)
 	{
+		sig_handler(2);
 		if (launch(input, envi, node) == -1) //get path and launch execve. -1 = error
 		{
-			fd_putstr_out("-Minishell: ", node); //printf para que salga siemrpe en pantalla?
+			fd_putstr_out("-Minishell: ", node); //printf para que salga siempre en pantalla?
 			fd_putstr_out(node->pipe.cmd, node);
 			fd_putstr_out(": command not found\n", node);
-			exit(0);
+			exit(127);
 		}
 	}
 }
@@ -42,6 +42,7 @@ pid_t	child_launch(char *input, char **envi, t_stack *stack)
 {
 	pid_t	ch_pid;
 	t_stack *node;
+	int status;
 	
 	node = stack;
 	ch_pid = fork();
@@ -59,13 +60,14 @@ pid_t	child_launch(char *input, char **envi, t_stack *stack)
 		close(node->pipe.p[1]);
 		if (is_built(input) == 0)
 		{
-			//create_cmds(node); //lexer, falta el parsing(comillas)
+			//create_cmds(node);
 			exec_built_in(input, envi, node);
 			//free_node_content(node);
 		}
 		close(node->pipe.p[0]);
  	}
-	wait(NULL);
+	//wait(NULL);
+	wait(&status);
 	return (ch_pid);
 }
 
@@ -76,19 +78,14 @@ void    exec_stack(t_stack *stack)
 
     tmp = stack;
 	i = 0;
-	/*REORDER_STACK AQUÍ*/
-	//if(exit_cmd_in_stack(stack) > 0)
-	//	stack = reorder_stack(tmp, stack);
+	if(exit_cmd_in_stack(stack) > 0)
+		tmp = reorder_stack(stack);
     while(tmp != NULL)
     {
-        if (str_cmp(tmp->pipe.input, "^C") == 0) // ctrl + c. no funciona para cerrar función y seguir en minishell (usar señales?)
-			//break ; //ejecutar
-			exit(1); 
         child_launch(tmp->pipe.input, tmp->pipe.envi, tmp);
         tmp = tmp->next;
         i++;
     }
-    //deleteAllNodes(stack);
 }
 
 int is_built(char *input)
