@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:19:59 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/02 21:34:28 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/06 17:46:55 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,6 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-/*typedef struct s_shell
-{
-	struct t_env	*env;
-	int				quit;
-	int				fork;
-}	t_shell;
-*/
 typedef struct s_pipe
 {
     char	*input;
@@ -53,7 +46,6 @@ typedef struct s_pipe
     char	*ext_path;
     char	*cmd;
     char	**arg;
-//	int				quit;
     //pid_t   node_pid;
 } t_pipe;
 
@@ -64,13 +56,6 @@ typedef struct s_stack
     struct s_stack  *prev;
 }	t_stack;
 
-typedef struct	s_shell
-{
-	t_pipe	*pipe;
-	int		quit;
-}	t_shell;
-
-//t_shell	g_shell;
 int	g_num_quit;
 
 //builtin
@@ -115,6 +100,7 @@ int     write_pipe(int fd, char *str); //deshuso
 
 //main
 void	clear(char **intro);
+void	free_all_params(t_stack **stack, char **input, char ***tokens);
 
 //parse
 int     expand(char **txt);
@@ -151,8 +137,8 @@ void	malloc_split(char *entry, char **splited, int index);
 
 
 //lexer
-void    create_cmds(t_stack *node);
-void    cmd_path(t_stack *node);
+void    create_cmds(t_stack **node);
+//void    cmd_path(t_stack **node);
 void    relative_path(t_stack *node);
 void    exp_act_path(t_stack *node);
 void    exp_up_path(t_stack *node);
@@ -178,8 +164,10 @@ int			str_cmp(char *str1, char *str2);
  t_stack *stack_first(t_stack *stack);
 
 //signals
-//void	sig_handler(int signum, siginfo_t *info, void *context);
 void 	sig_handler(int sig);
+void	restore_prompt(int sig);
+void	ctrl_c(int sig);
+void	back_slash(int sig);
 
 //enviroment
 t_env  *set_envi(char **env);

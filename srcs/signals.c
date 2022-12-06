@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 12:56:10 by marvin            #+#    #+#             */
-/*   Updated: 2022/12/02 23:09:04 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/06 18:01:59 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	restore_prompt(int sig)
 void	ctrl_c(int sig)
 {
 	g_num_quit = 130;
-	write(1, "\n", 1);
+	write(1, "\b\b\n", 1);
 	(void)sig;
 }
 
@@ -38,6 +38,7 @@ void	back_slash(int sig)
 
 void	sig_handler(int sig)
 {
+	printf("\b\b  \b\b");
 	if (sig == 1)
 	{
 		signal(SIGINT, restore_prompt);
@@ -48,13 +49,9 @@ void	sig_handler(int sig)
 		signal(SIGINT, ctrl_c);
 		signal(SIGQUIT, back_slash);
 	}
-//	if (sig == SIGINT)
-//		signal(SIGINT, ctrl_c);
-//	if (sig == SIGQUIT)
-//		signal(SIGQUIT, back_slash);
 	if (sig == 3)
 	{
-		printf("exit\n");
+		printf("\b\bexit\n");
 		exit(0);
 	}
 }
