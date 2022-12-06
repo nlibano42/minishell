@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 12:56:10 by marvin            #+#    #+#             */
-/*   Updated: 2022/12/06 10:23:20 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/06 18:01:59 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,7 @@
 void	restore_prompt(int sig)
 {
 	g_num_quit = 130;
-//	write(1, "\n", 1);
-	printf("\\b\bn");
+	write(1, "\n", 1);
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
