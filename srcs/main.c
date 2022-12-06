@@ -25,10 +25,6 @@ void	clear(char **intro)
 	free (intro);
 }
 
-/*VARIABLES GLOBALES*/
-//t_env	*envir;
-int	g_num_quit;
-
 int	main(int argc, char **argv, char **env)
 {
 	char	*input;
