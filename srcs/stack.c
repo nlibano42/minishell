@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 11:39:07 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/02 23:05:17 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/06 02:35:24 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,18 @@ t_stack *pipe_stack(char * input, char **envi)
     if (tokens[0])
     {
         stack = create_node(tokens[0], envi);
-        create_cmds(stack);
+        create_cmds(&stack);
     }
     i = 1;
     while (tokens[i])
     {
         tmp_node = create_node(tokens[i], envi);
-        create_cmds(tmp_node);
+        create_cmds(&tmp_node);
         insert_l_pipe(tmp_node, stack);
         i++;
     }
     
-    clear(tokens);
+//    clear(tokens); //se libera con node (stack)
     return (stack);
 }
 
@@ -120,7 +120,7 @@ void    free_node(t_stack *node)
     free(node);
 }
 
-void    free_node_content(t_stack *node)
+/*void    free_node_content(t_stack *node)
 {
     if (node == NULL)
         return ;
@@ -128,6 +128,15 @@ void    free_node_content(t_stack *node)
         clear(node->pipe.arg);
     free(node->pipe.cmd);
     free(node->pipe.input); //lo podemos liberar en lexerc al crear cmds
+}*/
+
+void	free_pipe(t_pipe pipe)
+{
+	free(pipe.input);
+	if (pipe.cmd)
+		free(pipe.cmd);
+	if (pipe.arg)
+		clear(pipe.arg);
 }
 
 void deleteAllNodes(t_stack *start)
@@ -137,7 +146,8 @@ void deleteAllNodes(t_stack *start)
     while (start != NULL)
     { 
         temp = start;
-        free_node_content(temp);
+ //     free_node_content(temp);
+		free_pipe(temp->pipe);
         start = start -> next;
         free(temp);
     }

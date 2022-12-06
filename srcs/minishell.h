@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:19:59 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/02 21:34:28 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/06 10:08:17 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,8 +145,8 @@ void	malloc_split(char *entry, char **splited, int index);
 
 
 //lexer
-void    create_cmds(t_stack *node);
-void    cmd_path(t_stack *node);
+void    create_cmds(t_stack **node);
+//void    cmd_path(t_stack **node);
 void    relative_path(t_stack *node);
 void    exp_act_path(t_stack *node);
 void    exp_up_path(t_stack *node);
@@ -172,7 +172,9 @@ int			str_cmp(char *str1, char *str2);
  t_stack *stack_first(t_stack *stack);
 
 //signals
-//void	sig_handler(int signum, siginfo_t *info, void *context);
 void 	sig_handler(int sig);
+void	restore_prompt(int sig);
+void	ctrl_c(int sig);
+void	back_slash(int sig);
 
 #endif

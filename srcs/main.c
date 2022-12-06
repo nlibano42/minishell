@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 11:33:47 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/02 23:07:07 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/06 10:09:12 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,12 @@ int	main(int argc, char **argv, char **env)
 {
 	char	*input;
 	char	**tokens;
-	char	**envi;
 	t_stack	*stack;
 
 	(void)argc;
 	(void)argv;
 	stack = NULL;
-	envi = env;
+	tokens = NULL;
 	sig_handler(1);
 	while (1)
 	{
@@ -52,12 +51,14 @@ int	main(int argc, char **argv, char **env)
 				free(input);
 				break ;
 			}
-			stack = pipe_stack(input, envi);
+			stack = pipe_stack(input, env);
 			exec_stack(stack);
 		}
-		deleteAllNodes(stack);
+		if (stack)
+			deleteAllNodes(stack);
 		free(input);
-		clear(tokens);
+		if (tokens)
+			clear(tokens);
 	}
 	return (0);
 }
