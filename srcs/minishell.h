@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:19:59 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/06 10:08:17 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/06 17:46:55 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,6 @@ typedef struct s_env
 	char	*next;
 }	t_env;
 
-/*typedef struct s_shell
-{
-	struct t_env	*env;
-	int				quit;
-	int				fork;
-}	t_shell;
-*/
 typedef struct s_pipe
 {
     char	*input;
@@ -52,7 +45,6 @@ typedef struct s_pipe
     char	*ext_path;
     char	*cmd;
     char	**arg;
-//	int				quit;
     //pid_t   node_pid;
 } t_pipe;
 
@@ -63,13 +55,6 @@ typedef struct s_stack
     struct s_stack  *prev;
 }	t_stack;
 
-typedef struct	s_shell
-{
-	t_pipe	*pipe;
-	int		quit;
-}	t_shell;
-
-//t_shell	g_shell;
 int	g_num_quit;
 
 //builtin
@@ -109,6 +94,7 @@ int     write_pipe(int fd, char *str); //deshuso
 
 //main
 void	clear(char **intro);
+void	free_all_params(t_stack **stack, char **input, char ***tokens);
 
 //parse
 int     expand(char **txt);

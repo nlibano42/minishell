@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 11:33:47 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/06 10:09:12 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/06 18:09:12 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,26 @@ int	main(int argc, char **argv, char **env)
 			tokens = ft_split(input, ' ');
 			if (str_cmp(tokens[0], "exit") == 0)
 			{
-				clear(tokens);
-				free(input);
+				free_all_params(&stack, &input, &tokens);
+			//	clear(tokens);
+			//	free(input);
 				break ;
 			}
 			stack = pipe_stack(input, env);
 			exec_stack(stack);
 		}
-		if (stack)
-			deleteAllNodes(stack);
-		free(input);
-		if (tokens)
-			clear(tokens);
+		free_all_params(&stack, &input, &tokens);
 	}
 	return (0);
 }
+
+void	free_all_params(t_stack **stack, char **input, char ***tokens)
+{
+	if (*stack)
+		deleteAllNodes(*stack);
+	if (*input)
+		free(*input);
+	if (*tokens)
+		clear(*tokens);
+}
+
