@@ -57,8 +57,7 @@ void	export_no_args(char **env, t_stack *node)
 		}
 }
 
-//char	**export_add(char **envi, char *vbl)
-void	export_add(char **envi, char *vbl)
+char	**export_add(char **envi, char *vbl)
 {
 	char	**united;
 	int		len;
@@ -67,21 +66,16 @@ void	export_add(char **envi, char *vbl)
 	len = (ft_str2len(envi)) + 2;
 	united = (char **)malloc(sizeof(char *) * len);
 	if (!united)
-		//return (NULL);
-		return ;
+		return (NULL);
 	i = 0;
 	while (envi[i])
 	{
-		//united[i] = envi[i];
-		united[i] = ft_strdup((const char*)envi[i]);
+		united[i] = envi[i];
 		i++;
 	}
-	//united[i] = vbl;
-	united [i] = ft_strdup((const char*)vbl);
+	united[i] = vbl;
 	united[i + 1] = NULL;
-	envi = united;
-	clear(united);
-	//return (united);
+	return (united);
 }
 
 void	export(char *input, char **envi, t_stack *node)
@@ -116,7 +110,7 @@ void	export(char *input, char **envi, t_stack *node)
 	if (exist == 0) //vble no encontrada, añadirla al final
 	{
 		printf("export añadir vble -%s-\n", node->pipe.arg[0]);
-		export_add(envi, node->pipe.arg[0]);
+		envi = export_add(envi, node->pipe.arg[0]);
 	}
 	clear(var);
 	//clear(envi_var);
