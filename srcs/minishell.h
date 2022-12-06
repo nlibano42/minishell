@@ -82,8 +82,7 @@ void        exit_kill(t_stack *node);
 int         exec_built_in(char *input, char **envi, t_stack *node);
 
 //export
-//char	**export_add(char **envi, char *vbl);
-void    export_add(char **envi, char *vbl);
+char	**export_add(char **envi, char *vbl);
 char	**sort_env(char **env);
 void    export(char *input, char **envi, t_stack *node);
 void	export_no_args(char **env, t_stack *node);
