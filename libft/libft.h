@@ -47,4 +47,12 @@ size_t	ft_strcpy(char *dst, char *src);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 size_t	ft_strcpy(char *dst, char *src);
 
+//ft_itoa
+void	ft_char(int	nb, char *str, int	i);
+void	ft_rev_str(char	*str, int	lenght);
+int	n_len(int n, int i);
+char	*ft_itoa(int n);
+
+char	*ft_strdup(const char *s1);
+
 #endif

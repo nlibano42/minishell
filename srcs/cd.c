@@ -11,8 +11,8 @@ char    *active_dir(char **envi)
 		var = ft_split(envi[i], '=');
 		if (str_cmp(var[0], "PWD") == 0)
         {
-            break ;
-            //return(var[1]);
+            //break ;
+            return(var[1]);
         }
 		i++;
 		clear(var);
@@ -31,8 +31,8 @@ char    *old_dir(char **envi)
 		var = ft_split(envi[i], '=');
 		if (str_cmp(var[0], "OLDPWD") == 0)
         {
-            break ;
-            //return(var[1]);
+            //break ;
+            return(var[1]);
         }
 		i++;
 		clear(var);
@@ -74,7 +74,10 @@ void    update_pwd(char **envi, t_stack *node) //modifica en envi no pasa a sist
 		printf("-Minishell: cd: %s: No such file or directory\n", node->pipe.arg[0]); //NO es ft_putstr_out, se imprime siempre
 		return ; //handle error
 	}
+    
     new_input = stradd("PWD=", node->pipe.arg[0]);
+    printf("update pwd new input %s\n", new_input);
+    
     var = ft_split(new_input, '=');
 	j = -1;
 	while (envi[++j])
@@ -83,7 +86,45 @@ void    update_pwd(char **envi, t_stack *node) //modifica en envi no pasa a sist
 		envi_var = ft_split(envi[j], '=');
 		if (str_cmp(envi_var[0], var[0]) == 0) 
 		{
-			ft_strcpy(envi[j], new_input);
+			//ft_strcpy(envi[j], new_input);
+            envi[j] = new_input;
+			clear(envi_var);
+			break ;
+		}
+		clear(envi_var);
+	}
+    
+    clear(var);
+}
+
+void    update_oldpwd(char **envi, char *old_dir) //modifica en envi no pasa a sistema para los no built in
+{
+    char *new_input;
+    char **var;
+    char **envi_var;
+    int    j;
+
+    /*
+    if(access((const char*)node->pipe.arg[0], F_OK) == -1) //comprobar que hay acceso al directorio
+	{
+		printf("-Minishell: cd: %s: No such file or directory\n", node->pipe.arg[0]); //NO es ft_putstr_out, se imprime siempre
+		return ; //handle error
+	}
+    */
+    
+    new_input = stradd("OLDPWD=", old_dir);
+    printf("update old pwd to: %s\n", new_input);
+    
+    var = ft_split(new_input, '=');
+	j = -1;
+	while (envi[++j])
+	{
+		//cojer de env y de arg hasta el = y compara, comparar el nombre de vble
+		envi_var = ft_split(envi[j], '=');
+		if (str_cmp(envi_var[0], var[0]) == 0) 
+		{
+			//ft_strcpy(envi[j], new_input);
+            envi[j] = new_input;
 			clear(envi_var);
 			break ;
 		}
@@ -92,22 +133,24 @@ void    update_pwd(char **envi, t_stack *node) //modifica en envi no pasa a sist
     clear(var);
 }
 
-void    update_oldpwd(char **envi, char *old_dir) //modifica en envi no pasa a sistema para los no built in
+void    OLD_update_oldpwd(char **envi, char *old_dir) //modifica en envi no pasa a sistema para los no built in
 {
 	int		i;
     char    **line;
+    char    *change_dir;
 
     i = 0;
+    change_dir = stradd("OLDPWD=", old_dir);
 	while (envi[i])
 	{
 		line = ft_split(envi[i], '=');
 		if (str_cmp("OLDPWD", line[0]) == 0)
 		{
             //envi[i] = "OLDPWD";
-            ft_strcpy(envi[i], "OLDPWD");
-            envi[i] = stradd(envi[i], "=");
-			envi[i] = stradd(envi[i], old_dir);
-            
+            //ft_strcpy(envi[i], "OLDPWD");
+            //envi[i] = stradd(envi[i], "=");
+			//envi[i] = stradd(envi[i], old_dir);
+            envi[i] = change_dir;
             clear(line);
 			return ;
 		}
@@ -157,24 +200,26 @@ void	cd(char *input, char **envi, t_stack *node)
 	char	*old_dir;
 	char	**var;
 	int		i;
-old_dir=NULL;
+
+    old_dir=NULL;
 	i = 0;
 	while (envi[i]) //get active dir
 	{
 		var = ft_split(envi[i], '=');
 		if (str_cmp(var[0], "PWD") == 0)
         {
-			old_dir = var[1];
+			old_dir = ft_strdup(var[1]);
             break ;
         }
 		i++;
-		free(var);
+		clear(var);
 	}
+    clear(var);
     if (init_cd(input, envi, node) == 0)
         update_pwd(envi, node);
     //old_dir = stradd("OLDPWD=", old_dir);
     printf("guardamos old dir: %s\n", old_dir); //convertir en export y añadir a envi OLDPWD
     update_oldpwd(envi, old_dir);
-    clear(var);
+    free(old_dir);
     //free(node->pipe.arg);
 }

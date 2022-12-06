@@ -25,18 +25,25 @@ void	clear(char **intro)
 	free (intro);
 }
 
+/*VARIABLES GLOBALES*/
+//t_env	*envir;
+int	g_num_quit;
+
 int	main(int argc, char **argv, char **env)
 {
 	char	*input;
 	char	**tokens;
 	char	**envi;
 	t_stack	*stack;
+	
 
 	(void)argc;
 	(void)argv;
 	stack = NULL;
 	envi = env;
 	sig_handler(1);
+	//envir = set_envi(env);
+
 	while (1)
 	{
 		input = readline("MiniShell $> ");
@@ -53,7 +60,7 @@ int	main(int argc, char **argv, char **env)
 				break ;
 			}
 			stack = pipe_stack(input, envi);
-			exec_stack(stack);
+			exec_stack(stack, input);
 		}
 		deleteAllNodes(stack);
 		free(input);

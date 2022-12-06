@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lst_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlibano- <nlibano-@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 01:14:15 by nlibano-          #+#    #+#             */
-/*   Updated: 2022/12/02 00:47:25 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/06 16:57:13 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_env	*ft_lstnew(char *name, char *val)
 {
-	t_stack	*list;
+	t_env	*list;
 
 	list = malloc(sizeof(t_env));
 	if (!list)
@@ -25,6 +25,7 @@ t_env	*ft_lstnew(char *name, char *val)
 	return (list);
 }
 
+/*
 void	ft_lstadd_back(t_env **lst, t_env *new)
 {
 	t_env	*last_lst;
@@ -37,14 +38,14 @@ void	ft_lstadd_back(t_env **lst, t_env *new)
 		last_lst->next = new;
 	}
 }
-
+*/
 t_env	*ft_lstfind(t_env *lst, char *name)
 {
 
 	while (lst)
 	{
 		if (lst->name == name)
-			return (lst)
+			return (lst);
 		lst = lst->next;
 	}
 	return (NULL);
@@ -70,3 +71,17 @@ void	ft_lstdelone(t_env *lst)
 	if (lst)
 		free(lst);
 }
+
+/*
+t_env **ft_lstlast(t_env **lst) //ir al ultimo elemento
+{
+	t_env *tmp;
+
+	while(*lst)
+	{
+		tmp = (*lst)->next;
+		*lst = tmp;
+	}
+	return(lst);
+}
+*/

@@ -102,114 +102,11 @@ char	*parse(char *txt)
 	count[1] = 0;
 	flags[0] = 1;
 	flags[1] = 1;
+	
 	quote_d_count(txt, count);
-	//if ( (txt = quote_in_or_out_loop(txt, count, flags)) == NULL)
-	if ( (txt = new_quote_in_or_out_loop(txt, count, flags)) == NULL)
+	if ( (txt = quote_in_or_out_loop(txt, count, flags)) == NULL)
 		return("echo -Minishell: echo: opened quotes");
 	return(txt);
-}
-
-char	*quote_in_or_out_loop(char *txt, int *count, int *flags)
-{
-	int	i;
-	int *j;
-
-	i = 0;
-	j = &i;
-	while(txt[i] != '\0')
-	{
-		if(txt[i] == 39) // simples ' 39 ascci de '
-		{	
-			if((count[1] % 2 == 0 && count[1] > 0) && flags[0] != -1)//dentro, entramos simples (ignorar dentro las dobles)
-			//if(flags[1] == 1 && flags[0] == 1) //además fuera de simples
-			{
-				//if(flags[0] != -1) //además fuera de dobles
-				//if(count[1] % 2 != 0 || count[0] > 0)
-				//{
-					if (inside_simple(txt, flags, count, j) == 1)
-						return(NULL);
-				//}
-			}
-		}
-		else if(txt[i] == 34) //34 es el ascci de ""
-		{
-			if((count[0] % 2 == 0 && count[0] > 0) && flags[1] != -1) //dentro, entramos dobles (ignorar dentro las simples)
-			//if (flags[0] == 1 && flags[1] == 1)
-			{	
-				//if (flags[1] != -1) //ademas fuera de simples
-				//{
-					if (inside_doble(txt, flags, count, j) == 1)
-						return(NULL);
-				//}
-			}
-		}
-		else if (txt[i] == 36) //36 es el ascci de $
-			txt = expand_vble(txt, j);
-		i++;
-	}
-//	printf("   -> parse loop ::%s::\n", txt); //al final deberiamos tener ya el txt parseado, ojo con el trim, entre comillas se respetan los espacios
-	if (count[0] > 0 || count[1] > 0)
-		return(NULL);
-	return(txt);
-}
-
-int	inside_simple(char *txt, int *flags, int *count, int *j)
-{
-	int i;
-
-	i = *j;
-	flags[1] = flags[1] * -1;
-	count[1]--;
-	remove_quote(txt, i);
-	write(1, "simple in\n", 10);
-	while(txt[i] != 39) // 39 es el ascii de '
-	{
-		if (txt[i] == '\0')
-			return(1);
-		
-		write(1,".", 1);
-		i++;
-	}
-	flags[1] = flags[1] * -1;
-	count[1]--;
-	remove_quote(txt, i);
-	write(1, "\nsimple out\n", 11);
-	return(0);
-}
-
-int	inside_doble(char *txt, int *flags, int *count, int *j)
-{	
-	int size;
-	int i;
-
-	size = ft_strlen(txt);
-	i = *j;
-	flags[0] = flags[0] * -1;
-	count[0]--;
-	remove_quote(txt, i);
-	write(1, "doble in\n", 9);
-	while(txt[i] != 34)
-	{
-		
-		if (txt[i] == 36) //36 es el ascci de $
-		{
-			txt = expand_vble(txt, j);
-			i = i + (ft_strlen(txt) - size);
-			size = ft_strlen(txt);
-			
-		}
-		if (txt[i] == '\0')
-		{
-			return(1); //return 1 y es caso de quotes abiertas
-		}
-		write(1,".", 1);
-		i++;
-	}
-	flags[0] = flags[0] * -1;
-	count[0]--;
-	remove_quote(txt, i);
-	write(1, "\ndoble out\n", 10);
-	return(0);
 }
 
 void	quote_d_count(char *txt, int *count)
@@ -217,16 +114,14 @@ void	quote_d_count(char *txt, int *count)
 	int	i;
 
 	i = 0;
-	while(txt[i])
+	while(txt[i] != '\0')
 	{
 		if(txt[i] == '"')
 			count[0]++;
-		//
 		if(txt[i] == 39)
 			count[1]++;
 		i++;
 	}
-	//con count  sabemos si hay comillas (count > 0) y si alguna queda abierta count impar
 }
 
 void	remove_quote(char *txt, int init)
@@ -268,11 +163,10 @@ char *expand_vble(char *txt, int *init)
 		}
 	}
 	j = j + *init;
-	exp[j] = ' ';
+	exp[j] = ' '; //problema!!
 	exp[j + 1] = '\0';
 	j++;
 	i = *init + add;
-	//while(txt[i] != '\0') //hasta terminar txt volvemos copiar el resto de txt
 	while(txt[i])
 	{
 		i++;
@@ -293,19 +187,22 @@ char    *search_vble_env(char *txt, int init)
 
 	init++;
 	j = 0;
-	while (txt[init] != ' ' && txt[init] != '\0' && txt[init] != '"')
+	while (txt[init] != ' ' && txt[init] != '\0' && txt[init] != '"' && txt[init] != '\'')
 	{
 		vble[j] = txt[init];
 		j++;
 		init++;
 	}
 	vble[j] = '\0';
-	if(str_cmp(vble, "?") == 0) //$? devuleve el exit status de la ultima ejecución
-		return("0"); //status;
+	if(str_cmp(vble, "?") == 0) //$? devuelve el exit status de la ultima ejecución
+	{ 
+		//return(ft_itoa(g_num_quit)); //retornar el status. ft_itoa sin 
+		return("0"); 
+	}
 	return (getenv((const char*)vble));
 }
 
-char	*new_quote_in_or_out_loop(char *txt, int *count, int *flags)
+char	*quote_in_or_out_loop(char *txt, int *count, int *flags)
 {
 	int	i;
 	int *j;
@@ -317,59 +214,51 @@ char	*new_quote_in_or_out_loop(char *txt, int *count, int *flags)
 		if(txt[i] == 39) // simples ' 39 ascci de '
 		{	
 			if((count[1] % 2 == 0 && count[1] > 0) && flags[0] != -1)//dentro, entramos simples (ignorar dentro las dobles)
-			//if(flags[1] == 1 && flags[0] == 1) //además fuera de simples
 			{
 				flip_flag(txt, flags, count, i, 1);
-				write(1, "simple in\n", 10);
+				//write(1, "simple in\n", 10);
 				while(txt[i] != 39) // 39 es el ascii de '
 				{
 					if (txt[i] == '\0')
 						return(NULL);
-		
-					write(1,".", 1);
+					//write(1,".", 1);
 					i++;
 				}
 				flip_flag(txt, flags, count, i, 1);
-				write(1, "\nsimple out\n", 11);
+				//write(1, "\nsimple out\n", 11);
 			}
 		}
 		else if(txt[i] == 34) //34 es el ascci de ""
 		{
 			if((count[0] % 2 == 0 && count[0] > 0) && flags[1] != -1) //dentro, entramos dobles (ignorar dentro las simples)
-			//if (flags[0] == 1 && flags[1] == 1)
 			{	
 				flip_flag(txt, flags, count, i, 0);
-				write(1, "doble in\n", 9);
+				//write(1, "doble in\n", 9);
 				while(txt[i] != 34)
 				{
-		
 					if (txt[i] == 36) //36 es el ascci de $
 					{
-						int size;
-						size = ft_strlen(txt);
 						txt = expand_vble(txt, j);
-						i = i + (ft_strlen(txt) - size);
-						size = ft_strlen(txt);
-			
 					}
 					if (txt[i] == '\0')
 					{
 						return(NULL);
 					}
-					write(1,".", 1);
+					//write(1,".", 1);
 					i++;
 				}
 				flip_flag(txt, flags, count, i, 0);
-				write(1, "doble out\n", 9);
+				//write(1, "doble out\n", 9);
 			}
 		}
 		else if (txt[i] == 36) //36 es el ascci de $
 			txt = expand_vble(txt, j);
+		else if (txt[i] == 39 || txt[i] == 34)
+			return(NULL);	
 		i++;
 	}
-	printf("   -> parse loop ::%s::\n", txt); //al final deberiamos tener ya el txt parseado, ojo con el trim, entre comillas se respetan los espacios
-	if (count[0] > 0 || count[1] > 0)
-		return(NULL);
+	//if (txt[i] == 39 || txt[i] == 34)
+	//	return(NULL);
 	return(txt);
 }
 

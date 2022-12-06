@@ -35,7 +35,7 @@ char	**sort_env(char **env)
 	return (sort);
 }
 
-void	export_no_args(char **env, struct t_stack *node)
+void	export_no_args(char **env, t_stack *node)
 {
 	int		i;
 	char	**sort;
@@ -53,11 +53,38 @@ void	export_no_args(char **env, struct t_stack *node)
 			fd_putstr_out(split[1], node);
 			fd_putstr_out("\"", node);
 			fd_putstr_out("\n", node);
-			clear (split); //si cambiamos split free(split)
+			clear (split);
 		}
 }
 
-void	export(char *input, char **envi, struct t_stack *node)
+//char	**export_add(char **envi, char *vbl)
+void	export_add(char **envi, char *vbl)
+{
+	char	**united;
+	int		len;
+	int		i;
+
+	len = (ft_str2len(envi)) + 2;
+	united = (char **)malloc(sizeof(char *) * len);
+	if (!united)
+		//return (NULL);
+		return ;
+	i = 0;
+	while (envi[i])
+	{
+		//united[i] = envi[i];
+		united[i] = ft_strdup((const char*)envi[i]);
+		i++;
+	}
+	//united[i] = vbl;
+	united [i] = ft_strdup((const char*)vbl);
+	united[i + 1] = NULL;
+	envi = united;
+	clear(united);
+	//return (united);
+}
+
+void	export(char *input, char **envi, t_stack *node)
 {
 	int		j;
 	int		exist;
@@ -70,7 +97,7 @@ void	export(char *input, char **envi, struct t_stack *node)
 		export_no_args(envi, node);
 		return ;
 	}
-	//comprobra si hay más de un argumento?
+	//comprobra si hay más de un argumento? cada argumento de node se toma como una variable a trata por export
 	var = ft_split(node->pipe.arg[0], '=');
 	j = -1;
 	exist = 0;
@@ -86,11 +113,11 @@ void	export(char *input, char **envi, struct t_stack *node)
 		}
 		clear(envi_var);
 	}
-	if (exist == 0) //vble no encontrada, añadir
+	if (exist == 0) //vble no encontrada, añadirla al final
 	{
-		printf("export añadir vble %s\n", node->pipe.arg[0]);
-		envi = str2add(envi, node->pipe.arg[0]);
+		printf("export añadir vble -%s-\n", node->pipe.arg[0]);
+		export_add(envi, node->pipe.arg[0]);
 	}
 	clear(var);
-	clear(envi_var);
+	//clear(envi_var);
 }

@@ -37,30 +37,27 @@ char * no_blancks(char *txt)
 
 void    create_cmds(t_stack *node)
 {
-    char            line[999];
-    char            **words;
-    int             i;
+    char    **words;
+    int     i;
     
-    ft_strcpy(line, node->pipe.input);
-    words = ft_split(line, ' ');
-    node->pipe.arg = (char **)malloc(sizeof(char*) * (ft_str2len(words)) + 1);
+    words = ft_split(node->pipe.input, ' ');
+    node->pipe.arg = (char **)malloc(sizeof(char*) * ft_str2len(words)); //tenemos un espacio de más porque words contiene cmd y args
 	if (!node->pipe.arg)
 		return ;
     node->pipe.cmd = words[0];
+    i = 1;
     
-    i = 0;
-    while(words[++i])
+    while(words[i])
     {
         node->pipe.arg[i - 1] = words[i];
-        //ft_strcpy(node->pipe.arg[i - 1] , words[i]);
+        //ft_strcpy(node->pipe.arg[i] , words[i]);
+        i++;
     }
-//    node->pipe.arg[i - 1] = '\0';
-	node->pipe.arg[i - 1] = NULL;
-
+    node->pipe.arg[i -1] = '\0';
+	//node->pipe.arg[i - 1] = NULL;
+    
     cmd_path(node);
-    //printf("create cmds: cmd '%s', arg '%s', path '%s'\n", node->pipe.cmd, node->pipe.arg[0], node->pipe.ext_path);
     free(words);
-    //free(line);
 }
 
 void cmd_path(t_stack *node) //si el cmd viene con ruta
@@ -90,7 +87,6 @@ void cmd_path(t_stack *node) //si el cmd viene con ruta
     node->pipe.ext_path = ruta;
     if (ruta[0] != '\0')
         relative_path(node);
-    //printf("Lexer path ext: %s.\n", node->pipe.ext_path);
     c = 0;
     while(node->pipe.cmd[i] != '\0')
     {
@@ -122,7 +118,7 @@ void    exp_act_path(t_stack *node) //expandir path actuak ./
     node->pipe.ext_path = exp_dir;
 }
 
-void    exp_up_path(t_stack *node) //exoandir directorio arriba ../
+void    exp_up_path(t_stack *node) //expandir directorio arriba ../
 {
     char    *exp_dir;
     char    *tmp;
