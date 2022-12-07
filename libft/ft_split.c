@@ -30,7 +30,7 @@ static size_t	ft_get_split_size(char const *s, char c)
 
 static char	**ft_split_add(const char *s, char **dst, size_t i, size_t len)
 {
-	dst[i] = (char *)malloc(sizeof(char) * (len + 1));
+	dst[i] = (char *)malloc(sizeof(char) * len + 1);
 	if (!dst[i])
 	{
 		while (i)
