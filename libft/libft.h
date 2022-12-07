@@ -51,4 +51,10 @@ void	*ft_memcpy(void *dst, const void *src, size_t n);
 size_t	ft_strncpy(char *dst, const char *src, int init);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 
+//ft_itoa
+void	ft_char(int	nb, char *str, int	i);
+void	ft_rev_str(char	*str, int	lenght);
+int	n_len(int n, int i);
+char	*ft_itoa(int n);
+
 #endif

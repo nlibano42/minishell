@@ -12,16 +12,16 @@
 
 #include "minishell.h"
 
-int	echo(t_stack *node)
+int	echo(t_stack *node, char* input)
 {
 	char *output;
 
 	if (node->pipe.arg[0] == NULL)
 	{
 		fd_putstr_out("\n", node);
-		return (1);
+		return (0);
 	}
-	output = parse(node->pipe.input);
+	output = parse(input);
 	if (str_cmp(node->pipe.arg[0], "-n") == 0)
 		fd_putstr_out(&output[8], node);
 	else
@@ -29,6 +29,7 @@ int	echo(t_stack *node)
 		fd_putstr_out(&output[5], node);
 		fd_putstr_out("\n", node);
 	}
+	
 	return (0);
 }
 
@@ -57,112 +58,12 @@ void	pwd(char **envi, t_stack *node)
 		{
 			fd_putstr_out(var[1], node);
 			fd_putstr_out("\n", node);
-			free (var);
+			clear (var);
 			break;
 		}
 		i++;
-		free (var);
+		clear (var);
 	}
-}
-
-char	**sort_env(char **env)
-{
-	char	**sort;
-	char	*tmp;
-	int		i;
-	int		j;
-
-	sort = env;
-	i = -1;
-	while (sort[++i])
-	{
-		j = -1;
-		while (sort[++j])
-		if (ft_strncmp(sort[i], sort[j], ft_strlen(sort[i])) < 0)
-		{
-			tmp = sort[i];
-			sort[i] = sort[j];
-			sort[j] = tmp;
-		}
-	}
-	return (sort);
-}
-
-void	export_no_args(char **env)
-{
-	int		i;
-	char	**sort;
-	char	**split;
-
-	sort = sort_env(env);
-	i = -1;
-	while (sort[++i])
-		if (ft_strncmp(sort[i], "_=", 2) != 0)
-		{
-			split = ft_split(sort[i], '=');
-			printf("declare -x %s=\"%s\"\n", split[0], split[1]);
-			free (split);
-		}
-}
-
-void	export(char *input, char **envi)
-{
-	int		i;
-	int		j;
-	int		exist;
-	char	**var;
-	char	**arguments;
-
-	arguments = ft_split(input, ' ');
-	if (!arguments[1])
-	{
-		export_no_args(envi);
-		free(arguments);
-		return ;
-	}
-	i = 0;
-	while (arguments[++i])
-	{
-		var = ft_split(arguments[i], '=');
-		j = -1;
-		exist = 0;
-		while (envi[++j])
-		{
-			if (str_cmp(envi[j], var[0]) == 0)
-			{
-				envi[i] = arguments[i];
-				exist = 1;
-				break ;
-			}
-		}
-		if (exist == 0)
-		{
-		//	envi[j] = arguments[j];
-		// si env es un struct, podriamos añadir al final.
-//seg.fault			envi[j] = stradd(envi[j], arguments[i]);
-		}
-	}
-/*	if ((ft_str2len(arguments) == 3)) //1export 2vble 3valor
-		while (envi[i])
-		{
-			var = ft_split(envi[i], '=');
-			if (str_cmp(var[0], arguments[1]) == 0)
-			{
-				envi[i] = stradd(var[0], "=");
-				envi[i] = stradd(envi[i], arguments[2]);
-				free(var);
-				free(arguments);
-				return ;
-			}
-			i++;
-			free(var);
-		}
-	if ((ft_str2len(arguments) == 4))
-		envi = str2add(envi, input);
-	//opcion de añadir  variable
-*/
-	
-	free(arguments);
 }
 
 void	unset(char *input, char **envi)
@@ -196,43 +97,32 @@ void	unset(char *input, char **envi)
 	return ;
 }
 
-void	exit_kill(t_stack *node)
+void	exit_kill(t_stack *node) 
 {
 	//kill(node->pipe.node_pid, SIGKILL);
 	deleteAllNodes(node);
 	exit(0);
 }
 
-int	exec_built_in(char *input, char **envi, t_stack *node) //reconvertir en exec in parent y sacar echo para el caso de comillas sin cerrar
+int	exec_built_in(char *input, char **envi, t_stack *node)
 {
-	char	**tokens;
-
-	tokens = ft_split(input, ' ');
-	tokens[0] = lowercase(tokens[0]);
-	if (str_cmp(tokens[0], "echo") == 0)
-		echo(node);
-	else if (str_cmp(tokens[0], "pwd") == 0)
+	if (str_cmp(node->pipe.cmd, "echo") == 0)
+		echo(node, input);
+	else if (str_cmp(node->pipe.cmd, "pwd") == 0)
 		pwd(envi, node);
-	else if (str_cmp(tokens[0], "cd") == 0)
-	{
-		//create_cmds(node);
+	else if (str_cmp(node->pipe.cmd, "cd") == 0)
 		cd(input, envi, node);
-	}
-	else if (str_cmp(tokens[0], "export") == 0)
-		export(input, envi);
-	else if (str_cmp(tokens[0], "unset") == 0)
+	else if (str_cmp(node->pipe.cmd, "export") == 0)
+		export(input, envi, node);
+	else if (str_cmp(node->pipe.cmd, "unset") == 0)
 		unset(input, envi);
-	else if (str_cmp(tokens[0], "env") == 0)
+	else if (str_cmp(node->pipe.cmd, "env") == 0)
 		env(envi, node);
-	else if (str_cmp(tokens[0], "parse") == 0)
-		parse(input);
-	else if (str_cmp(tokens[0], "exit") == 0)
-		exit_kill(node);
-	else
+	else if (str_cmp(node->pipe.cmd, "exit") == 0)
 	{
-		clear(tokens);
-		return (1);
+		printf("cucu exit\n");
+		exit_kill(node);
 	}
-	clear(tokens);
+	g_num_quit = 0; //status a 0.
 	return (0);
 }

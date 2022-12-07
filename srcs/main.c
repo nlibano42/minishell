@@ -36,6 +36,8 @@ int	main(int argc, char **argv, char **env)
 	stack = NULL;
 	tokens = NULL;
 	sig_handler(1);
+	//envir = set_envi(env);
+
 	while (1)
 	{
 		input = readline("MiniShell $> ");
@@ -48,12 +50,10 @@ int	main(int argc, char **argv, char **env)
 			if (str_cmp(tokens[0], "exit") == 0)
 			{
 				free_all_params(&stack, &input, &tokens);
-			//	clear(tokens);
-			//	free(input);
 				break ;
 			}
 			stack = pipe_stack(input, env);
-			exec_stack(stack);
+			exec_stack(stack, input);
 		}
 		free_all_params(&stack, &input, &tokens);
 	}

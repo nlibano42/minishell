@@ -34,12 +34,13 @@ typedef struct s_env
 {
 	char	*name;
 	char	*val;
-	char	*next;
+	struct s_env	*next;
 }	t_env;
 
 typedef struct s_pipe
 {
     char	*input;
+    char    *parsed_input;
     int		p[2];
     char	**envi; //esto hay que quitar. trasladar todo a struct
     char	*ext_path;
@@ -58,13 +59,18 @@ typedef struct s_stack
 int	g_num_quit;
 
 //builtin
-int			echo(t_stack *stack);
+int			echo(t_stack *stack, char *input);
 void		env(char **envi, t_stack *node);
 void	    pwd(char **envi, t_stack *node);
-void		export(char *input, char **envi);
 void	    unset(char *input, char **envi);
 void        exit_kill(t_stack *node);
 int         exec_built_in(char *input, char **envi, t_stack *node);
+
+//export
+char	**export_add(char **envi, char *vbl);
+char	**sort_env(char **env);
+void    export(char *input, char **envi, t_stack *node);
+void	export_no_args(char **env, t_stack *node);
 
 //cd
 char    *active_dir(char **envi);
@@ -77,7 +83,7 @@ void    cd(char *input, char **envi, t_stack *node);
 //execbash
 void    exec_in_child(char *input, char **envi, t_stack *stack);
 pid_t	child_launch(char *input, char **envi, t_stack *stack);
-void    exec_stack(t_stack *stack);
+void    exec_stack(t_stack *stack, char *input);
 
 //execv
 int	    launch(char *intro, char **envi, t_stack *node);
@@ -109,14 +115,14 @@ char    *search_vble_env(char *txt, int init);
 char	*parse(char *txt);
 int	    OLD_quote_in_or_out(char *txt, int ini);
 void    flag_check(int flag, int *flags);
-char *expand_vble(char *txt, int *init);
+char    *expand_vble(char *txt, int *init);
 char    *quote_in_or_out_loop(char *txt, int *count, int *flags);
 char    *expand_loop(char *txt);
 int     inside_simple(char *txt, int *flags, int *count, int *i);
 int     inside_doble(char *txt, int *flags, int *count, int *i);
 
-char	*new_quote_in_or_out_loop(char *txt, int *count, int *flags);
 void	flip_flag(char *txt, int *flags, int *count, int i, int f);
+
 
     /*version 2*/
 char	*parsing	(char *input);
@@ -162,5 +168,19 @@ void 	sig_handler(int sig);
 void	restore_prompt(int sig);
 void	ctrl_c(int sig);
 void	back_slash(int sig);
+
+//enviroment
+t_env  *set_envi(char **env);
+t_env  *create_vble(char *envi);
+void    insert_env(t_env *envi, t_env *vble);
+void deleteEnviro(t_env *envi);
+
+//lst_env
+t_env	*ft_lstnew(char *name, char *val);
+void	ft_lstadd_back(t_env **lst, t_env *new);
+t_env	*ft_lstfind(t_env *lst, char *name);
+void	ft_lstclear(t_env **lst);
+void	ft_lstdelone(t_env *lst);
+t_env   **ft_lstlast(t_env **lst);
 
 #endif

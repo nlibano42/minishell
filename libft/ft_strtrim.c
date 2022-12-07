@@ -12,7 +12,6 @@
 
 #include "libft.h"
 
-//static int	ft_char_in_set(char c, char const *set)
 int	ft_char_in_set(char c, char const *set)
 {
 	size_t	i;
