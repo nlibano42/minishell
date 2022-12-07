@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 01:14:15 by nlibano-          #+#    #+#             */
-/*   Updated: 2022/12/07 21:31:24 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/07 22:11:14 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ t_env	*ft_lstnew(char *name, char *val)
 	list = malloc(sizeof(t_env));
 	if (!list)
 		return (NULL);
-	list->name = name;
-	list->val = val;
+	list->name = ft_strdup(name);
+	list->val = ft_strdup(val);
 	list->next = NULL;
 	return (list);
 }
@@ -69,7 +69,11 @@ void	ft_lstclear(t_env **lst)
 void	ft_lstdelone(t_env *lst)
 {
 	if (lst)
+	{
+		free(lst->name);
+		free(lst->val);
 		free(lst);
+	}
 }
 
 t_env	*ft_lstlast(t_env *lst)

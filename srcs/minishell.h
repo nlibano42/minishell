@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:19:59 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/07 21:26:19 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/07 22:43:16 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ typedef struct s_pipe
     char    *parsed_input;
     int		p[2];
     char	**envi; //esto hay que quitar. trasladar todo a struct
-    char	*ext_path;
+//    struct s_env	*env;
+	char	*ext_path;
     char	*cmd;
     char	**arg;
     //pid_t   node_pid;
@@ -56,7 +57,13 @@ typedef struct s_stack
     struct s_stack  *prev;
 }	t_stack;
 
-int	g_num_quit;
+typedef struct	s_shell
+{
+	int				num_quit;
+	struct s_env	*env;
+}	t_shell;
+
+t_shell	g_shell;
 
 //builtin
 int			echo(t_stack *stack, char *input);
@@ -64,12 +71,12 @@ void		env(char **envi, t_stack *node);
 void	    pwd(char **envi, t_stack *node);
 void	    unset(char *input, char **envi);
 void        exit_kill(t_stack *node);
-int         exec_built_in(char *input, char **envi, t_stack *node);
+int         exec_built_in(char *input, t_stack *node);
 
 //export
 char	**export_add(char **envi, char *vbl);
 char	**sort_env(char **env);
-void    export(char *input, char **envi, t_stack *node);
+void    export(char *input, t_stack *node);
 void	export_no_args(char **env, t_stack *node);
 
 //cd
@@ -78,15 +85,15 @@ int     init_cd(char *input, char **envi, t_stack *node);
 void    update_pwd(char **envi, t_stack *node);
 void    expand_relative(char **envi, t_stack *node);
 void    expand_relative2(char **envi, t_stack *node);
-void    cd(char *input, char **envi, t_stack *node);
+void    cd(char *input, t_stack *node);
 
 //execbash
-void    exec_in_child(char *input, char **envi, t_stack *stack);
-pid_t	child_launch(char *input, char **envi, t_stack *stack);
+void    exec_in_child(char *input, t_stack *stack);
+pid_t	child_launch(char *input, t_stack *stack);
 void    exec_stack(t_stack *stack, char *input);
 
 //execv
-int	    launch(char *intro, char **envi, t_stack *node);
+int	    launch(char *intro, t_stack *node);
 const char	*search_cmd(char *txt, char **envi);
 const char	*path_exe(char **envi, char *txt);
 int	accesible(const char *path);
@@ -144,8 +151,8 @@ void    exp_act_path(t_stack *node);
 void    exp_up_path(t_stack *node);
 
 //stack
-t_stack  *pipe_stack(char * input, char **envi);
-t_stack  *create_node(char *txt, char **envi);
+t_stack  *pipe_stack(char * input);
+t_stack  *create_node(char *txt);
 void            insert_f_pipe(t_stack *node, t_stack *stack);
 void            insert_l_pipe(t_stack *node, t_stack *stack);
 void            free_stack(t_stack *stack);

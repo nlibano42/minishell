@@ -6,30 +6,29 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 11:39:07 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/06 02:35:24 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/07 22:33:21 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_stack *pipe_stack(char * input, char **envi)
+t_stack *pipe_stack(char * input)
 {
-    t_stack  *stack;
-    t_stack  *tmp_node;
-    char            **tokens;
-    int             i;
-    
-   
+    t_stack	*stack;
+    t_stack	*tmp_node;
+    char	**tokens;
+    int		i;
+
     tokens = ft_split(input, '|');
     if (tokens[0])
     {
-        stack = create_node(tokens[0], envi);
+        stack = create_node(tokens[0]);
         create_cmds(&stack);
     }
     i = 1;
     while (tokens[i])
     {
-        tmp_node = create_node(tokens[i], envi);
+        tmp_node = create_node(tokens[i]);
         create_cmds(&tmp_node);
         insert_l_pipe(tmp_node, stack);
         i++;
@@ -39,13 +38,13 @@ t_stack *pipe_stack(char * input, char **envi)
     return (stack);
 }
 
-t_stack  *create_node(char *txt, char **envi) 
+t_stack  *create_node(char *txt) 
 {
     t_stack  *node;
    
     node = (t_stack *)malloc(sizeof(t_stack));
     node->pipe.input = txt;
-    node->pipe.envi = envi;
+ //   node->pipe.env = env;
     node->pipe.cmd = NULL;
     node->pipe.arg = NULL;
     node->pipe.ext_path = NULL;
@@ -107,6 +106,8 @@ void	free_pipe(t_pipe pipe)
 		free(pipe.cmd);
 	if (pipe.arg)
 		clear(pipe.arg);
+//	if (pipe.env)
+//		ft_lstclear(&(pipe.env));
 }
 
 void deleteAllNodes(t_stack *start)
