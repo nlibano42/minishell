@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 17:03:32 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/06 02:19:01 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/02 23:06:32 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,61 +35,69 @@ char * no_blancks(char *txt)
     return(ret);
 }
 
-void    create_cmds(t_stack **node)
+void    create_cmds(t_stack *node)
 {
-    char            **words;
-    int             i;
+    char    **words;
+    int     i;
     
-    words = ft_split((*node)->pipe.input, ' ');
-    (*node)->pipe.arg = (char **)malloc(sizeof(char *) * (ft_str2len(words)) + 1);
-	if (!((*node)->pipe.arg))
+    words = ft_split(node->pipe.input, ' ');
+    node->pipe.arg = (char **)malloc(sizeof(char*) * ft_str2len(words)); //tenemos un espacio de más porque words contiene cmd y args
+	if (!node->pipe.arg)
 		return ;
-    (*node)->pipe.cmd = ft_strdup(words[0]);
-    i = 0;
-    while(words[++i])
-        (*node)->pipe.arg[i - 1] = ft_strdup(words[i]);
-	(*node)->pipe.arg[i - 1] = NULL;
-//    cmd_path(node);
-    clear(words);
+    node->pipe.cmd = words[0];
+    i = 1;
+    
+    while(words[i])
+    {
+        node->pipe.arg[i - 1] = words[i];
+        //ft_strcpy(node->pipe.arg[i] , words[i]);
+        i++;
+    }
+    node->pipe.arg[i -1] = '\0';
+	//node->pipe.arg[i - 1] = NULL;
+    
+    cmd_path(node);
+    free(words);
 }
 
-/*void cmd_path(t_stack **node) //si el cmd viene con ruta
+void cmd_path(t_stack *node) //si el cmd viene con ruta
 {
     char ruta[999];
     char comand[999];
     int i;
     int c;
 
-    i = ft_strlen((*node)->pipe.cmd);
+    i = ft_strlen(node->pipe.cmd);
     c = 0;
-    while(--i >= 0)
+    while(i >= 0)
     {
-        if((*node)->pipe.cmd[i] == '/')
+        if(node->pipe.cmd[i] == '/')
             c++;
+        i--;
     }
     i = 0;
     while(c > 0)
     {
-        if((*node)->pipe.cmd[i] == '/')
+        if(node->pipe.cmd[i] == '/')
             c--;
-        ruta[i] = (*node)->pipe.cmd[i];
+        ruta[i] = node->pipe.cmd[i];
         i++;
     }
     ruta[i] = '\0';
-    (*node)->pipe.ext_path = ruta;
+    node->pipe.ext_path = ruta;
     if (ruta[0] != '\0')
-        relative_path(*node);
+        relative_path(node);
     c = 0;
-    while((*node)->pipe.cmd[i] != '\0')
+    while(node->pipe.cmd[i] != '\0')
     {
-        comand[c] = (*node)->pipe.cmd[i];
+        comand[c] = node->pipe.cmd[i];
         i++;
         c++;
     }
     comand[c] = '\0';
-    ft_strcpy((*node)->pipe.cmd, comand);
+    ft_strcpy(node->pipe.cmd, comand);
 }
-*/
+
 
 void    relative_path(t_stack *node) //expandir una ruta relativa ../ o ./
 {

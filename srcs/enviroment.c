@@ -12,34 +12,42 @@
 
 #include "minishell.h"
 
-/*
-t_env	**set_envi(char **env)
+
+t_env	*set_envi(char **env)
 {
-	t_env *tmp_env;
-    t_env **result;
+	t_env *tmp;
+    t_env *result;
     char **values;
     int i;
 
-   // tmp_env = ft_lstnew(char *name, char *val);
-    
-    //envir = tmp_env;
-    i = 0;
-    result = NULL;
+    values = ft_split(env[0], '=');
+    result = ft_lstnew(values[0], values[1]);
+    i = 1;
     while(env[i])
     {
         values = ft_split(env[i], '=');
-        tmp_env = ft_lstnew(values[0], values[1]);
-        //ft_lstadd_back(result, tmp_env);
-        (*result)->next = tmp_env;
+        tmp = ft_lstnew(values[0], values[1]);
+        result->next = tmp;
+        printf("Checking enviro[%d] val %s value %s\n", i, result->name, result->val);
+        result = result->next;
         i++;
     }
     return(result);
 }
-*/
 
+void    print_enviro(t_env *enviro)
+{
+    t_env *result;
+    
+    result = enviro;
+    while(result->next != NULL)
+    {
+        printf("Checking val %s value %s\n", result->name, result->val);
+        result = result->next;
+    }
+}
 
-
-
+/*
 t_env	*set_envi(char **env)
 {
 	t_env *tmp_env;
@@ -59,7 +67,7 @@ t_env	*set_envi(char **env)
     }
     return(result);
 }
-
+*/
 t_env  *create_vble(char *envi) //para iniciliar y modificar para usar en export 
 {
     t_env  *vble;
@@ -106,3 +114,20 @@ void deleteEnviro(t_env *envi)
     }
 }
 
+/*
+char **copy_env(char **env)
+{
+    char    **copy;
+    int     i;
+
+    i = 0;
+    copy = (char **)malloc(sizeof(char*) * (ft_str2len(env) + 1));
+    while(env[i])
+    {
+        copy[i] = env[i];
+        i++;
+    }
+    copy[i] = NULL;
+    return(copy);
+}
+*/

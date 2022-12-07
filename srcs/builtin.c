@@ -86,9 +86,9 @@ void	unset(char *input, char **envi)
 				envi[i] = envi[i + 1];
 				i++;
 			}
-//			envi[i] = '\0';
 			envi[i] = NULL;
 			clear(var);
+			clear(arguments);
 			return ;
 		}
 		i++;
@@ -99,7 +99,6 @@ void	unset(char *input, char **envi)
 
 void	exit_kill(t_stack *node) 
 {
-	//kill(node->pipe.node_pid, SIGKILL);
 	deleteAllNodes(node);
 	exit(0);
 }
@@ -119,10 +118,7 @@ int	exec_built_in(char *input, char **envi, t_stack *node)
 	else if (str_cmp(node->pipe.cmd, "env") == 0)
 		env(envi, node);
 	else if (str_cmp(node->pipe.cmd, "exit") == 0)
-	{
-		printf("cucu exit\n");
 		exit_kill(node);
-	}
 	g_num_quit = 0; //status a 0.
 	return (0);
 }

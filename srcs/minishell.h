@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:19:59 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/06 17:46:55 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/02 21:34:28 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,13 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+/*typedef struct s_shell
+{
+	struct t_env	*env;
+	int				quit;
+	int				fork;
+}	t_shell;
+*/
 typedef struct s_pipe
 {
     char	*input;
@@ -46,6 +53,7 @@ typedef struct s_pipe
     char	*ext_path;
     char	*cmd;
     char	**arg;
+//	int				quit;
     //pid_t   node_pid;
 } t_pipe;
 
@@ -56,7 +64,17 @@ typedef struct s_stack
     struct s_stack  *prev;
 }	t_stack;
 
+typedef struct	s_shell
+{
+	t_pipe	*pipe;
+	int		quit;
+}	t_shell;
+
+//t_shell	g_shell;
+/*VARIABLES GLOBALES*/
 int	g_num_quit;
+int sig;
+//enviroment tambien global??
 
 //builtin
 int			echo(t_stack *stack, char *input);
@@ -67,7 +85,7 @@ void        exit_kill(t_stack *node);
 int         exec_built_in(char *input, char **envi, t_stack *node);
 
 //export
-char	**export_add(char **envi, char *vbl);
+char    **export_add(char **envi, char *vbl);
 char	**sort_env(char **env);
 void    export(char *input, char **envi, t_stack *node);
 void	export_no_args(char **env, t_stack *node);
@@ -94,20 +112,14 @@ int	accesible(const char *path);
 //in_out
 int     is_built(char *input);
 int     fd_putstr_out(char *str, t_stack *node);
-void    redirect_pipes(t_stack *node);
+void    redirect_pipes(t_stack *node); //no se redirecciona
 int     read_pipe(int fd, char *str); //deshuso
 int     write_pipe(int fd, char *str); //deshuso
 
 //main
 void	clear(char **intro);
-void	free_all_params(t_stack **stack, char **input, char ***tokens);
 
 //parse
-int     expand(char **txt);
-int     expand2(char *txt);
-char	*literal(char *input);
-int     inside_open_quotes(char *input);
-    /*version 1*/
 void    quote_in_or_out(char txt, int *count, int *flags);
 void    quote_d_count(char *txt, int *count);
 void	remove_quote(char *txt, int init);
@@ -118,27 +130,11 @@ void    flag_check(int flag, int *flags);
 char    *expand_vble(char *txt, int *init);
 char    *quote_in_or_out_loop(char *txt, int *count, int *flags);
 char    *expand_loop(char *txt);
-int     inside_simple(char *txt, int *flags, int *count, int *i);
-int     inside_doble(char *txt, int *flags, int *count, int *i);
-
 void	flip_flag(char *txt, int *flags, int *count, int i, int f);
 
-
-    /*version 2*/
-char	*parsing	(char *input);
-char    *expand3(char *txt, int init, int end);
-int inside_open_quotes2(char *input);
-int outside_quotes(char *input);
-char	**parse_split(char *input, char c);
-int count_words(char *str);
-void	fill(char *str, char **word, int index);
-void	malloc_split(char *entry, char **splited, int index);
-
-
-
 //lexer
-void    create_cmds(t_stack **node);
-//void    cmd_path(t_stack **node);
+void    create_cmds(t_stack *node);
+void    cmd_path(t_stack *node);
 void    relative_path(t_stack *node);
 void    exp_act_path(t_stack *node);
 void    exp_up_path(t_stack *node);
@@ -164,16 +160,16 @@ int			str_cmp(char *str1, char *str2);
  t_stack *stack_first(t_stack *stack);
 
 //signals
+//void	sig_handler(int signum, siginfo_t *info, void *context);
 void 	sig_handler(int sig);
-void	restore_prompt(int sig);
-void	ctrl_c(int sig);
-void	back_slash(int sig);
 
 //enviroment
 t_env  *set_envi(char **env);
 t_env  *create_vble(char *envi);
 void    insert_env(t_env *envi, t_env *vble);
 void deleteEnviro(t_env *envi);
+char **copy_env(char **env);
+void    print_enviro(t_env *enviro);
 
 //lst_env
 t_env	*ft_lstnew(char *name, char *val);

@@ -12,86 +12,9 @@
 
 #include "minishell.h"
 
-
-/*EXPANDIR VBLE $*/
-int	expand(char **txt)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 1;
-	while (txt[i])
-	{
-		if (txt[i][0] == '$')
-		{
-			while (txt[i][j])
-			{
-				txt[i][j - 1] = txt[i][j];
-				j++;
-			}
-			txt[i][j - 1] = '\0';
-			txt[i] = getenv(txt[i]);
-			if (!txt[i])
-				return (1);
-			j = 1;
-		}
-		i++;
-	}
-	return (0);
-}
-
-int	expand2(char *txt)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 1;
-	if (txt[0] == '$')
-	{
-		while (txt[i])
-		{
-			txt[i - 1] = txt[i];
-			j++;
-		}
-		txt[i - 1] = '\0';
-		printf("txt '%s'", txt);
-		txt = getenv(txt);
-		if (!txt[i])
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-char	*literal(char *input)
-{
-	char	**tokens;
-	char	**next;
-
-	tokens = ft_split(input, '"');
-	next = (char**)malloc(sizeof(char *) * 2);
-    /*
-    if (tokens[0])
-        next[0] = (char *)malloc(sizeof(char) * ft_strlen(tokens[0]));
-    if (tokens[1])
-        next[1] = (char *)malloc(sizeof(char) * ft_strlen(tokens[1]));
-    */
-    //ft_strcpy(next[0], tokens[0]);
-    //ft_strcpy(next[1], tokens[1]);
-	if (!next[0] && !next[1])
-		return ("");
-	next[0] = tokens[0];
-	next[1] = tokens[1];
-	return (next[1]);
-}
-
 /*SI ESTAMOS DENTRO O FUERA DE "dobles" o 'simples'*/
 /*Dobles: dentro inhibir menos $*/
 /*Simples: dentro inhibir todo*/
-
-/*ESTE ES EL PARSER*/
 
 char	*parse(char *txt)
 {
@@ -105,7 +28,10 @@ char	*parse(char *txt)
 	
 	quote_d_count(txt, count);
 	if ( (txt = quote_in_or_out_loop(txt, count, flags)) == NULL)
+	{
+		g_num_quit = 1;
 		return("echo -Minishell: echo: opened quotes");
+	}
 	return(txt);
 }
 
@@ -175,8 +101,6 @@ char *expand_vble(char *txt, int *init)
 	}
 	exp[j] = '\0';
 	txt = exp;
-	//ft_strcpy(txt, exp);
-	//printf("expanded ::%s::\n", txt);
 	return(txt);
 }
 
@@ -216,16 +140,13 @@ char	*quote_in_or_out_loop(char *txt, int *count, int *flags)
 			if((count[1] % 2 == 0 && count[1] > 0) && flags[0] != -1)//dentro, entramos simples (ignorar dentro las dobles)
 			{
 				flip_flag(txt, flags, count, i, 1);
-				//write(1, "simple in\n", 10);
-				while(txt[i] != 39) // 39 es el ascii de '
+				while(txt[i] != 39)
 				{
 					if (txt[i] == '\0')
 						return(NULL);
-					//write(1,".", 1);
 					i++;
 				}
 				flip_flag(txt, flags, count, i, 1);
-				//write(1, "\nsimple out\n", 11);
 			}
 		}
 		else if(txt[i] == 34) //34 es el ascci de ""
@@ -233,7 +154,6 @@ char	*quote_in_or_out_loop(char *txt, int *count, int *flags)
 			if((count[0] % 2 == 0 && count[0] > 0) && flags[1] != -1) //dentro, entramos dobles (ignorar dentro las simples)
 			{	
 				flip_flag(txt, flags, count, i, 0);
-				//write(1, "doble in\n", 9);
 				while(txt[i] != 34)
 				{
 					if (txt[i] == 36) //36 es el ascci de $
@@ -241,19 +161,15 @@ char	*quote_in_or_out_loop(char *txt, int *count, int *flags)
 						txt = expand_vble(txt, j);
 					}
 					if (txt[i] == '\0')
-					{
 						return(NULL);
-					}
-					//write(1,".", 1);
 					i++;
 				}
 				flip_flag(txt, flags, count, i, 0);
-				//write(1, "doble out\n", 9);
 			}
 		}
 		else if (txt[i] == 36) //36 es el ascci de $
 			txt = expand_vble(txt, j);
-		else if (txt[i] == 39 || txt[i] == 34)
+		else if (txt[i] == 39 || txt[i] == 34) //comillas que no cierran, opned quotes
 			return(NULL);	
 		i++;
 	}

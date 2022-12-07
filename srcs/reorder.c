@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:54:17 by marvin            #+#    #+#             */
-/*   Updated: 2022/12/02 16:56:45 by marvin           ###   ########.fr       */
+/*   Updated: 2022/12/07 11:46:40 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int exit_cmd_in_stack(t_stack *stack)
 
     i = 0;
     tmp = stack;
-    while(tmp != NULL)
+    while(tmp->next != NULL)
     {
         if(str_cmp(tmp->pipe.cmd, "exit") == 0)
             return(i);

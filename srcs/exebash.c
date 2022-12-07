@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 13:33:24 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/06 13:10:38 by marvin           ###   ########.fr       */
+/*   Updated: 2022/12/07 11:24:25 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,10 @@ void exec_in_child(char *input, char **envi, t_stack *stack)
 	close(node->pipe.p[1]);
 	if (is_built(node->pipe.cmd) == 0)
 		exit(0); //close the process, it will be excecuted in the parent
-	if(is_built(node->pipe.cmd) == 1)
+	else if(is_built(node->pipe.cmd) == 1)
 	{
-		sig_handler(2);
-		if (launch(input, envi, node) == -1) //get path and launch execve. -1 = error
-		{
-			fd_putstr_out("-Minishell: ", node); //printf para que salga siempre en pantalla?
-			fd_putstr_out(node->pipe.cmd, node);
-			fd_putstr_out(": command not found\n", node);
-			g_num_quit = 127;
-			exit(127);
-		}
+		sig = 2;
+		launch(input, envi, node);
 	}
 }
 
@@ -109,4 +102,31 @@ int is_built(char *cmd)
 	else if (str_cmp(cmd, "parse") == 0)
 		r = 0;
 	return (r);
+}
+
+void old_exec_in_child(char *input, char **envi, t_stack *stack)
+{
+	t_stack *node;
+
+	node = stack;
+	if (node->next != NULL) // send stdout to the pipe to next comand
+		dup2(node->next->pipe.p[1],1);
+	if(node->prev != NULL)  //stdin entrada debe ser lo leido del pipe
+		dup2(node->pipe.p[0], 0);
+	close(node->pipe.p[0]);
+	close(node->pipe.p[1]);
+	if (is_built(node->pipe.cmd) == 0)
+		exit(0); //close the process, it will be excecuted in the parent
+	else if(is_built(node->pipe.cmd) == 1)
+	{
+		sig = 2;
+		if (launch(input, envi, node) == -1) //get path and launch execve. -1 = error
+		{
+			fd_putstr_out("-Minishell: ", node); //printf para que salga siempre en pantalla?
+			fd_putstr_out(node->pipe.cmd, node);
+			fd_putstr_out(": command not found\n", node);
+			g_num_quit = 127;
+			exit(127);
+		}
+	}
 }
