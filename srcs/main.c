@@ -30,7 +30,6 @@ int	main(int argc, char **argv, char **env)
 	char	*input;
 	char	**tokens;
 	t_stack	*stack;
-	
 
 	(void)argc;
 	(void)argv;
