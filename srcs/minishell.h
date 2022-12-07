@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:19:59 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/06 17:46:55 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/07 19:11:05 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ void	malloc_split(char *entry, char **splited, int index);
 
 //lexer
 void    create_cmds(t_stack **node);
-//void    cmd_path(t_stack **node);
+void    cmd_path(t_stack **node);
 void    relative_path(t_stack *node);
 void    exp_act_path(t_stack *node);
 void    exp_up_path(t_stack *node);

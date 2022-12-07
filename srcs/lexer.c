@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 17:03:32 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/06 02:19:01 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/07 19:11:19 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,11 @@ void    create_cmds(t_stack **node)
     while(words[++i])
         (*node)->pipe.arg[i - 1] = ft_strdup(words[i]);
 	(*node)->pipe.arg[i - 1] = NULL;
-//    cmd_path(node);
+    cmd_path(node);
     clear(words);
 }
 
-/*void cmd_path(t_stack **node) //si el cmd viene con ruta
+void cmd_path(t_stack **node) //si el cmd viene con ruta
 {
     char ruta[999];
     char comand[999];
@@ -89,7 +89,7 @@ void    create_cmds(t_stack **node)
     comand[c] = '\0';
     ft_strcpy((*node)->pipe.cmd, comand);
 }
-*/
+
 
 void    relative_path(t_stack *node) //expandir una ruta relativa ../ o ./
 {
