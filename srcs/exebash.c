@@ -6,13 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 13:33:24 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/06 13:10:38 by marvin           ###   ########.fr       */
+/*   Updated: 2022/12/07 22:40:10 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void exec_in_child(char *input, char **envi, t_stack *stack)
+void exec_in_child(char *input, t_stack *stack)
 {
 	t_stack *node;
 
@@ -28,18 +28,18 @@ void exec_in_child(char *input, char **envi, t_stack *stack)
 	if(is_built(node->pipe.cmd) == 1)
 	{
 		sig_handler(2);
-		if (launch(input, envi, node) == -1) //get path and launch execve. -1 = error
+		if (launch(input, node) == -1) //get path and launch execve. -1 = error
 		{
 			fd_putstr_out("-Minishell: ", node); //printf para que salga siempre en pantalla?
 			fd_putstr_out(node->pipe.cmd, node);
 			fd_putstr_out(": command not found\n", node);
-			g_num_quit = 127;
+			g_shell.num_quit = 127;
 			exit(127);
 		}
 	}
 }
 
-pid_t	child_launch(char *input, char **envi, t_stack *stack)
+pid_t	child_launch(char *input, t_stack *stack)
 {
 	pid_t	ch_pid;
 	t_stack *node;
@@ -53,19 +53,19 @@ pid_t	child_launch(char *input, char **envi, t_stack *stack)
 	}
 	if (ch_pid == 0) //HIJO
 	{
-		exec_in_child(input, envi, stack);
+		exec_in_child(input, stack);
 	}
 	if(ch_pid > 0) //PADRE
 	{
 		close(node->pipe.p[1]);
 		if (is_built(node->pipe.cmd) == 0)
 		{
-			exec_built_in(input, envi, node);
+			exec_built_in(input, node);
 		}
 		close(node->pipe.p[0]);
  	}
 	//wait(NULL);
-	wait(&g_num_quit); //variable para el exit status
+	wait(&(g_shell.num_quit)); //variable para el exit status
 	return (ch_pid);
 }
 
@@ -80,7 +80,7 @@ void    exec_stack(t_stack *stack, char *input)
 		tmp = reorder_stack(stack);
     while(tmp != NULL)
     {
- 		child_launch(input, tmp->pipe.envi, tmp);
+ 		child_launch(input, tmp);
         tmp = tmp->next;
         i++;
     }

@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 10:40:03 by marvin            #+#    #+#             */
-/*   Updated: 2022/12/02 01:26:36 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/07 23:03:43 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,65 +33,65 @@ int	echo(t_stack *node, char* input)
 	return (0);
 }
 
-void	env(char **envi, t_stack *node)
+void	env(, t_stack *node)
 {
-	int	i;
+	t_env	*env;
 
-	i = 0;
-	while (envi[i])
+	env = g_shell.env;
+	while (env)
 	{
-		fd_putstr_out(envi[i++], node);
+		fd_putstr_out(env->name, node);
+		fd_putstr_out("=", node);
+		fd_putstr_out(env->val, node);
 		fd_putstr_out("\n", node);
+		env = env->next;
 	}
 }
 
-void	pwd(char **envi, t_stack *node)
+void	pwd(t_stack *node)
 {
-	int		i;
-	char	**var;
+	t_env	*env;
 
-	i = 0;
-	while (envi[i])
+	env = g_shell.env;
+	while (env)
 	{
-		var = ft_split(envi[i], '=');
-		if (str_cmp(var[0], "PWD") == 0)
+		if (str_cmp(env.name, "PWD") == 0)
 		{
-			fd_putstr_out(var[1], node);
+			fd_putstr_out(env.val, node);
 			fd_putstr_out("\n", node);
-			clear (var);
 			break;
 		}
-		i++;
-		clear (var);
+		env = env->next;
 	}
 }
 
-void	unset(char *input, char **envi)
+void	unset(char *input)
 {
-	int		i;
-	char	**var;
+	t_env	*env;
+	t_env	*tmp;
 	char	**arguments;
 
-	i = 0;
+	env = g_shell.env;
 	arguments = ft_split(input, ' ');
 	if (!arguments[1])
 		return ;
-	while (envi[i])
+	tmp = NULL;
+	while (env)
 	{
-		var = ft_split(envi[i], '=');
 		if (str_cmp(var[0], arguments[1]) == 0)
 		{
-			while(envi[i + 1])
+			if (tmp)
 			{
-				envi[i] = envi[i + 1];
-				i++;
+				if(env->next)
+					tmp->next = NULL;
+				else
+					tmp->next = env->next;
 			}
-//			envi[i] = '\0';
-			envi[i] = NULL;
-			clear(var);
+			ft_lstdelone(env);
 			return ;
 		}
-		i++;
+		tmp = env;
+		env = env->next;
 	}
 	clear(var);
 	return ;
@@ -104,25 +104,22 @@ void	exit_kill(t_stack *node)
 	exit(0);
 }
 
-int	exec_built_in(char *input, char **envi, t_stack *node)
+int	exec_built_in(char *input, t_stack *node)
 {
 	if (str_cmp(node->pipe.cmd, "echo") == 0)
 		echo(node, input);
 	else if (str_cmp(node->pipe.cmd, "pwd") == 0)
-		pwd(envi, node);
+		pwd(node);
 	else if (str_cmp(node->pipe.cmd, "cd") == 0)
-		cd(input, envi, node);
+		cd(input, node);
 	else if (str_cmp(node->pipe.cmd, "export") == 0)
-		export(input, envi, node);
+		export(input, node);
 	else if (str_cmp(node->pipe.cmd, "unset") == 0)
-		unset(input, envi);
+		unset(input);
 	else if (str_cmp(node->pipe.cmd, "env") == 0)
-		env(envi, node);
+		env(node);
 	else if (str_cmp(node->pipe.cmd, "exit") == 0)
-	{
-		printf("cucu exit\n");
 		exit_kill(node);
-	}
-	g_num_quit = 0; //status a 0.
+	g_shell.num_quit = 0; //status a 0.
 	return (0);
 }

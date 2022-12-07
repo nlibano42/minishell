@@ -6,7 +6,7 @@
 #    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/07 14:52:36 by marvin            #+#    #+#              #
-#    Updated: 2022/12/07 19:04:18 by nlibano-         ###   ########.fr        #
+#    Updated: 2022/12/07 22:34:53 by nlibano-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,12 +20,12 @@ READLINE_DIR = ${HOME}/.brew/opt/readline
 
 #SRCS		= main.c signals.c\
 
-SRCS		= main.c signals.c builtin.c parse.c exebash.c stack.c in_out.c cd.c execv.c lexer.c chain.c reorder.c export.c\
+SRCS		= main.c signals.c builtin.c parse.c exebash.c stack.c in_out.c cd.c execv.c lexer.c chain.c reorder.c export.c enviroment.c lst_env.c\
 		
 
 # Compiler options
 CC			= gcc
-CFLAGS		= -Wall -Wextra -Werror -g3 #-fsanitize=address
+CFLAGS		= -Wall -Wextra -Werror -g3 -fsanitize=address
 #DFLAG		= -lreadline
 F_READLINE	= -I$(READLINE_DIR)/include
 DFLAG		= -lreadline -L$(READLINE_DIR)/lib
