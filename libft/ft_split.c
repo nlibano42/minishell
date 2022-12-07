@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlibano- <nlibano-@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 13:53:14 by nlibano-          #+#    #+#             */
-/*   Updated: 2022/12/05 13:34:04 by marvin           ###   ########.fr       */
+/*   Updated: 2022/12/02 23:15:39 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static size_t	ft_get_split_size(char const *s, char c)
 
 static char	**ft_split_add(const char *s, char **dst, size_t i, size_t len)
 {
-	dst[i] = (char *)malloc(sizeof(char) * (len + 1));
+	dst[i] = (char *)malloc(sizeof(char) * len + 1);
 	if (!dst[i])
 	{
 		while (i)
