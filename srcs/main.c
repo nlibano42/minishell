@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 11:33:47 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/06 18:09:12 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/07 20:41:28 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,15 @@ int	main(int argc, char **argv, char **env)
 	char	*input;
 	char	**tokens;
 	t_stack	*stack;
+	t_env	*envi;
 
 	(void)argc;
 	(void)argv;
 	stack = NULL;
 	tokens = NULL;
 	sig_handler(1);
-	//envir = set_envi(env);
+	envi = NULL;
+	set_envi(&envi, env);
 
 	while (1)
 	{

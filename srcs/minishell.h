@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:19:59 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/07 19:11:05 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/07 21:26:19 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@
 
 typedef struct s_env
 {
-	char	*name;
-	char	*val;
+	char			*name;
+	char			*val;
 	struct s_env	*next;
 }	t_env;
 
@@ -170,7 +170,7 @@ void	ctrl_c(int sig);
 void	back_slash(int sig);
 
 //enviroment
-t_env  *set_envi(char **env);
+void	set_envi(t_env **envi, char **env);
 t_env  *create_vble(char *envi);
 void    insert_env(t_env *envi, t_env *vble);
 void deleteEnviro(t_env *envi);
@@ -181,6 +181,6 @@ void	ft_lstadd_back(t_env **lst, t_env *new);
 t_env	*ft_lstfind(t_env *lst, char *name);
 void	ft_lstclear(t_env **lst);
 void	ft_lstdelone(t_env *lst);
-t_env   **ft_lstlast(t_env **lst);
+t_env   *ft_lstlast(t_env *lst);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 01:14:15 by nlibano-          #+#    #+#             */
-/*   Updated: 2022/12/06 16:57:13 by marvin           ###   ########.fr       */
+/*   Updated: 2022/12/07 21:31:24 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_env	*ft_lstnew(char *name, char *val)
 	return (list);
 }
 
-/*
+
 void	ft_lstadd_back(t_env **lst, t_env *new)
 {
 	t_env	*last_lst;
@@ -38,7 +38,7 @@ void	ft_lstadd_back(t_env **lst, t_env *new)
 		last_lst->next = new;
 	}
 }
-*/
+
 t_env	*ft_lstfind(t_env *lst, char *name)
 {
 
@@ -72,16 +72,13 @@ void	ft_lstdelone(t_env *lst)
 		free(lst);
 }
 
-/*
-t_env **ft_lstlast(t_env **lst) //ir al ultimo elemento
+t_env	*ft_lstlast(t_env *lst)
 {
-	t_env *tmp;
-
-	while(*lst)
+	while (lst)
 	{
-		tmp = (*lst)->next;
-		*lst = tmp;
+		if (!(lst->next))
+			return (lst);
+		lst = lst->next;
 	}
-	return(lst);
+	return (lst);
 }
-*/
