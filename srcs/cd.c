@@ -157,7 +157,8 @@ void	cd(char *input, char **envi, t_stack *node)
 	char	*old_dir;
 	char	**var;
 	int		i;
-old_dir=NULL;
+
+	old_dir = NULL;
 	i = 0;
 	while (envi[i]) //get active dir
 	{
