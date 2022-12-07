@@ -19,7 +19,7 @@ t_stack *pipe_stack(char * input, char **envi)
     char            **tokens;
     int             i;
     
-    //input = parse(input);   /* UNA VEZ BIEN HECHO, PARSEAR AQUÍ */ 
+   
     tokens = ft_split(input, '|');
     if (tokens[0])
     {
@@ -42,7 +42,7 @@ t_stack *pipe_stack(char * input, char **envi)
 t_stack  *create_node(char *txt, char **envi) 
 {
     t_stack  *node;
-
+   
     node = (t_stack *)malloc(sizeof(t_stack));
     node->pipe.input = txt;
     node->pipe.envi = envi;
@@ -53,12 +53,6 @@ t_stack  *create_node(char *txt, char **envi)
     node->prev = NULL;
     pipe(node->pipe.p);
     return(node);
-}
-
-void    insert_f_pipe(t_stack *node, t_stack *stack) //first MAL!!
-{
-    node->next = stack;
-    //stack->next = node;
 }
 
 void    insert_l_pipe(t_stack *node, t_stack *stack) //last
@@ -78,30 +72,6 @@ void    insert_l_pipe(t_stack *node, t_stack *stack) //last
         node->prev = temp;
         temp->next = node;
     }
-}
-
-void    free_stack(t_stack *stack)
-{
-    //t_stack  *tmp;
-
-    
-    if (stack->next == NULL)
-    {
-        free_node(stack);
-        //free(stack);
-    }
-    /*
-    else if(stack->next != NULL) //recorrer la pila y liberar los nodos
-    {
-        tmp = stack;
-        while(stack)
-        {
-            tmp = stack->next;
-            free_node(stack->prev);
-            stack = tmp;
-        }
-        free(stack);
-    } */
 }
 
 void    free_node(t_stack *node)
@@ -127,7 +97,7 @@ void    free_node(t_stack *node)
     if (node->pipe.arg != NULL)
         clear(node->pipe.arg);
     free(node->pipe.cmd);
-    free(node->pipe.input); //lo podemos liberar en lexerc al crear cmds
+    //free(node->pipe.input);
 }*/
 
 void	free_pipe(t_pipe pipe)

@@ -50,7 +50,6 @@ void    create_cmds(t_stack **node)
         (*node)->pipe.arg[i - 1] = ft_strdup(words[i]);
 	(*node)->pipe.arg[i - 1] = NULL;
 //    cmd_path(node);
-    //printf("create cmds: cmd '%s', arg '%s', path '%s'\n", node->pipe.cmd, node->pipe.arg[0], node->pipe.ext_path);
     clear(words);
 }
 
@@ -80,7 +79,6 @@ void    create_cmds(t_stack **node)
     (*node)->pipe.ext_path = ruta;
     if (ruta[0] != '\0')
         relative_path(*node);
-    //printf("Lexer path ext: %s.\n", node->pipe.ext_path);
     c = 0;
     while((*node)->pipe.cmd[i] != '\0')
     {
@@ -112,7 +110,7 @@ void    exp_act_path(t_stack *node) //expandir path actuak ./
     node->pipe.ext_path = exp_dir;
 }
 
-void    exp_up_path(t_stack *node) //exoandir directorio arriba ../
+void    exp_up_path(t_stack *node) //expandir directorio arriba ../
 {
     char    *exp_dir;
     char    *tmp;
