@@ -74,7 +74,10 @@ void	unset(char *input)
 	env = g_shell.env;
 	arguments = ft_split(input, ' ');
 	if (!arguments[1])
+	{
+		clear(arguments);
 		return ;
+	}
 	tmp = NULL;
 	while (env)
 	{
