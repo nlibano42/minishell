@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 17:03:32 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/07 19:11:19 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/08 02:50:05 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void    exp_act_path(t_stack *node) //expandir path actuak ./
 {
     char    *exp_dir;
 
-    exp_dir = active_dir(node->pipe.envi);
+    exp_dir = active_dir();
     node->pipe.ext_path++; //cambiar esto?
     exp_dir = stradd(exp_dir, node->pipe.ext_path);
     node->pipe.ext_path = exp_dir;
@@ -116,7 +116,7 @@ void    exp_up_path(t_stack *node) //expandir directorio arriba ../
     char    *tmp;
     int     i;
 
-    exp_dir = active_dir(node->pipe.envi);
+    exp_dir = active_dir();
     i = ft_strlen(exp_dir);
     while(exp_dir[i] != '/')
         i--;

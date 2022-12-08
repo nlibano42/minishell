@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 10:40:03 by marvin            #+#    #+#             */
-/*   Updated: 2022/12/07 23:03:43 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/08 01:33:22 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	echo(t_stack *node, char* input)
 	return (0);
 }
 
-void	env(, t_stack *node)
+void	env(t_stack *node)
 {
 	t_env	*env;
 
@@ -55,9 +55,9 @@ void	pwd(t_stack *node)
 	env = g_shell.env;
 	while (env)
 	{
-		if (str_cmp(env.name, "PWD") == 0)
+		if (str_cmp(env->name, "PWD") == 0)
 		{
-			fd_putstr_out(env.val, node);
+			fd_putstr_out(env->val, node);
 			fd_putstr_out("\n", node);
 			break;
 		}
@@ -78,7 +78,7 @@ void	unset(char *input)
 	tmp = NULL;
 	while (env)
 	{
-		if (str_cmp(var[0], arguments[1]) == 0)
+		if (str_cmp(env->name, arguments[1]) == 0)
 		{
 			if (tmp)
 			{
@@ -88,12 +88,13 @@ void	unset(char *input)
 					tmp->next = env->next;
 			}
 			ft_lstdelone(env);
+			clear(arguments);
 			return ;
 		}
 		tmp = env;
 		env = env->next;
 	}
-	clear(var);
+	clear(arguments);
 	return ;
 }
 

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 11:15:56 by marvin            #+#    #+#             */
-/*   Updated: 2022/12/01 11:15:56 by marvin           ###   ########.fr       */
+/*   Updated: 2022/12/08 02:50:57 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char	**export_add(char **envi, char *vbl)
 	return (united);
 }
 
-void	export(char *input, char **envi, t_stack *node)
+void	export(char *input, t_stack *node)
 {
 	int		j;
 	int		exist;

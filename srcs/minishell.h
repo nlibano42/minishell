@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:19:59 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/07 22:43:16 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/08 02:22:02 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ t_shell	g_shell;
 
 //builtin
 int			echo(t_stack *stack, char *input);
-void		env(char **envi, t_stack *node);
-void	    pwd(char **envi, t_stack *node);
-void	    unset(char *input, char **envi);
+void		env(t_stack *node);
+void	    pwd(t_stack *node);
+void	    unset(char *input);
 void        exit_kill(t_stack *node);
 int         exec_built_in(char *input, t_stack *node);
 
@@ -80,11 +80,11 @@ void    export(char *input, t_stack *node);
 void	export_no_args(char **env, t_stack *node);
 
 //cd
-char    *active_dir(char **envi);
-int     init_cd(char *input, char **envi, t_stack *node);
-void    update_pwd(char **envi, t_stack *node);
-void    expand_relative(char **envi, t_stack *node);
-void    expand_relative2(char **envi, t_stack *node);
+char    *active_dir(void);
+int     init_cd(char *input, t_stack *node);
+void    update_pwd(t_stack *node);
+void    expand_relative(t_stack *node);
+void    expand_relative2(t_stack *node);
 void    cd(char *input, t_stack *node);
 
 //execbash
@@ -94,8 +94,8 @@ void    exec_stack(t_stack *stack, char *input);
 
 //execv
 int	    launch(char *intro, t_stack *node);
-const char	*search_cmd(char *txt, char **envi);
-const char	*path_exe(char **envi, char *txt);
+const char	*search_cmd(char *txt);
+const char	*path_exe(char *txt);
 int	accesible(const char *path);
 
 //in_out
@@ -178,9 +178,9 @@ void	back_slash(int sig);
 
 //enviroment
 void	set_envi(t_env **envi, char **env);
-t_env  *create_vble(char *envi);
-void    insert_env(t_env *envi, t_env *vble);
-void deleteEnviro(t_env *envi);
+//t_env  *create_vble(char *envi);
+//void    insert_env(t_env *envi, t_env *vble);
+//void deleteEnviro(t_env *envi);
 
 //lst_env
 t_env	*ft_lstnew(char *name, char *val);
