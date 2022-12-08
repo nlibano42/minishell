@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 13:33:24 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/08 16:49:05 by marvin           ###   ########.fr       */
+/*   Updated: 2022/12/08 17:54:15 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	**tab_env(void)
 	char	*s1;
 
 	env = g_shell.env;
-	i = 0;
+	i = 1;
 	while (env)
 	{
 		i++;
@@ -41,7 +41,7 @@ char	**tab_env(void)
 		free (s1);
 		env = env->next;
 	}
-	tab[i] = NULL;
+	tab[i + 1] = NULL;
 	return (tab);
 }
 

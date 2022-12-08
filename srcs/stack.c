@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 11:39:07 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/07 22:33:21 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/08 18:19:06 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_stack  *create_node(char *txt)
     t_stack  *node;
    
     node = (t_stack *)malloc(sizeof(t_stack));
-    node->pipe.input = txt;
+    node->pipe.input = ft_strdup(txt);
     node->pipe.cmd = NULL;
     node->pipe.arg = NULL;
     node->pipe.ext_path = NULL;

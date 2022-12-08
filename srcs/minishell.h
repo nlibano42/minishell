@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:19:59 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/08 02:22:02 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/08 17:22:08 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ pid_t	child_launch(char *input, t_stack *stack);
 void    exec_stack(t_stack *stack, char *input);
 
 //execv
+char	**tab_env(void);
 int	    launch(char *intro, t_stack *node);
 const char	*search_cmd(char *txt);
 const char	*path_exe(char *txt);

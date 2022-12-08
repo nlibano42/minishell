@@ -81,6 +81,7 @@ void    update_pwd(t_stack *node) //modifica en envi no pasa a sistema para los 
 		if (str_cmp(env->name, "PWD") == 0) 
 		{
             env->val = node->pipe.arg[0];
+			chdir((const char *)node->pipe.arg[0]);
 			break ;
 		}
 		env = env->next;
