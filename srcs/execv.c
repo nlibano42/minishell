@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 13:33:24 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/08 02:44:25 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/08 16:49:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,26 @@ char	**tab_env(void)
 		free (s1);
 		env = env->next;
 	}
-	tab[i + 1] = NULL;
+	tab[i] = NULL;
 	return (tab);
+}
+
+void	path_in_enviroment(t_stack *node) //si no existe PATH no ejecutamos execv mensaje comand no encontrado
+{
+	t_env	*env;
+
+	env = g_shell.env;
+	while (env)
+	{
+		if(strcmp(env->name , "PATH") == 0)
+			return ;
+		env = env ->next;
+	}
+	g_shell.num_quit = 127;
+	fd_putstr_out(" -Minshell: ", node); //si no sale al tener | pasar a printf
+	fd_putstr_out(node->pipe.cmd, node);
+	fd_putstr_out(": command not found\n", node);
+	exit(127);
 }
 
 int	launch(char *intro, t_stack *node)
@@ -53,6 +71,7 @@ int	launch(char *intro, t_stack *node)
 	char	**envi;
 
 	envi = tab_env();
+	path_in_enviroment(node);
 	arguments = NULL;
 	splited = ft_split((const char*)intro, '|');
 	arguments = ft_split(splited[0], ' ');
@@ -64,10 +83,10 @@ int	launch(char *intro, t_stack *node)
 		clear((char **)arguments);
 		free((char *)path);
 		clear(envi);
+		g_shell.num_quit = -1;
 		return(-1) ;
 	}
 	execve(path, arguments, envi);
-	clear(envi);
 	return(0);
 }
 
@@ -87,7 +106,6 @@ int	old_launch(char *intro, t_stack *node)
 	if (node->pipe.ext_path != NULL) //(existe path en el comando introducido)
 		execve(node->pipe.input, arguments, envi); 
 	path = path_exe(node->pipe.cmd);
-	printf("Launchc execv.c argumentos %s\n", (char *)arguments);
 	if(path == NULL)
 	{
 		clear((char **)arguments);

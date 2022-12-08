@@ -50,14 +50,16 @@ int	main(int argc, char **argv, char **env)
 			tokens = ft_split(input, ' ');
 			if (str_cmp(tokens[0], "exit") == 0)
 			{
-				free_all_params(&stack, &input, &tokens);
-				break ;
+				//free_all_params(&stack, &input, &tokens);
+				//break ;
+				exit(0);
 			}
 			stack = pipe_stack(input);
 			exec_stack(stack, input);
 		}
 		free_all_params(&stack, &input, &tokens);
 	}
+	ft_lstclear(&g_shell.env);
 	return (0);
 }
 
@@ -70,4 +72,3 @@ void	free_all_params(t_stack **stack, char **input, char ***tokens)
 	if (*tokens)
 		clear(*tokens);
 }
-

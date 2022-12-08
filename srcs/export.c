@@ -12,106 +12,92 @@
 
 #include "minishell.h"
 
-char	**sort_env(char **env)
-{
-	char	**sort;
-	char	*tmp;
-	int		i;
-	int		j;
 
-	sort = env;
-	i = -1;
-	while (sort[++i])
+t_env	*sort_env(void) //t_env version
+{
+	t_env	*sort;
+	t_env	*iterate;
+	t_env	*tmp;
+
+	sort = g_shell.env;
+	iterate = g_shell.env;
+	while (sort)
 	{
-		j = -1;
-		while (sort[++j])
-		if (ft_strncmp(sort[i], sort[j], ft_strlen(sort[i])) < 0)
+		while (iterate)
 		{
-			tmp = sort[i];
-			sort[i] = sort[j];
-			sort[j] = tmp;
+			if (ft_strncmp(sort->name, iterate->name , ft_strlen(sort->name)) < 0)
+			{
+				tmp = sort;
+				sort =  iterate;
+				iterate = tmp;
+				
+			}
+			iterate = iterate->next;
 		}
+		sort = sort->next;
 	}
 	return (sort);
 }
 
-void	export_no_args(char **env, t_stack *node)
-{
-	int		i;
-	char	**sort;
-	char	**split;
 
-	sort = sort_env(env);
-	i = -1;
-	while (sort[++i])
-		if (ft_strncmp(sort[i], "_=", 2) != 0)
+void	export_no_args(t_stack *node)
+{
+	t_env	*sort;
+
+	sort = sort_env();
+	//sort = g_shell.env;
+	while (sort)
+		if (ft_strncmp((const char*)sort->name, "_=", 2) != 0)
 		{
-			split = ft_split(sort[i], '=');
 			fd_putstr_out("declare -x ", node);
-			fd_putstr_out(split[0], node);
+			fd_putstr_out(sort->name, node);
 			fd_putstr_out("=\"", node);
-			fd_putstr_out(split[1], node);
+			fd_putstr_out(sort->val, node);
 			fd_putstr_out("\"", node);
 			fd_putstr_out("\n", node);
-			clear (split);
+			sort = sort->next;
 		}
 }
 
-char	**export_add(char **envi, char *vbl)
+void	export_add(char *vbl)
 {
-	char	**united;
-	int		len;
-	int		i;
+	t_env	*new;
+	t_env	**enviroment;
+	char	**vble;
 
-	len = (ft_str2len(envi)) + 2;
-	united = (char **)malloc(sizeof(char *) * len);
-	if (!united)
-		return (NULL);
-	i = 0;
-	while (envi[i])
-	{
-		united[i] = envi[i];
-		i++;
-	}
-	united[i] = vbl;
-	united[i + 1] = NULL;
-	return (united);
+	enviroment = &g_shell.env;
+	vble = ft_split(vbl, '=');
+	new = ft_lstnew(vble[0], vble[1]);
+	clear(vble);
+    ft_lstadd_back(enviroment, new);
 }
 
-void	export(char *input, t_stack *node)
+void	export(t_stack *node)
 {
-	int		j;
 	int		exist;
 	char	**var;
-	char	**envi_var;
+	t_env	*env;
 
-	(void)input;
 	if (!node->pipe.arg[0])
 	{
-		export_no_args(envi, node);
+		export_no_args(node);
 		return ;
 	}
-	//comprobra si hay más de un argumento? cada argumento de node se toma como una variable a trata por export
+	//comprobra si hay más de un argumento? cada argumento de node se toma como una variable a trata por export while arg[i]
 	var = ft_split(node->pipe.arg[0], '=');
-	j = -1;
 	exist = 0;
-	while (envi[++j])
+	env = g_shell.env;
+	while (env)
 	{
-		envi_var = ft_split(envi[j], '=');
-		if (str_cmp(envi_var[0], var[0]) == 0) 
+		if (str_cmp(env->name, var[0]) == 0) 
 		{
-			ft_strcpy(envi[j], node->pipe.arg[0]);
+            env->val = var[0];
 			exist = 1;
-			clear(envi_var);
 			break ;
 		}
-		clear(envi_var);
+		env = env->next;
 	}
-	if (exist == 0) //vble no encontrada, añadirla al final
-	{
-		printf("export añadir vble -%s-\n", node->pipe.arg[0]);
-		envi = export_add(envi, node->pipe.arg[0]);
-	}
+	if (exist == 0)
+		export_add(node->pipe.arg[0]);
 	clear(var);
-	//clear(envi_var);
 }

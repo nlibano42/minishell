@@ -29,7 +29,6 @@ int	echo(t_stack *node, char* input)
 		fd_putstr_out(&output[5], node);
 		fd_putstr_out("\n", node);
 	}
-	
 	return (0);
 }
 
@@ -74,10 +73,7 @@ void	unset(char *input)
 	env = g_shell.env;
 	arguments = ft_split(input, ' ');
 	if (!arguments[1])
-	{
-		clear(arguments);
 		return ;
-	}
 	tmp = NULL;
 	while (env)
 	{
@@ -103,7 +99,6 @@ void	unset(char *input)
 
 void	exit_kill(t_stack *node) 
 {
-	//kill(node->pipe.node_pid, SIGKILL);
 	deleteAllNodes(node);
 	exit(0);
 }
@@ -117,13 +112,13 @@ int	exec_built_in(char *input, t_stack *node)
 	else if (str_cmp(node->pipe.cmd, "cd") == 0)
 		cd(input, node);
 	else if (str_cmp(node->pipe.cmd, "export") == 0)
-		export(input, node);
+		export(node);
 	else if (str_cmp(node->pipe.cmd, "unset") == 0)
 		unset(input);
 	else if (str_cmp(node->pipe.cmd, "env") == 0)
 		env(node);
 	else if (str_cmp(node->pipe.cmd, "exit") == 0)
 		exit_kill(node);
-	g_shell.num_quit = 0; //status a 0.
+	g_shell.num_quit = 0;
 	return (0);
 }

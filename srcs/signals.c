@@ -51,7 +51,7 @@ void	sig_handler(int sig)
 	}
 	if (sig == 3)
 	{
-		printf("\b\bexit\n");
+		printf("\b\b\b\b\b\b\b\b\bexit\n");
 		exit(0);
 	}
 }

@@ -74,13 +74,13 @@ void        exit_kill(t_stack *node);
 int         exec_built_in(char *input, t_stack *node);
 
 //export
-char	**export_add(char **envi, char *vbl);
-char	**sort_env(char **env);
-void    export(char *input, t_stack *node);
-void	export_no_args(char **env, t_stack *node);
+void	export_add(char *vbl);
+//t_env	*sort_env(void) //t_env version
+void    export(t_stack *node);
+void	export_no_args(t_stack *node);
 
 //cd
-char    *active_dir(void);
+char   *active_dir(void);
 int     init_cd(char *input, t_stack *node);
 void    update_pwd(t_stack *node);
 void    expand_relative(t_stack *node);
@@ -151,24 +151,18 @@ void    exp_act_path(t_stack *node);
 void    exp_up_path(t_stack *node);
 
 //stack
-t_stack  *pipe_stack(char * input);
-t_stack  *create_node(char *txt);
-void            insert_f_pipe(t_stack *node, t_stack *stack);
-void            insert_l_pipe(t_stack *node, t_stack *stack);
-void            free_stack(t_stack *stack);
-void            free_node(t_stack *node);
-void            deleteAllNodes(t_stack *start);
-void            free_node_content(t_stack *node);
+t_stack *pipe_stack(char * input);
+t_stack *create_node(char *txt);
+void    insert_l_pipe(t_stack *node, t_stack *stack);
+void    deleteAllNodes(t_stack *start);
+void    free_node_content(t_stack *node);
 
 int			str_cmp(char *str1, char *str2);
 
 //reorder
- void    mov_last(t_stack *node, t_stack *stack);
  int     exit_cmd_in_stack(t_stack *stack);
  t_stack *reorder_stack(t_stack *stack);
  t_stack *jump_to(t_stack *stack, int to);
- //void    jump_to(t_stack *stack, int to);
- t_stack *stack_first(t_stack *stack);
 
 //signals
 void 	sig_handler(int sig);

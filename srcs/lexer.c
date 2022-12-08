@@ -45,9 +45,12 @@ void    create_cmds(t_stack **node)
 	if (!((*node)->pipe.arg))
 		return ;
     (*node)->pipe.cmd = ft_strdup(words[0]);
-    i = 0;
-    while(words[++i])
+    i = 1;
+    while(words[i])
+    {
         (*node)->pipe.arg[i - 1] = ft_strdup(words[i]);
+        i++;
+    }
 	(*node)->pipe.arg[i - 1] = NULL;
     cmd_path(node);
     clear(words);
