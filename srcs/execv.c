@@ -41,6 +41,7 @@ char	**tab_env(void)
 		free (s1);
 		env = env->next;
 	}
+	tab[i + 1] = NULL;
 	return (tab);
 }
 
