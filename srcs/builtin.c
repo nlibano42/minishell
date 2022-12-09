@@ -32,51 +32,6 @@ int	echo(t_stack *node, char* input)
 	return (0);
 }
 
-
-
-/*
-int	echo(t_stack *node, char *input)
-{
-	//char	*output;
-	int		i;
-	char	*s;
-
-	//output = input;
-	(void)input;
-
-	if (node->pipe.arg[0] == NULL)
-	{
-		fd_putstr_out("\n", node);
-		return (0);
-	}
-	i = -1;
-	while (node->pipe.arg[++i])
-	{
-		if ((str_cmp(node->pipe.arg[0], "-n") == 0 && i > 1) || \
-				(str_cmp(node->pipe.arg[0], "-n") != 0 && i > 0))
-			fd_putstr_out(" ", node);
-		if (str_cmp(node->pipe.arg[i], "-n") == 0)
-			continue ;
-		s = node->pipe.arg[i];
-//		if (s[0] == '"' && s[ft_strlen(s) - 1] == '"')
-//		{
-			delete_quotes(&s);			
-//			fd_putstr_out(s, node);
-//		}
-//		else if (s[0] == '$')
-		if (s[0] == '$')
-		{
-			if (getenv(&s[1]))
-				fd_putstr_out(getenv(&s[1]), node);
-		}
-		else
-			fd_putstr_out(s, node);
-	}
-	if (str_cmp(node->pipe.arg[0], "-n") != 0)
-		fd_putstr_out("\n", node);
-	return (0);
-}
-*/
 void	env(t_stack *node)
 {
 	t_env	*env;
@@ -144,7 +99,7 @@ void	unset(char *input)
 
 void	exit_kill(t_stack *node) 
 {
-	deleteAllNodes(node);
+	delete_all_nodes(node);
 	exit(0);
 }
 

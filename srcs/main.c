@@ -64,7 +64,7 @@ int	main(int argc, char **argv, char **env)
 void	free_all_params(t_stack **stack, char **input, char ***tokens)
 {
 	if (*stack)
-		deleteAllNodes(*stack);
+		delete_all_nodes(*stack);
 	if (*input)
 		free(*input);
 	if (*tokens)

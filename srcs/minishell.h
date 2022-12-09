@@ -154,7 +154,7 @@ void    exp_up_path(t_stack *node);
 t_stack *pipe_stack(char * input);
 t_stack *create_node(char *txt);
 void    insert_l_pipe(t_stack *node, t_stack *stack);
-void    deleteAllNodes(t_stack *start);
+void    delete_all_nodes(t_stack *start);
 void    free_node_content(t_stack *node);
 
 int			str_cmp(char *str1, char *str2);
