@@ -106,17 +106,17 @@ char	*parse(char *txt)
 	count[1] = 0;
 	flags[0] = 1;
 	flags[1] = 1;
-	quote_d_count(txt, count);
+	quote_d_count(txt, &count);
 	if ( (txt = quote_in_or_out_loop(txt, count, flags)) == NULL)
-	{
+	//{
 		//free(count);
 		return("echo -Minishell: echo: opened quotes");
-	}
+	//}
 	//free(count);
 	return(txt);
 }
 
-void	quote_d_count(char *txt, int *count)
+void	quote_d_count(char *txt, int **count)
 {
 	int	i;
 
@@ -124,9 +124,9 @@ void	quote_d_count(char *txt, int *count)
 	while(txt[i] != '\0')
 	{
 		if(txt[i] == '"')
-			count[0]++;
+			(*count)[0]++;
 		if(txt[i] == 39)
-			count[1]++;
+			(*count)[1]++;
 		i++;
 	}
 }

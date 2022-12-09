@@ -14,13 +14,11 @@
 
 t_stack	*pipe_stack(char *input)
 {
-    t_stack	*stack;
-    t_stack	*tmp_node;
-    char	**tokens;
-    int		i;
+    t_stack *stack;
+    t_stack *tmp_node;
+    char    **tokens;
+    int     i;
    
-    input = pre_parse(input); //evitar redirecciones, tratarlas como pipes
-	input =parse(input);
     tokens = ft_split(input, '|');
     if (tokens[0])
     {
@@ -79,11 +77,10 @@ void    free_node_content(t_stack *node)
         return ;
     if (node->pipe.arg != NULL)
         clear(node->pipe.arg);
-    free(node->pipe.input);
     free(node->pipe.cmd);
 }
 
-void	delete_all_nodes(t_stack *start)
+void deleteAllNodes(t_stack *start)
 {
     t_stack * temp;
 

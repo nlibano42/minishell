@@ -12,23 +12,75 @@
 
 #include "minishell.h"
 
-int	echo(t_stack *node, char* input)
+void	delete_quotes(char	**s)
 {
-	char *output;
+	int	i;
+	int	j;
+//	int	count;
+
+//	count = 0;
+//	i = -1;
+//	while ((*s)[++i])
+//	{
+//		if ((*s)[i] == 34)
+//			count ++;
+//	}
+//	if (count % 2 != 0)
+//		exit(0);
+	i = -1;
+	while ((*s)[++i])
+	{
+		if ((*s)[i] == 34)
+		{
+			j = i - 1;
+			while ((*s)[++j])
+			{
+				(*s)[j] = (*s)[j + 1];
+				if ((*s)[j + 1] == '\0')
+					break ;
+			}
+		}
+	}
+}
+
+int	echo(t_stack *node, char *input)
+{
+	char	*output;
+	int		i;
+	char	*s;
+
+output = input;
 
 	if (node->pipe.arg[0] == NULL)
 	{
 		fd_putstr_out("\n", node);
 		return (0);
 	}
-	output = parse(input);
-	if (str_cmp(node->pipe.arg[0], "-n") == 0)
-		fd_putstr_out(&output[8], node);
-	else
+	i = -1;
+	while (node->pipe.arg[++i])
 	{
-		fd_putstr_out(&output[5], node);
-		fd_putstr_out("\n", node);
+		if ((str_cmp(node->pipe.arg[0], "-n") == 0 && i > 1) || \
+				(str_cmp(node->pipe.arg[0], "-n") != 0 && i > 0))
+			fd_putstr_out(" ", node);
+		if (str_cmp(node->pipe.arg[i], "-n") == 0)
+			continue ;
+		s = node->pipe.arg[i];
+//		if (s[0] == '"' && s[ft_strlen(s) - 1] == '"')
+//		{
+			delete_quotes(&s);			
+//			fd_putstr_out(s, node);
+//		}
+//		else if (s[0] == '$')
+		if (s[0] == '$')
+		{
+			if (getenv(&s[1]))
+				fd_putstr_out(getenv(&s[1]), node);
+		}
+		else
+			fd_putstr_out(s, node);
 	}
+	if (str_cmp(node->pipe.arg[0], "-n") != 0)
+		fd_putstr_out("\n", node);
 	return (0);
 }
 

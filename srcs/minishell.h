@@ -117,7 +117,7 @@ char	*literal(char *input);
 int     inside_open_quotes(char *input);
     /*version 1*/
 void    quote_in_or_out(char txt, int *count, int *flags);
-void    quote_d_count(char *txt, int *count);
+void    quote_d_count(char *txt, int **count);
 void	remove_quote(char *txt, int init);
 char    *search_vble_env(char *txt, int init);
 char	*parse(char *txt);
