@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:19:59 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/08 17:22:08 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/09 00:04:54 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ char	*literal(char *input);
 int     inside_open_quotes(char *input);
     /*version 1*/
 void    quote_in_or_out(char txt, int *count, int *flags);
-void    quote_d_count(char *txt, int *count);
+void    quote_d_count(char *txt, int **count);
 void	remove_quote(char *txt, int init);
 char    *search_vble_env(char *txt, int init);
 char	*parse(char *txt);

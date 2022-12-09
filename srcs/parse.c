@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 11:54:39 by xbasabe-         #+#    #+#             */
-/*   Updated: 2022/11/24 01:46:06 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/09 00:08:29 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,21 +95,29 @@ char	*literal(char *input)
 
 char	*parse(char *txt)
 {
-	int	count[2];
+//	int	count[2];
+	int	*count;
 	int	flags[2];
 
+	count = malloc(sizeof(int) * 2 + 1);
+	if (!count)
+		return (NULL);
 	count[0] = 0;
 	count[1] = 0;
 	flags[0] = 1;
 	flags[1] = 1;
 	
-	quote_d_count(txt, count);
+	quote_d_count(txt, &count);
 	if ( (txt = quote_in_or_out_loop(txt, count, flags)) == NULL)
+	{
+		free(count);
 		return("echo -Minishell: echo: opened quotes");
+	}
+	free(count);
 	return(txt);
 }
 
-void	quote_d_count(char *txt, int *count)
+void	quote_d_count(char *txt, int **count)
 {
 	int	i;
 
@@ -117,9 +125,9 @@ void	quote_d_count(char *txt, int *count)
 	while(txt[i] != '\0')
 	{
 		if(txt[i] == '"')
-			count[0]++;
+			(*count)[0]++;
 		if(txt[i] == 39)
-			count[1]++;
+			(*count)[1]++;
 		i++;
 	}
 }
