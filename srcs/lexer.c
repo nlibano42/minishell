@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 17:03:32 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/08 02:50:05 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/09 20:37:39 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,51 @@ char * no_blancks(char *txt)
     return(ret);
 }
 
+char	**split_read_line(char *s)
+{
+	int	start;
+	int	fin;
+	int	i;
+	int	flag1;
+	int next;
+	char
+
+	start = 0;
+	fin = 0;
+	flag1 = 0;
+	next = 0;
+	i = -1;
+	while (s[++i])
+	{
+		if (s[i] == 34 && flag1 == 0)
+		{       
+			flag1 = 1;
+			start = i;
+			continue ;
+		}
+		else if (s[i] == 34 && flag1 == 1)
+		{       
+			flag1 = 0;
+			if (s[i + 1] == ' ')
+			{
+				fin = i;
+				next = 0;
+				save_arg(
+			}
+			else
+				next = 1;
+			continue ;
+		}
+	}
+}
+
 void    create_cmds(t_stack **node)
 {
     char            **words;
     int             i;
-    
-    words = ft_split((*node)->pipe.input, ' ');
+  
+	words = split_read_line((*node)->pipe.input);
+//    words = ft_split((*node)->pipe.input, ' ');
     (*node)->pipe.arg = (char **)malloc(sizeof(char *) * (ft_str2len(words)) + 1);
 	if (!((*node)->pipe.arg))
 		return ;
