@@ -12,15 +12,15 @@
 
 #include "minishell.h"
 
-t_stack *pipe_stack(char * input)
+t_stack	*pipe_stack(char *input)
 {
-    t_stack *stack;
-    t_stack *tmp_node;
-    char    **tokens;
-    int     i;
+    t_stack	*stack;
+    t_stack	*tmp_node;
+    char	**tokens;
+    int		i;
    
     input = pre_parse(input); //evitar redirecciones, tratarlas como pipes
-	/*PARSE AQUI parse(input)*/
+	input =parse(input);
     tokens = ft_split(input, '|');
     if (tokens[0])
     {
