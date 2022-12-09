@@ -76,7 +76,7 @@ void    update_pwd(t_stack *node) //modifica en envi no pasa a sistema para los 
     if(access((const char*)node->pipe.arg[0], F_OK) == -1) //comprobar que hay acceso al directorio y si es archivo? mensaje de arg[0] no es un directorio
 	{
 		//printf("-Minishell: cd: %s: No such file or directory\n", node->pipe.arg[0]);
-		printf("-Minishell: cd: %s: %s\n", node->pipe.arg[0], errno);
+		printf("-Minishell: cd: %s: %d\n", node->pipe.arg[0], errno);
 		g_shell.num_quit = 1;
 		return ;
 	}
