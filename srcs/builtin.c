@@ -151,7 +151,7 @@ void	unset(char *input)
 
 void	exit_kill(t_stack *node) 
 {
-	deleteAllNodes(node);
+	delete_all_nodes(node);
 	exit(0);
 }
 

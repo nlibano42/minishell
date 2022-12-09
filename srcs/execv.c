@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execv.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 13:33:24 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/08 17:54:15 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/09 17:03:49 by xbasabe-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	launch(char *intro, t_stack *node)
 		g_shell.num_quit = -1;
 		return(-1) ;
 	}
-	execve(path, arguments, envi);
+	g_shell.num_quit = execve(path, arguments, envi);
 	return(0);
 }
 
@@ -140,5 +140,6 @@ const char	*path_exe(char *txt)
 		i++;
 	}
 	clear((char **)p);
+
 	return(NULL);
 }

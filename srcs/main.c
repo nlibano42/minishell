@@ -50,8 +50,6 @@ int	main(int argc, char **argv, char **env)
 			tokens = ft_split(input, ' ');
 			if (str_cmp(tokens[0], "exit") == 0)
 			{
-				//free_all_params(&stack, &input, &tokens);
-				//break ;
 				exit(0);
 			}
 			stack = pipe_stack(input);
@@ -66,7 +64,7 @@ int	main(int argc, char **argv, char **env)
 void	free_all_params(t_stack **stack, char **input, char ***tokens)
 {
 	if (*stack)
-		deleteAllNodes(*stack);
+		delete_all_nodes(*stack);
 	if (*input)
 		free(*input);
 	if (*tokens)

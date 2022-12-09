@@ -86,7 +86,8 @@ void	export(t_stack *node)
 	{
 		if (str_cmp(env->name, var[0]) == 0) 
 		{
-            env->val = var[0];
+			free(env->val);
+			env->val = ft_strdup((const char*)var[1]);
 			exist = 1;
 			break ;
 		}

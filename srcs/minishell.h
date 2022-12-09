@@ -123,7 +123,6 @@ char    *search_vble_env(char *txt, int init);
 char	*parse(char *txt);
 int	    OLD_quote_in_or_out(char *txt, int ini);
 void    flag_check(int flag, int *flags);
-char    *expand_vble(char *txt, int *init);
 char    *quote_in_or_out_loop(char *txt, int *count, int *flags);
 char    *expand_loop(char *txt);
 int     inside_simple(char *txt, int *flags, int *count, int *i);
@@ -135,10 +134,10 @@ void	flip_flag(char *txt, int *flags, int *count, int i, int f);
     /*version 2*/
 char	*parsing	(char *input);
 char    *expand3(char *txt, int init, int end);
-int inside_open_quotes2(char *input);
-int outside_quotes(char *input);
+int     inside_open_quotes2(char *input);
+int     outside_quotes(char *input);
 char	**parse_split(char *input, char c);
-int count_words(char *str);
+int     count_words(char *str);
 void	fill(char *str, char **word, int index);
 void	malloc_split(char *entry, char **splited, int index);
 
@@ -155,7 +154,7 @@ void    exp_up_path(t_stack *node);
 t_stack *pipe_stack(char * input);
 t_stack *create_node(char *txt);
 void    insert_l_pipe(t_stack *node, t_stack *stack);
-void    deleteAllNodes(t_stack *start);
+void    delete_all_nodes(t_stack *start);
 void    free_node_content(t_stack *node);
 
 int			str_cmp(char *str1, char *str2);
@@ -184,5 +183,13 @@ t_env	*ft_lstfind(t_env *lst, char *name);
 void	ft_lstclear(t_env **lst);
 void	ft_lstdelone(t_env *lst);
 t_env   *ft_lstlast(t_env *lst);
+
+//redirect
+char *pre_parse(char *input);
+
+//parse_utils
+char *get_env(char *vble);
+char    *expand_vble(char *txt, int *init);
+char *expand_vble_out(char *txt, int *init);
 
 #endif

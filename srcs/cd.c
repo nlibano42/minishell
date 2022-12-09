@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char    *active_dir(void)
+char* active_dir(void)
 {
 	t_env	*env;
 
@@ -8,7 +8,7 @@ char    *active_dir(void)
 	while (env)
 	{
 		if (str_cmp(env->name, "PWD") == 0)
-            return(env->val);
+			return (env->val);
 		env = env->next;
 	}
     return(env->val);
@@ -22,7 +22,10 @@ char    *home_dir(void)
 	while (env)
 	{
 		if (str_cmp(env->name, "HOME") == 0)
-            return(env->val);
+		{
+			printf("cd -ir a HOME- %s", env->val);
+		    return (env->val);
+		}
 		env = env->next;
 	}
     return(env->val);
@@ -70,9 +73,10 @@ void    update_pwd(t_stack *node) //modifica en envi no pasa a sistema para los 
 	t_env	*env;
 
 	env = g_shell.env;
-    if(access((const char*)node->pipe.arg[0], F_OK) == -1) //comprobar que hay acceso al directorio
+    if(access((const char*)node->pipe.arg[0], F_OK) == -1) //comprobar que hay acceso al directorio y si es archivo? mensaje de arg[0] no es un directorio
 	{
-		printf("-Minishell: cd: %s: No such file or directory\n", node->pipe.arg[0]);
+		//printf("-Minishell: cd: %s: No such file or directory\n", node->pipe.arg[0]);
+		printf("-Minishell: cd: %s: %s\n", node->pipe.arg[0], errno);
 		g_shell.num_quit = 1;
 		return ;
 	}
