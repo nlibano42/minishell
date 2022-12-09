@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:19:59 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/08 02:22:02 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/09 00:04:54 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ pid_t	child_launch(char *input, t_stack *stack);
 void    exec_stack(t_stack *stack, char *input);
 
 //execv
+char	**tab_env(void);
 int	    launch(char *intro, t_stack *node);
 const char	*search_cmd(char *txt);
 const char	*path_exe(char *txt);
@@ -122,7 +123,6 @@ char    *search_vble_env(char *txt, int init);
 char	*parse(char *txt);
 int	    OLD_quote_in_or_out(char *txt, int ini);
 void    flag_check(int flag, int *flags);
-char    *expand_vble(char *txt, int *init);
 char    *quote_in_or_out_loop(char *txt, int *count, int *flags);
 char    *expand_loop(char *txt);
 int     inside_simple(char *txt, int *flags, int *count, int *i);
@@ -134,10 +134,10 @@ void	flip_flag(char *txt, int *flags, int *count, int i, int f);
     /*version 2*/
 char	*parsing	(char *input);
 char    *expand3(char *txt, int init, int end);
-int inside_open_quotes2(char *input);
-int outside_quotes(char *input);
+int     inside_open_quotes2(char *input);
+int     outside_quotes(char *input);
 char	**parse_split(char *input, char c);
-int count_words(char *str);
+int     count_words(char *str);
 void	fill(char *str, char **word, int index);
 void	malloc_split(char *entry, char **splited, int index);
 
@@ -183,5 +183,13 @@ t_env	*ft_lstfind(t_env *lst, char *name);
 void	ft_lstclear(t_env **lst);
 void	ft_lstdelone(t_env *lst);
 t_env   *ft_lstlast(t_env *lst);
+
+//redirect
+char *pre_parse(char *input);
+
+//parse_utils
+char *get_env(char *vble);
+char    *expand_vble(char *txt, int *init);
+char *expand_vble_out(char *txt, int *init);
 
 #endif

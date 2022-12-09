@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 11:54:39 by xbasabe-         #+#    #+#             */
-/*   Updated: 2022/11/24 01:46:06 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/09 00:08:29 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,16 +96,23 @@ char	*literal(char *input)
 char	*parse(char *txt)
 {
 	int	count[2];
+	//int	*count;
 	int	flags[2];
 
+	//count = malloc(sizeof(int) * 2 + 1);
+	//if (!count)
+	//	return (NULL);
 	count[0] = 0;
 	count[1] = 0;
 	flags[0] = 1;
 	flags[1] = 1;
-	
 	quote_d_count(txt, count);
 	if ( (txt = quote_in_or_out_loop(txt, count, flags)) == NULL)
+	{
+		//free(count);
 		return("echo -Minishell: echo: opened quotes");
+	}
+	//free(count);
 	return(txt);
 }
 
@@ -138,46 +145,25 @@ void	remove_quote(char *txt, int init)
 	txt[i] = '\0';
 }
 
-char *expand_vble(char *txt, int *init)
+void	delete_quotes(char	**s) //¿?
 {
-	char *value; //valor que tiene la vble tras el $
-	char exp[999]; //el nuevo txt expandido
-	int		i;
-	int		j;
-	int		add;
+	int	i;
+	int	j;
 
-	i = 0;
-	add = *init;
-	while (txt[add] != ' ' && txt[add] != '\0' && txt[add] != '"' && txt[add] != '\'')
-		add++;
-	add = add - *init;
-	value = search_vble_env(txt, *init);
-	j = 0;
-	ft_strncpy(exp, txt, *init);
-	if(value != NULL)
+	i = -1;
+	while ((*s)[++i])
 	{
-		while(value[j])
+		if ((*s)[i] == 34)
 		{
-			exp[*init + j] = value[j];
-			j++;
+			j = i - 1;
+			while ((*s)[++j])
+			{
+				(*s)[j] = (*s)[j + 1];
+				if ((*s)[j + 1] == '\0')
+					break ;
+			}
 		}
 	}
-	j = j + *init;
-	exp[j] = ' '; //problema!!
-	exp[j + 1] = '\0';
-	j++;
-	i = *init + add;
-	while(txt[i])
-	{
-		i++;
-		exp[j] = txt[i];
-		j++;
-	}
-	exp[j] = '\0';
-	txt = exp;
-	//ft_strcpy(txt, exp);
-	//printf("expanded ::%s::\n", txt);
-	return(txt);
 }
 
 char    *search_vble_env(char *txt, int init)
@@ -196,10 +182,10 @@ char    *search_vble_env(char *txt, int init)
 	vble[j] = '\0';
 	if(str_cmp(vble, "?") == 0) //$? devuelve el exit status de la ultima ejecución
 	{ 
-		//return(ft_itoa(g_num_quit)); //retornar el status. ft_itoa sin 
-		return("0"); 
+		return(ft_itoa(g_shell.num_quit)); //ft_itoa not working 
+		//return("0");
 	}
-	return (getenv((const char*)vble));
+	return (get_env(vble));
 }
 
 char	*quote_in_or_out_loop(char *txt, int *count, int *flags)
@@ -236,13 +222,13 @@ char	*quote_in_or_out_loop(char *txt, int *count, int *flags)
 				//write(1, "doble in\n", 9);
 				while(txt[i] != 34)
 				{
-					if (txt[i] == 36) //36 es el ascci de $
-					{
-						txt = expand_vble(txt, j);
-					}
 					if (txt[i] == '\0')
 					{
 						return(NULL);
+					}
+					if (txt[i] == 36) //36 es el ascci de $
+					{
+						txt = expand_vble(txt, j);
 					}
 					//write(1,".", 1);
 					i++;
@@ -252,7 +238,9 @@ char	*quote_in_or_out_loop(char *txt, int *count, int *flags)
 			}
 		}
 		else if (txt[i] == 36) //36 es el ascci de $
-			txt = expand_vble(txt, j);
+		{	
+			txt = expand_vble_out(txt, j);
+		}
 		else if (txt[i] == 39 || txt[i] == 34)
 			return(NULL);	
 		i++;

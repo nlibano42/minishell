@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 11:39:07 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/07 22:33:21 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/08 18:19:06 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_stack *pipe_stack(char * input)
     char    **tokens;
     int     i;
    
+    input = pre_parse(input); //evitar redirecciones, tratarlas como pipes
     tokens = ft_split(input, '|');
     if (tokens[0])
     {
@@ -42,7 +43,7 @@ t_stack  *create_node(char *txt)
     t_stack  *node;
    
     node = (t_stack *)malloc(sizeof(t_stack));
-    node->pipe.input = txt;
+    node->pipe.input = ft_strdup(txt);
     node->pipe.cmd = NULL;
     node->pipe.arg = NULL;
     node->pipe.ext_path = NULL;
@@ -77,6 +78,7 @@ void    free_node_content(t_stack *node)
         return ;
     if (node->pipe.arg != NULL)
         clear(node->pipe.arg);
+    free(node->pipe.input);
     free(node->pipe.cmd);
 }
 

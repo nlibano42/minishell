@@ -6,70 +6,65 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 11:15:56 by marvin            #+#    #+#             */
-/*   Updated: 2022/12/08 02:50:57 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/08 17:55:50 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-t_env	*sort_env(void) //t_env version
+char	**sort_env(void)
 {
-	t_env	*sort;
-	t_env	*iterate;
-	t_env	*tmp;
+	char	**sort;
+	char	*tmp;
+	int		i;
+	int		j;
 
-	sort = g_shell.env;
-	iterate = g_shell.env;
-	while (sort)
+	sort = tab_env();
+	i = -1;
+	while (sort[++i])
 	{
-		while (iterate)
+		j = -1;
+		while (sort[++j])
+		if (ft_strncmp(sort[i], sort[j], ft_strlen(sort[i])) < 0)
 		{
-			if (ft_strncmp(sort->name, iterate->name , ft_strlen(sort->name)) < 0)
-			{
-				tmp = sort;
-				sort =  iterate;
-				iterate = tmp;
-				
-			}
-			iterate = iterate->next;
+			tmp = sort[i];
+			sort[i] = sort[j];
+			sort[j] = tmp;
 		}
-		sort = sort->next;
 	}
 	return (sort);
 }
 
-
 void	export_no_args(t_stack *node)
 {
-	t_env	*sort;
+	int		i;
+	char	**sort;
+	char	**split;
 
 	sort = sort_env();
-	//sort = g_shell.env;
-	while (sort)
-		if (ft_strncmp((const char*)sort->name, "_=", 2) != 0)
-		{
-			fd_putstr_out("declare -x ", node);
-			fd_putstr_out(sort->name, node);
-			fd_putstr_out("=\"", node);
-			fd_putstr_out(sort->val, node);
-			fd_putstr_out("\"", node);
-			fd_putstr_out("\n", node);
-			sort = sort->next;
-		}
+	i = -1;
+	while (sort[++i])
+	{
+		split = ft_split(sort[i], '=');
+		fd_putstr_out("declare -x ", node);
+		fd_putstr_out(split[0], node);
+		fd_putstr_out("=\"", node);
+		fd_putstr_out(split[1], node);
+		fd_putstr_out("\"", node);
+		fd_putstr_out("\n", node);
+		clear (split);
+	}
 }
 
 void	export_add(char *vbl)
 {
 	t_env	*new;
-	t_env	**enviroment;
 	char	**vble;
 
-	enviroment = &g_shell.env;
 	vble = ft_split(vbl, '=');
 	new = ft_lstnew(vble[0], vble[1]);
 	clear(vble);
-    ft_lstadd_back(enviroment, new);
+    ft_lstadd_back(&(g_shell.env), new);
 }
 
 void	export(t_stack *node)
@@ -91,7 +86,8 @@ void	export(t_stack *node)
 	{
 		if (str_cmp(env->name, var[0]) == 0) 
 		{
-            env->val = var[0];
+			free(env->val);
+			env->val = ft_strdup((const char*)var[1]);
 			exist = 1;
 			break ;
 		}

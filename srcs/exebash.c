@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exebash.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 13:33:24 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/07 22:40:10 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/09 17:56:22 by xbasabe-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ pid_t	child_launch(char *input, t_stack *stack)
  	}
 	//wait(NULL);
 	wait(&(g_shell.num_quit)); //variable para el exit status
+	if(g_shell.num_quit == 32512)
+		g_shell.num_quit = 127;
 	return (ch_pid);
 }
 
@@ -105,8 +107,6 @@ int is_built(char *cmd)
 	else if (str_cmp(cmd, "env") == 0)
 		r = 0;
 	else if (str_cmp(cmd, "exit") == 0)
-		r = 0;
-	else if (str_cmp(cmd, "parse") == 0)
 		r = 0;
 	return (r);
 }

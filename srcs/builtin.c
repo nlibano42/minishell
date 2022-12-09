@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 10:40:03 by marvin            #+#    #+#             */
-/*   Updated: 2022/12/08 01:33:22 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/09 01:41:10 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,51 @@ int	echo(t_stack *node, char* input)
 	return (0);
 }
 
+
+
+/*
+int	echo(t_stack *node, char *input)
+{
+	//char	*output;
+	int		i;
+	char	*s;
+
+	//output = input;
+	(void)input;
+
+	if (node->pipe.arg[0] == NULL)
+	{
+		fd_putstr_out("\n", node);
+		return (0);
+	}
+	i = -1;
+	while (node->pipe.arg[++i])
+	{
+		if ((str_cmp(node->pipe.arg[0], "-n") == 0 && i > 1) || \
+				(str_cmp(node->pipe.arg[0], "-n") != 0 && i > 0))
+			fd_putstr_out(" ", node);
+		if (str_cmp(node->pipe.arg[i], "-n") == 0)
+			continue ;
+		s = node->pipe.arg[i];
+//		if (s[0] == '"' && s[ft_strlen(s) - 1] == '"')
+//		{
+			delete_quotes(&s);			
+//			fd_putstr_out(s, node);
+//		}
+//		else if (s[0] == '$')
+		if (s[0] == '$')
+		{
+			if (getenv(&s[1]))
+				fd_putstr_out(getenv(&s[1]), node);
+		}
+		else
+			fd_putstr_out(s, node);
+	}
+	if (str_cmp(node->pipe.arg[0], "-n") != 0)
+		fd_putstr_out("\n", node);
+	return (0);
+}
+*/
 void	env(t_stack *node)
 {
 	t_env	*env;
