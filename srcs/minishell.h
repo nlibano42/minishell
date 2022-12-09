@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:19:59 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/09 00:04:54 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/09 19:16:55 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,8 @@ int     expand(char **txt);
 int     expand2(char *txt);
 char	*literal(char *input);
 int     inside_open_quotes(char *input);
+void	delete_quotes(char **s);
+
     /*version 1*/
 void    quote_in_or_out(char txt, int *count, int *flags);
 void    quote_d_count(char *txt, int **count);

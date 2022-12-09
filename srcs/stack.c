@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 11:39:07 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/08 18:19:06 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/09 19:13:28 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void    free_node_content(t_stack *node)
     free(node->pipe.cmd);
 }
 
-void deleteAllNodes(t_stack *start)
+void delete_all_nodes(t_stack *start)
 {
     t_stack * temp;
 

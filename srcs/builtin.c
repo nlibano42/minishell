@@ -6,12 +6,12 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 10:40:03 by marvin            #+#    #+#             */
-/*   Updated: 2022/12/09 01:41:10 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/09 19:14:27 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+/*
 void	delete_quotes(char	**s)
 {
 	int	i;
@@ -42,7 +42,7 @@ void	delete_quotes(char	**s)
 		}
 	}
 }
-
+*/
 int	echo(t_stack *node, char *input)
 {
 	char	*output;
