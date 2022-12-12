@@ -6,81 +6,62 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 10:40:03 by marvin            #+#    #+#             */
-/*   Updated: 2022/12/09 19:14:27 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/09 01:41:10 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
-void	delete_quotes(char	**s)
-{
-	int	i;
-	int	j;
-//	int	count;
 
-//	count = 0;
-//	i = -1;
-//	while ((*s)[++i])
-//	{
-//		if ((*s)[i] == 34)
-//			count ++;
-//	}
-//	if (count % 2 != 0)
-//		exit(0);
-	i = -1;
-	while ((*s)[++i])
-	{
-		if ((*s)[i] == 34)
-		{
-			j = i - 1;
-			while ((*s)[++j])
-			{
-				(*s)[j] = (*s)[j + 1];
-				if ((*s)[j + 1] == '\0')
-					break ;
-			}
-		}
-	}
-}
-*/
-int	echo(t_stack *node, char *input)
+int	new_echo(t_stack *node, char *input)
 {
 	char	*output;
 	int		i;
-	char	*s;
+	int		n;
 
-output = input;
-
+	(void)input;
+	output = node->pipe.parsed_input;
+	i = -1;
+	n = 0;
+	if (strcmp(node->pipe.arg[0], "-n"))
+	{
+		n = 1;
+		i++;
+	}
 	if (node->pipe.arg[0] == NULL)
 	{
 		fd_putstr_out("\n", node);
 		return (0);
 	}
-	i = -1;
-	while (node->pipe.arg[++i])
+	while (node->pipe.arg[i])
 	{
-		if ((str_cmp(node->pipe.arg[0], "-n") == 0 && i > 1) || \
-				(str_cmp(node->pipe.arg[0], "-n") != 0 && i > 0))
-			fd_putstr_out(" ", node);
-		if (str_cmp(node->pipe.arg[i], "-n") == 0)
-			continue ;
-		s = node->pipe.arg[i];
-//		if (s[0] == '"' && s[ft_strlen(s) - 1] == '"')
-//		{
-			delete_quotes(&s);			
-//			fd_putstr_out(s, node);
-//		}
-//		else if (s[0] == '$')
-		if (s[0] == '$')
-		{
-			if (getenv(&s[1]))
-				fd_putstr_out(getenv(&s[1]), node);
-		}
-		else
-			fd_putstr_out(s, node);
+		fd_putstr_out(node->pipe.arg[i], node);
+		fd_putstr_out(" ", node);
+		i++;
 	}
-	if (str_cmp(node->pipe.arg[0], "-n") != 0)
+	if (n == 1)
 		fd_putstr_out("\n", node);
+	return (0);
+}
+
+int	echo(t_stack *node, char *input)
+{
+	char	*output;
+
+	(void)input;
+	output = node->pipe.parsed_input;
+	//output = parse(output);
+	if (node->pipe.arg[0] == NULL)
+	{
+		fd_putstr_out("\n", node);
+		return (0);
+	}
+	if (str_cmp(node->pipe.arg[0], "-n") == 0)
+		fd_putstr_out(&output[8], node);
+	else
+	{
+		fd_putstr_out(&output[5], node);
+		fd_putstr_out("\n", node);
+	}
 	return (0);
 }
 
@@ -110,7 +91,7 @@ void	pwd(t_stack *node)
 		{
 			fd_putstr_out(env->val, node);
 			fd_putstr_out("\n", node);
-			break;
+			break ;
 		}
 		env = env->next;
 	}
@@ -133,7 +114,7 @@ void	unset(char *input)
 		{
 			if (tmp)
 			{
-				if(env->next)
+				if (env->next)
 					tmp->next = NULL;
 				else
 					tmp->next = env->next;
@@ -149,7 +130,7 @@ void	unset(char *input)
 	return ;
 }
 
-void	exit_kill(t_stack *node) 
+void	exit_kill(t_stack *node)
 {
 	delete_all_nodes(node);
 	exit(0);
@@ -171,6 +152,11 @@ int	exec_built_in(char *input, t_stack *node)
 		env(node);
 	else if (str_cmp(node->pipe.cmd, "exit") == 0)
 		exit_kill(node);
+	else if (str_cmp(node->pipe.cmd, "$?") == 0)
+	{
+		fd_putstr_out(ft_itoa(g_shell.num_quit), node);
+		fd_putstr_out("\n", node);
+	}
 	g_shell.num_quit = 0;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 11:39:07 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/09 19:13:28 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/08 18:19:06 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,26 @@ t_stack	*pipe_stack(char *input)
 	char	**tokens;
 	int		i;
 
-	input = pre_parse(input); //evitar redirecciones, tratarlas como pipes
-	input = parse(input);
-	tokens = ft_split(input, '|');
+	input = pre_parse(input);
+	//tokens = ft_split(input, ' ');
+	tokens = split_tokens(input);
 	if (tokens[0])
 	{
 		stack = create_node(tokens[0]);
-		create_cmds(&stack);
+		create_cmds(&stack, tokens[0]);
 	}
-	i = 1;
-	while (tokens[i])
+	if(tokens[1] != NULL)
 	{
-		tmp_node = create_node(tokens[i]);
-		create_cmds(&tmp_node);
-		insert_l_pipe(tmp_node, stack);
-		i++;
+		i = 1;
+		while (tokens[i])
+		{
+			tmp_node = create_node(tokens[i]);
+			create_cmds(&tmp_node, tokens[i]);
+			insert_l_pipe(tmp_node, stack);
+			i++;
+		}
 	}
-	clear(tokens);
+	//clear(tokens);
 	return (stack);
 }
 
@@ -44,7 +47,9 @@ t_stack	*create_node(char *txt)
 	t_stack	*node;
 
 	node = (t_stack *)malloc(sizeof(t_stack));
-	node->pipe.input = ft_strdup(txt);
+	//node->pipe.input = ft_strdup(txt);
+	node->pipe.input = txt;
+	node->pipe.parsed_input = parse(txt);
 	node->pipe.cmd = NULL;
 	node->pipe.arg = NULL;
 	node->pipe.ext_path = NULL;

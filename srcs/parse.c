@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 11:54:39 by xbasabe-         #+#    #+#             */
-/*   Updated: 2022/12/09 19:15:30 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/09 00:08:29 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,48 +95,48 @@ char	*literal(char *input)
 
 char	*parse(char *txt)
 {
-//	int	count[2];
-	int	*count;
+	int	count[2];
+	//int	*count;
 	int	flags[2];
 
-	count = malloc(sizeof(int) * 2 + 1);
-	if (!count)
-		return (NULL);
+	//count = malloc(sizeof(int) * 2 + 1);
+	//if (!count)
+	//	return (NULL);
 	count[0] = 0;
 	count[1] = 0;
 	flags[0] = 1;
 	flags[1] = 1;
-	quote_d_count(txt, &count);
-	if ( (txt = quote_in_or_out_loop(txt, count, flags)) == NULL)
+	quote_d_count(txt, count);
+	if ((txt = quote_in_or_out_loop(txt, count, flags)) == NULL)
 	{
-		free(count);
-		return("echo -Minishell: echo: opened quotes");
+		//free(count);
+		return ("echo -Minishell: echo: opened quotes");
 	}
-	free(count);
-	return(txt);
+	//free(count);
+	return (txt);
 }
 
-void	quote_d_count(char *txt, int **count)
+void	quote_d_count(char *txt, int *count)
 {
 	int	i;
 
 	i = 0;
-	while(txt[i] != '\0')
+	while (txt[i] != '\0')
 	{
-		if(txt[i] == '"')
-			(*count)[0]++;
-		if(txt[i] == 39)
-			(*count)[1]++;
+		if (txt[i] == '"')
+			count[0]++;
+		if (txt[i] == 39)
+			count[1]++;
 		i++;
 	}
 }
 
 void	remove_quote(char *txt, int init)
 {
-	int i;
+	int	i;
 
 	i = init + 1;
-	while(txt[i])
+	while (txt[i])
 	{
 		txt[i -1] = txt[i];
 		i++;
@@ -166,10 +166,10 @@ void	delete_quotes(char	**s) //¿?
 	}
 }
 
-char    *search_vble_env(char *txt, int init)
+char	*search_vble_env(char *txt, int init)
 {
-	int	j;
-	char vble[999];
+	int		j;
+	char	vble[999];
 
 	init++;
 	j = 0;
@@ -180,10 +180,9 @@ char    *search_vble_env(char *txt, int init)
 		init++;
 	}
 	vble[j] = '\0';
-	if(str_cmp(vble, "?") == 0) //$? devuelve el exit status de la ultima ejecución
-	{ 
-		return(ft_itoa(g_shell.num_quit)); //ft_itoa not working 
-		//return("0");
+	if (str_cmp(vble, "?") == 0) //$? devuelve el exit status de la ultima ejecución
+	{
+		return (ft_itoa(g_shell.num_quit));
 	}
 	return (get_env(vble));
 }
@@ -191,22 +190,22 @@ char    *search_vble_env(char *txt, int init)
 char	*quote_in_or_out_loop(char *txt, int *count, int *flags)
 {
 	int	i;
-	int *j;
+	int	*j;
 
 	i = 0;
 	j = &i;
-	while(txt[i] != '\0')
+	while (txt[i] != '\0')
 	{
-		if(txt[i] == 39) // simples ' 39 ascci de '
+		if (txt[i] == 39) // simples ' 39 ascci de '
 		{	
-			if((count[1] % 2 == 0 && count[1] > 0) && flags[0] != -1)//dentro, entramos simples (ignorar dentro las dobles)
+			if ((count[1] % 2 == 0 && count[1] > 0) && flags[0] != -1)//dentro, entramos simples (ignorar dentro las dobles)
 			{
 				flip_flag(txt, flags, count, i, 1);
 				//write(1, "simple in\n", 10);
-				while(txt[i] != 39) // 39 es el ascii de '
+				while (txt[i] != 39) // 39 es el ascii de '
 				{
 					if (txt[i] == '\0')
-						return(NULL);
+						return (NULL);
 					//write(1,".", 1);
 					i++;
 				}
@@ -214,17 +213,17 @@ char	*quote_in_or_out_loop(char *txt, int *count, int *flags)
 				//write(1, "\nsimple out\n", 11);
 			}
 		}
-		else if(txt[i] == 34) //34 es el ascci de ""
+		else if (txt[i] == 34) //34 es el ascci de ""
 		{
-			if((count[0] % 2 == 0 && count[0] > 0) && flags[1] != -1) //dentro, entramos dobles (ignorar dentro las simples)
+			if ((count[0] % 2 == 0 && count[0] > 0) && flags[1] != -1) //dentro, entramos dobles (ignorar dentro las simples)
 			{	
 				flip_flag(txt, flags, count, i, 0);
 				//write(1, "doble in\n", 9);
-				while(txt[i] != 34)
+				while (txt[i] != 34)
 				{
 					if (txt[i] == '\0')
 					{
-						return(NULL);
+						return (NULL);
 					}
 					if (txt[i] == 36) //36 es el ascci de $
 					{
@@ -242,18 +241,18 @@ char	*quote_in_or_out_loop(char *txt, int *count, int *flags)
 			txt = expand_vble_out(txt, j);
 		}
 		else if (txt[i] == 39 || txt[i] == 34)
-			return(NULL);	
+			return (NULL);
 		i++;
 	}
 	//if (txt[i] == 39 || txt[i] == 34)
 	//	return(NULL);
-	return(txt);
+	return (txt);
 }
 
 void	flip_flag(char *txt, int *flags, int *count, int i, int f)
 {
-	int init;
-	
+	int	init;
+
 	init = i;
 	flags[f] = flags[f] * -1;
 	count[f]--;

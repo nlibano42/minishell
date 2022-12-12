@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 13:33:24 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/09 18:19:03 by xbasabe-         ###   ########.fr       */
+/*   Updated: 2022/12/12 19:38:33 by xbasabe-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,21 +71,21 @@ pid_t	child_launch(char *input, t_stack *stack)
 	return (ch_pid);
 }
 
-void    exec_stack(t_stack *stack, char *input)
+void	exec_stack(t_stack *stack, char *input)
 {
-    t_stack  *tmp;
-    int             i;
+	t_stack	*tmp;
+	int		i;
 
-    tmp = stack;
+	tmp = stack;
 	i = 0;
-	if(exit_cmd_in_stack(stack) > 0)
+	if (exit_cmd_in_stack(stack) > 0)
 		tmp = reorder_stack(stack);
-    while(tmp != NULL)
-    {
- 		child_launch(input, tmp);
-        tmp = tmp->next;
-        i++;
-    }
+	while (tmp != NULL)
+	{
+		child_launch(input, tmp);
+		tmp = tmp->next;
+		i++;
+	}
 }
 
 int is_built(char *cmd)
@@ -107,6 +107,8 @@ int is_built(char *cmd)
 	else if (str_cmp(cmd, "env") == 0)
 		r = 0;
 	else if (str_cmp(cmd, "exit") == 0)
+		r = 0;
+	else if (str_cmp(cmd, "$?") == 0)
 		r = 0;
 	return (r);
 }
