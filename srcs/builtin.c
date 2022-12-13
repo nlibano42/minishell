@@ -152,11 +152,13 @@ int	exec_built_in(char *input, t_stack *node)
 		env(node);
 	else if (str_cmp(node->pipe.cmd, "exit") == 0)
 		exit_kill(node);
-	else if (str_cmp(node->pipe.cmd, "$?") == 0)
+	/*
+	else if (str_cmp(node->pipe.cmd, "$?") == 0) 
 	{
 		fd_putstr_out(ft_itoa(g_shell.num_quit), node);
 		fd_putstr_out("\n", node);
 	}
+	*/
 	g_shell.num_quit = 0;
 	return (0);
 }

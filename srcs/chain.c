@@ -19,7 +19,8 @@ char	*stradd(char *s1, char *s2)
 	int		i;
 	int		j;
 
-	len = (ft_strlen((const char *)s1) + ft_strlen((const char *)s2) + 1);
+	//len = (ft_strlen((const char *)s1) + ft_strlen((const char *)s2) + 1);
+	len = (ft_strlen((const char *)s1) + ft_strlen((const char *)s2));
 	i = ft_strlen((const char *)s1);
 	j = 0;
 	united = (char *)malloc(sizeof(char) * len + 1);
@@ -27,7 +28,8 @@ char	*stradd(char *s1, char *s2)
 		return (NULL);
 	ft_strcpy(united, s1);
 	j = 0;
-	while (i < len)
+	//while (i < len)
+	while(s2[j] != '\0')
 	{
 		united[i] = s2[j];
 		i++;

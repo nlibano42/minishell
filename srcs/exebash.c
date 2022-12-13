@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 13:33:24 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/13 11:17:09 by marvin           ###   ########.fr       */
+/*   Updated: 2022/12/13 17:32:17 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void exec_in_child(char *input, t_stack *stack)
 		exit(0); //close the process, it will be excecuted in the parent
 	if(is_built(node->pipe.cmd) == 1)
 	{
-		sig_handler(2);
+		//sig_handler(2);
 		if (launch(input, node) == -1) //get path and launch execve. -1 = error
 		{
 			fd_putstr_out("-Minishell: ", node); //printf para que salga siempre en pantalla?

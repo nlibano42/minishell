@@ -163,7 +163,8 @@ t_stack		*jump_to(t_stack *stack, int to);
 //signals
 void		sig_handler(int sig);
 void		new_sig_handler();
-void		restore_prompt(int sig);
+void		restore_prompt_C(int sig);
+void		restore_prompt_D(int sig);
 void		ctrl_c(int sig);
 void		back_slash(int sig);
 
@@ -196,8 +197,11 @@ char		*expand_vble_out(char *txt, int *init);
 
 //split_tokens
 char		**split_tokens(char *txt);
-void		flag_change(char *txt, int *flags, int i, int f);
+char	**split_tokens_add(char *txt);
+void		flag_change(char *txt, int *flags, int *i, int f);
 char	**token_add(char **dst, const char *s,  size_t i, size_t len);
 char		**str3add(char **s1, char *s2);
+void	split_tokens_simples(int *flags, char *txt, char *temp, int *i, int *d);
+void	split_tokens_doubles(int *flags, char *txt, char *temp, int *i, int *d);
 
 #endif

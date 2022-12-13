@@ -50,7 +50,7 @@ t_stack	*create_node(char *txt)
 	node = (t_stack *)malloc(sizeof(t_stack));
 	node->pipe.input = ft_strdup(txt);
 	node->pipe.parsed_input = parse(txt);
-	node->pipe.parsed_input = NULL;
+	//node->pipe.parsed_input = NULL;
 	node->pipe.cmd = NULL;
 	node->pipe.arg = NULL;
 	node->pipe.ext_path = NULL;
