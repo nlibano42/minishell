@@ -36,15 +36,16 @@ int	main(int argc, char **argv, char **env)
 	stack = NULL;
 	tokens = NULL;
 	//sig_handler(1);
+	
 	g_shell.env = NULL;
 	set_envi(&(g_shell.env), env);
 	while (1)
 	{
+		new_sig_handler();
 		input = readline("MiniShell $> ");
 		add_history(input);
 		if (!input)
-			//sig_handler(3);
-		sig_init();
+			sig_handler(3);
 		if (ft_strlen(input) > 0)
 		{
 			tokens = ft_split(input, ' ');

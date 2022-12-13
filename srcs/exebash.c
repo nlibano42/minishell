@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exebash.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 13:33:24 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/12 19:38:33 by xbasabe-         ###   ########.fr       */
+/*   Updated: 2022/12/13 11:17:09 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,12 @@ pid_t	child_launch(char *input, t_stack *stack)
 	}
 	if (ch_pid == 0) //HIJO
 	{
+		g_shell.pid = getpid();
 		exec_in_child(input, stack);
 	}
 	if(ch_pid > 0) //PADRE
 	{
+		g_shell.pid = getpid();
 		close(node->pipe.p[1]);
 		if (is_built(node->pipe.cmd) == 0)
 		{

@@ -26,6 +26,7 @@ t_stack	*pipe_stack(char *input)
 	{
 		stack = create_node(tokens[0]);
 		create_cmds(&stack, tokens[0]);
+		//stack->pipe.parsed_input = parse(stack->pipe.input);
 	}
 	if(tokens[1] != NULL)
 	{
@@ -34,11 +35,11 @@ t_stack	*pipe_stack(char *input)
 		{
 			tmp_node = create_node(tokens[i]);
 			create_cmds(&tmp_node, tokens[i]);
+			//tmp_node->pipe.parsed_input = parse(tmp_node->pipe.input);
 			insert_l_pipe(tmp_node, stack);
 			i++;
 		}
 	}
-	//clear(tokens);
 	return (stack);
 }
 
@@ -47,9 +48,9 @@ t_stack	*create_node(char *txt)
 	t_stack	*node;
 
 	node = (t_stack *)malloc(sizeof(t_stack));
-	//node->pipe.input = ft_strdup(txt);
-	node->pipe.input = txt;
+	node->pipe.input = ft_strdup(txt);
 	node->pipe.parsed_input = parse(txt);
+	node->pipe.parsed_input = NULL;
 	node->pipe.cmd = NULL;
 	node->pipe.arg = NULL;
 	node->pipe.ext_path = NULL;
@@ -86,6 +87,7 @@ void	free_node_content(t_stack *node)
 		clear(node->pipe.arg);
 	free(node->pipe.input);
 	free(node->pipe.cmd);
+	//free(node->pipe.parsed_input);
 }
 
 void	delete_all_nodes(t_stack *start)

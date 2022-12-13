@@ -12,14 +12,14 @@
 
 #include "minishell.h"
 
-int	new_echo(t_stack *node, char *input)
+int	echo(t_stack *node, char *input)
 {
-	char	*output;
+	//char	*output;
 	int		i;
 	int		n;
 
 	(void)input;
-	output = node->pipe.parsed_input;
+	//output = node->pipe.parsed_input;
 	i = -1;
 	n = 0;
 	if (strcmp(node->pipe.arg[0], "-n"))
@@ -43,7 +43,7 @@ int	new_echo(t_stack *node, char *input)
 	return (0);
 }
 
-int	echo(t_stack *node, char *input)
+int	old_echo(t_stack *node, char *input)
 {
 	char	*output;
 

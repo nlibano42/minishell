@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+/*
 char	*no_blancks(char *txt)
 {
 	int		i;
@@ -34,6 +35,7 @@ char	*no_blancks(char *txt)
 	}
 	return (ret);
 }
+*/
 
 void	create_cmds(t_stack **node, char *token)
 {
