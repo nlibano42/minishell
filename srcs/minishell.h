@@ -190,6 +190,7 @@ t_env		*ft_lstfind(t_env *lst, char *name);
 void		ft_lstclear(t_env **lst);
 void		ft_lstdelone(t_env *lst);
 t_env		*ft_lstlast(t_env *lst);
+char		*ft_lstfind_val(t_env *lst, char *name);
 
 //redirect
 char		*pre_parse(char *input);

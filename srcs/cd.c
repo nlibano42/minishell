@@ -56,6 +56,8 @@ char	*old_dir(void)
 
 int	init_cd(char *input, t_stack *node)
 {
+	char	*val;
+
 	(void) input;
 	if (node->pipe.arg == NULL)
 	{
@@ -69,12 +71,25 @@ int	init_cd(char *input, t_stack *node)
 	{
 		if (node->pipe.arg[0][0] == '.' && node->pipe.arg[0][1] == '/')
 			expand_relative(node);
-		if (node->pipe.arg[0][0] == '.' && node->pipe.arg[0][1] == '.'
+		else if (node->pipe.arg[0][0] == '.' && node->pipe.arg[0][1] == '.'
 		&& node->pipe.arg[0][2] == '/')
 			expand_relative2(node);
-		if (strcmp(node->pipe.arg[0], "-") == 0 && !node->pipe.arg[1])
-			node->pipe.arg[0] = old_dir();
-		if (strcmp(node->pipe.arg[0], "~") == 0 && !node->pipe.arg[1])
+		else if (strcmp(node->pipe.arg[0], "-") == 0 && !node->pipe.arg[1])
+		{
+			val = ft_lstfind_val(g_shell.env, "OLDPWD");
+			if (val == NULL)
+			{
+				printf("Minishell: cd: OLDPWD not set\n");
+				return (1);
+			}
+			else
+			{
+				free (node->pipe.arg[0]);
+				node->pipe.arg[0] = ft_strdup(val);
+			}
+		}
+			//node->pipe.arg[0] = old_dir();
+		else if (strcmp(node->pipe.arg[0], "~") == 0 && !node->pipe.arg[1])
 			node->pipe.arg[0] = ft_strdup(home_dir());
 	}
 	else if (node->pipe.arg[2] != NULL)

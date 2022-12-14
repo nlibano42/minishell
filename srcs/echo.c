@@ -20,7 +20,7 @@ int	echo(t_stack *node, char *input)
 	output = node->pipe.parsed_input;
 	if (str_cmp(output, "opened quotes in command line") == 0)
 		return (1);
-	if (node->pipe.arg[0] == NULL)
+	if (node->pipe.arg == NULL)
 	{
 		fd_putstr_out("\n", node);
 		return (0);

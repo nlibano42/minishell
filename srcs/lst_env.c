@@ -32,3 +32,14 @@ t_env	*ft_lstlast(t_env *lst)
 	}
 	return (lst);
 }
+
+char	*ft_lstfind_val(t_env *lst, char *name)
+{
+	while (lst)
+	{
+		if (ft_strncmp(lst->name, name, ft_strlen(name)) == 0)
+			return (lst->val);
+		lst = lst->next;
+	}
+	return (NULL);
+}
