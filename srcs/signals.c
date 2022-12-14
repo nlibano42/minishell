@@ -90,8 +90,21 @@ void	both_sig_handler(int sig)
 		son_sig_handler(sig);
 }
 */
+
+void    ft_suppress_output(void)
+{
+    struct termios    config;
+
+    if (tcgetattr(0, &config))
+        perror("minishell: tcsetattr");
+    config.c_lflag &= ~ECHOCTL;
+    if (tcsetattr(0, 0, &config))
+        perror("minishell: tcsetattr");
+}
+
 void	signal_handler(int sig)
 {
+	ft_suppress_output();
 	if (sig == SIGINT && g_shell.pid == 0)
 	{
 		printf("\n");
