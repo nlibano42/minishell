@@ -73,7 +73,13 @@ void	exit_kill(t_stack *node)
 {
 	delete_all_nodes(node);
 	printf("exit\n");
-	exit(0);
+	if (arg[1])
+	{
+		printf("-Minishell: exit: too many arguments");
+		g_shell.num_quit = 1;
+		exit(g_shell.num_quit);
+	}
+	exit(g_shell.num_quit);
 }
 
 int	exec_built_in(char *input, t_stack *node)
