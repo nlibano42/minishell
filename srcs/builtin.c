@@ -12,59 +12,6 @@
 
 #include "minishell.h"
 
-int	echo(t_stack *node, char *input)
-{
-	//char	*output;
-	int		i;
-	int		n;
-
-	(void)input;
-	//output = node->pipe.parsed_input;
-	i = -1;
-	n = 0;
-	if (strcmp(node->pipe.arg[0], "-n"))
-	{
-		n = 1;
-		i++;
-	}
-	if (node->pipe.arg[0] == NULL)
-	{
-		fd_putstr_out("\n", node);
-		return (0);
-	}
-	while (node->pipe.arg[i])
-	{
-		fd_putstr_out(node->pipe.arg[i], node);
-		fd_putstr_out(" ", node);
-		i++;
-	}
-	if (n == 1)
-		fd_putstr_out("\n", node);
-	return (0);
-}
-
-int	old_echo(t_stack *node, char *input)
-{
-	char	*output;
-
-	(void)input;
-	output = node->pipe.parsed_input;
-	//output = parse(output);
-	if (node->pipe.arg[0] == NULL)
-	{
-		fd_putstr_out("\n", node);
-		return (0);
-	}
-	if (str_cmp(node->pipe.arg[0], "-n") == 0)
-		fd_putstr_out(&output[8], node);
-	else
-	{
-		fd_putstr_out(&output[5], node);
-		fd_putstr_out("\n", node);
-	}
-	return (0);
-}
-
 void	env(t_stack *node)
 {
 	t_env	*env;
@@ -82,19 +29,11 @@ void	env(t_stack *node)
 
 void	pwd(t_stack *node)
 {
-	t_env	*env;
-	
-	env = g_shell.env;
-	while (env)
-	{
-		if (str_cmp(env->name, "PWD") == 0)
-		{
-			fd_putstr_out(env->val, node);
-			fd_putstr_out("\n", node);
-			break ;
-		}
-		env = env->next;
-	}
+	char	cwd[256];
+
+	getcwd(cwd, sizeof(cwd));
+	fd_putstr_out(cwd, node);
+	fd_putstr_out("\n", node);
 }
 
 void	unset(char *input)
@@ -152,13 +91,11 @@ int	exec_built_in(char *input, t_stack *node)
 		env(node);
 	else if (str_cmp(node->pipe.cmd, "exit") == 0)
 		exit_kill(node);
-	/*
 	else if (str_cmp(node->pipe.cmd, "$?") == 0) 
 	{
 		fd_putstr_out(ft_itoa(g_shell.num_quit), node);
 		fd_putstr_out("\n", node);
 	}
-	*/
 	g_shell.num_quit = 0;
 	return (0);
 }

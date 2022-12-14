@@ -85,6 +85,7 @@ void		update_pwd(t_stack *node);
 void		expand_relative(t_stack *node);
 void		expand_relative2(t_stack *node);
 void		cd(char *input, t_stack *node);
+void		update_oldpwd(char *old_dir);
 
 //execbash
 void		exec_in_child(char *input, t_stack *stack);

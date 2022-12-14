@@ -63,9 +63,18 @@ int	main(int argc, char **argv, char **env)
 void	free_all_params(t_stack **stack, char **input, char ***tokens)
 {
 	if (*stack)
+	{
 		delete_all_nodes(*stack);
+		stack = NULL;
+	}
 	if (*input)
+	{
 		free(*input);
+		input = NULL;
+	}
 	if (*tokens)
+	{
 		clear(*tokens);
+		tokens = NULL;
+	}
 }

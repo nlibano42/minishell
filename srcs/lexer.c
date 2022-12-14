@@ -45,9 +45,12 @@ void	create_cmds(t_stack **node, char *token)
 
 	words = ft_split(token, ' ');
 	len = ft_str2len(words);
-	(*node)->pipe.arg = (char **)malloc(sizeof(char *) * len + 1);
-	if (!((*node)->pipe.arg))
-		return ;
+	if (len > 1)
+	{
+		(*node)->pipe.arg = (char **)malloc(sizeof(char *) * len + 1);
+		if (!((*node)->pipe.arg))
+			return ;
+	}
 	(*node)->pipe.cmd = ft_strdup(words[0]);
 	i = 1;
 	while (words[i])
@@ -55,7 +58,8 @@ void	create_cmds(t_stack **node, char *token)
 		(*node)->pipe.arg[i - 1] = ft_strdup(words[i]);
 		i++;
 	}
-	(*node)->pipe.arg[i - 1] = NULL;
+	if (len > 1)
+		(*node)->pipe.arg[i - 1] = NULL;
 	cmd_path(node);
 	clear(words);
 }

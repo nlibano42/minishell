@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 10:58:40 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/14 11:19:34 by xbasabe-         ###   ########.fr       */
+/*   Updated: 2022/12/14 12:25:45 by xbasabe-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ char	**split_tokens(char *txt)
 	while (txt[i] != '\0')
 	{
 		if (txt[i] == 39)
-			split_tokens_simples(flags, txt, temp, &i, &d);
+			split_tokens_s(flags, txt, temp, &i, &d);
 		else if (txt[i] == 34)
-			split_tokens_doubles(flags, txt, temp, &i, &d);
+			split_tokens_d(flags, txt, temp, &i, &d);
 		else if (txt[i] == '|')
 		{
 			remove_quote(txt, i);
@@ -101,8 +101,6 @@ void	flag_change(char *txt, int *flags, int *i, int f)
 	flags[f] = flags[f] * -1;
 	remove_quote(txt, init);
 }
-
-
 
 /* FUNCIONA, CON UN LEAK
 
