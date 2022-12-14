@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:19:59 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/09 00:04:54 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/14 10:15:22 by xbasabe-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,16 +162,17 @@ t_stack		*jump_to(t_stack *stack, int to);
 
 //signals
 void		sig_handler(int sig);
-void		new_sig_handler();
+void		new_sig_handler(void);
 void		restore_prompt_C(int sig);
 void		restore_prompt_D(int sig);
 void		ctrl_c(int sig);
 void		back_slash(int sig);
+void		parent_sig_handler(void);
+void		son_sig_handler(void);
 
-void	sig_int(int code);
-void	sig_quit(int code);
-void	sig_init(void);
-
+void		sig_int(int code);
+void		sig_quit(int code);
+void		sig_init(void);
 
 //enviroment
 void		set_envi(t_env **envi, char **env);
@@ -197,11 +198,11 @@ char		*expand_vble_out(char *txt, int *init);
 
 //split_tokens
 char		**split_tokens(char *txt);
-char	**split_tokens_add(char *txt);
+char		**split_tokens_add(char *txt);
 void		flag_change(char *txt, int *flags, int *i, int f);
-char	**token_add(char **dst, const char *s,  size_t i, size_t len);
+char		**token_add(char **dst, const char *s, size_t i, size_t len);
 char		**str3add(char **s1, char *s2);
-void	split_tokens_simples(int *flags, char *txt, char *temp, int *i, int *d);
-void	split_tokens_doubles(int *flags, char *txt, char *temp, int *i, int *d);
+void		split_tokens_s(int *flags, char *txt, char *temp, int *i, int *d);
+void		split_tokens_d(int *flags, char *txt, char *temp, int *i, int *d);
 
 #endif

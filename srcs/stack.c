@@ -20,22 +20,19 @@ t_stack	*pipe_stack(char *input)
 	int		i;
 
 	input = pre_parse(input);
-	//tokens = ft_split(input, ' ');
 	tokens = split_tokens(input);
 	if (tokens[0])
 	{
 		stack = create_node(tokens[0]);
 		create_cmds(&stack, tokens[0]);
-		//stack->pipe.parsed_input = parse(stack->pipe.input);
 	}
-	if(tokens[1] != NULL)
+	if (tokens[1] != NULL)
 	{
 		i = 1;
 		while (tokens[i])
 		{
 			tmp_node = create_node(tokens[i]);
 			create_cmds(&tmp_node, tokens[i]);
-			//tmp_node->pipe.parsed_input = parse(tmp_node->pipe.input);
 			insert_l_pipe(tmp_node, stack);
 			i++;
 		}

@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   split_tokens.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/14 10:58:40 by xbasabe-          #+#    #+#             */
+/*   Updated: 2022/12/14 11:19:34 by xbasabe-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -18,9 +29,9 @@ char	**split_tokens(char *txt)
 	tokens = (char **)malloc((sizeof(char *) * 20));
 	while (txt[i] != '\0')
 	{
-		if (txt[i] == 39) // simples ' 39 ascci de '
+		if (txt[i] == 39)
 			split_tokens_simples(flags, txt, temp, &i, &d);
-		else if (txt[i] == 34) //34 es el ascci de ""
+		else if (txt[i] == 34)
 			split_tokens_doubles(flags, txt, temp, &i, &d);
 		else if (txt[i] == '|')
 		{
@@ -40,12 +51,12 @@ char	**split_tokens(char *txt)
 	return (tokens);
 }
 
-void	split_tokens_simples(int *flags, char *txt, char *temp, int *i, int *d) // en vez de i para que se actualize y *d
+void	split_tokens_s(int *flags, char *txt, char *temp, int *i, int *d)
 {	
-	if (flags[0] != -1 && flags[1] != -1)//dentro, entramos simples (ignorar dentro las dobles)
+	if (flags[0] != -1 && flags[1] != -1)
 	{
 		flag_change(txt, flags, i, 1);
-		while (txt[*i] != 39) // 39 es el ascii de '
+		while (txt[*i] != 39)
 		{
 			temp[*d] = txt[*i];
 			if (txt[*i] == '\0')
@@ -53,7 +64,6 @@ void	split_tokens_simples(int *flags, char *txt, char *temp, int *i, int *d) // 
 				printf("opened quotes in command line\n");
 				g_shell.num_quit = 1;
 				return ;
-				//exit(1);
 			}	
 			*i = *i + 1;
 			*d = *d + 1;
@@ -62,9 +72,9 @@ void	split_tokens_simples(int *flags, char *txt, char *temp, int *i, int *d) // 
 	}
 }
 
-void	split_tokens_doubles(int *flags, char *txt, char *temp, int *i, int *d) // en vez de i para que se actualize y *d
+void	split_tokens_d(int *flags, char *txt, char *temp, int *i, int *d)
 {
-	if (flags[1] != -1 && flags[0] != -1) //dentro, entramos dobles (ignorar dentro las simples)
+	if (flags[1] != -1 && flags[0] != -1)
 	{
 		flag_change(txt, flags, i, 0);
 		while (txt[*i] != 34)
@@ -74,7 +84,6 @@ void	split_tokens_doubles(int *flags, char *txt, char *temp, int *i, int *d) // 
 			{
 				printf("opened quotes in command line\n");
 				g_shell.num_quit = 1;
-				//exit(1);
 				return ;
 			}
 			*i = *i + 1;

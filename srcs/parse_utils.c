@@ -30,15 +30,15 @@ char	*get_env(char *vble)
 
 char	*expand_vble_out(char *txt, int *init)
 {
-	char 	*value; //valor que tiene la vble tras el $
-	char 	exp[999]; //el nuevo txt expandido
+	char	*value;
+	char	exp[999];
 	int		i;
 	int		j;
 	int		add;
 
 	i = 0;
 	add = *init;
-	while (txt[add] != ' ' && txt[add] != '\0' && txt[add] != '"') //&& txt[add] != '\'')
+	while (txt[add] != ' ' && txt[add] != '\0' && txt[add] != '"')
 		add++;
 	add = add - *init;
 	value = search_vble_env(txt, *init);
@@ -56,7 +56,6 @@ char	*expand_vble_out(char *txt, int *init)
 	i = *init + add;
 	*init = j - 2;
 	exp[j] = '\0';
-	//exp[j + 1] = '\0';
 	j++;
 	while (txt[i])
 	{
@@ -71,15 +70,15 @@ char	*expand_vble_out(char *txt, int *init)
 
 char	*expand_vble(char *txt, int *init)
 {
-	char	*value; //valor que tiene la vble tras el $
-	char	exp[999]; //el nuevo txt expandido
+	char	*value;
+	char	exp[999];
 	int		i;
 	int		j;
 	int		add;
 
 	i = 0;
 	add = *init;
-	while (txt[add] != ' ' && txt[add] != '\0' && txt[add] != '"') //&& txt[add] != '\'')
+	while (txt[add] != ' ' && txt[add] != '\0' && txt[add] != '"')
 		add++;
 	add = add - *init;
 	value = search_vble_env(txt, *init);

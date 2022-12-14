@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execv.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/05 13:33:24 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/13 18:05:09 by marvin           ###   ########.fr       */
+/*   Created: 2022/12/14 10:44:11 by xbasabe-          #+#    #+#             */
+/*   Updated: 2022/12/14 10:44:15 by xbasabe-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	**tab_env(void)
 	char	*s;
 	char	*s1;
 
-	env = g_shell.env;
+	env = g_shell.env; //crear funcion ebviroment size para recortar esta
 	i = 1;
 	while (env)
 	{
@@ -113,18 +113,17 @@ int	launch(char *intro, t_stack *node)
 	if (node->pipe.ext_path != NULL) //(existe path en el comando introducido)
 		execve(node->pipe.input, arguments, envi);
 	path = path_exe(node->pipe.cmd);
+	
 	if (path == NULL)
 	{
 		clear((char **)arguments);
 		free((char *)path);
 		clear(envi);
 		clear(splited);
-		g_shell.num_quit = -1;
-		exit(127);
-		//return (-1);
+		return (-1);
 	}
 	g_shell.num_quit = execve(path, arguments, envi);
-	return (0);
+	return (g_shell.num_quit);
 }
 
 int	old2_launch(char *intro, t_stack *node)
@@ -171,14 +170,13 @@ const char	*path_exe(char *txt)
 		if (access((const char *)directory, X_OK) == 0)
 		{
 			clear((char **)p);
-			free(txt);
 			return ((const char *)directory);
 		}
 		free(directory);
 		i++;
 	}
 	clear((char **)p);
-	free(txt);
-	directory = NULL;
-	return (directory);
+	//directory = NULL;
+	//return (directory);
+	return (NULL);
 }

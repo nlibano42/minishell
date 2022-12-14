@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 11:33:47 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/07 22:35:23 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/14 10:16:11 by xbasabe-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,20 +35,18 @@ int	main(int argc, char **argv, char **env)
 	(void)argv;
 	stack = NULL;
 	tokens = NULL;
-	//sig_handler(1);
-	new_sig_handler();
+	parent_sig_handler();
 	g_shell.env = NULL;
 	set_envi(&(g_shell.env), env);
 	while (1)
 	{
 		input = readline("MiniShell $> ");
 		add_history(input);
-		//if (!input)
-		//	sig_handler(3);
+		if (!input)
+			exit(0);
 		if (ft_strlen(input) > 0)
 		{
 			tokens = ft_split(input, ' ');
-			//tokens = split_tokens(input);
 			if (str_cmp(tokens[0], "exit") == 0)
 			{
 				exit(g_shell.num_quit);

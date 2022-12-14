@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-
 /*EXPANDIR VBLE $*/
 int	expand(char **txt)
 {
@@ -71,7 +70,7 @@ char	*literal(char *input)
 	char	**next;
 
 	tokens = ft_split(input, '"');
-	next = (char**)malloc(sizeof(char *) * 2);
+	next = (char **)malloc(sizeof(char *) * 2);
     /*
     if (tokens[0])
         next[0] = (char *)malloc(sizeof(char) * ft_strlen(tokens[0]));
@@ -96,23 +95,18 @@ char	*literal(char *input)
 char	*parse(char *txt)
 {
 	int	count[2];
-	//int	*count;
 	int	flags[2];
 
-	//count = malloc(sizeof(int) * 2 + 1);
-	//if (!count)
-	//	return (NULL);
 	count[0] = 0;
 	count[1] = 0;
 	flags[0] = 1;
 	flags[1] = 1;
 	quote_d_count(txt, count);
-	if ((txt = quote_in_or_out_loop(txt, count, flags)) == NULL)
+	txt = quote_in_or_out_loop(txt, count, flags);
+	if (txt == NULL)
 	{
-		//free(count);
 		return ("echo -Minishell: echo: opened quotes");
 	}
-	//free(count);
 	return (txt);
 }
 
@@ -145,27 +139,6 @@ void	remove_quote(char *txt, int init)
 	txt[i] = '\0';
 }
 
-void	delete_quotes(char	**s) //¿?
-{
-	int	i;
-	int	j;
-
-	i = -1;
-	while ((*s)[++i])
-	{
-		if ((*s)[i] == 34)
-		{
-			j = i - 1;
-			while ((*s)[++j])
-			{
-				(*s)[j] = (*s)[j + 1];
-				if ((*s)[j + 1] == '\0')
-					break ;
-			}
-		}
-	}
-}
-
 char	*search_vble_env(char *txt, int init)
 {
 	int		j;
@@ -173,14 +146,15 @@ char	*search_vble_env(char *txt, int init)
 
 	init++;
 	j = 0;
-	while (txt[init] != ' ' && txt[init] != '\0' && txt[init] != '"' && txt[init] != '\'')
+	while (txt[init] != ' ' && txt[init] != '\0'
+		&& txt[init] != '"' && txt[init] != '\'')
 	{
 		vble[j] = txt[init];
 		j++;
 		init++;
 	}
 	vble[j] = '\0';
-	if (str_cmp(vble, "?") == 0) //$? devuelve el exit status de la ultima ejecución
+	if (str_cmp(vble, "?") == 0)
 	{
 		return (ft_itoa(g_shell.num_quit));
 	}
@@ -196,47 +170,41 @@ char	*quote_in_or_out_loop(char *txt, int *count, int *flags)
 	j = &i;
 	while (txt[i] != '\0')
 	{
-		if (txt[i] == 39) // simples ' 39 ascci de '
+		if (txt[i] == 39)
 		{	
-			if ((count[1] % 2 == 0 && count[1] > 0) && flags[0] != -1)//dentro, entramos simples (ignorar dentro las dobles)
+			if ((count[1] % 2 == 0 && count[1] > 0) && flags[0] != -1)
 			{
 				flip_flag(txt, flags, count, i, 1);
-				//write(1, "simple in\n", 10);
-				while (txt[i] != 39) // 39 es el ascii de '
+				while (txt[i] != 39)
 				{
 					if (txt[i] == '\0')
 						return (NULL);
-					//write(1,".", 1);
 					i++;
 				}
 				flip_flag(txt, flags, count, i, 1);
-				//write(1, "\nsimple out\n", 11);
 			}
 		}
-		else if (txt[i] == 34) //34 es el ascci de ""
+		else if (txt[i] == 34)
 		{
-			if ((count[0] % 2 == 0 && count[0] > 0) && flags[1] != -1) //dentro, entramos dobles (ignorar dentro las simples)
+			if ((count[0] % 2 == 0 && count[0] > 0) && flags[1] != -1)
 			{	
 				flip_flag(txt, flags, count, i, 0);
-				//write(1, "doble in\n", 9);
 				while (txt[i] != 34)
 				{
 					if (txt[i] == '\0')
 					{
 						return (NULL);
 					}
-					if (txt[i] == 36) //36 es el ascci de $
+					if (txt[i] == 36)
 					{
 						txt = expand_vble(txt, j);
 					}
-					//write(1,".", 1);
 					i++;
 				}
 				flip_flag(txt, flags, count, i, 0);
-				//write(1, "doble out\n", 9);
 			}
 		}
-		else if (txt[i] == 36) //36 es el ascci de $
+		else if (txt[i] == 36)
 		{	
 			txt = expand_vble_out(txt, j);
 		}
@@ -244,8 +212,6 @@ char	*quote_in_or_out_loop(char *txt, int *count, int *flags)
 			return (NULL);
 		i++;
 	}
-	//if (txt[i] == 39 || txt[i] == 34)
-	//	return(NULL);
 	return (txt);
 }
 

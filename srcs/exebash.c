@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exebash.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 13:33:24 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/13 17:32:17 by marvin           ###   ########.fr       */
+/*   Updated: 2022/12/14 10:35:50 by xbasabe-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ pid_t	child_launch(char *input, t_stack *stack)
 	if (ch_pid == 0) //HIJO
 	{
 		g_shell.pid = getpid();
+		son_sig_handler();
 		exec_in_child(input, stack);
 	}
 	if(ch_pid > 0) //PADRE

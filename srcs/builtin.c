@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 10:40:03 by marvin            #+#    #+#             */
-/*   Updated: 2022/12/09 01:41:10 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/14 09:48:46 by xbasabe-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	env(t_stack *node)
 void	pwd(t_stack *node)
 {
 	t_env	*env;
-
+	
 	env = g_shell.env;
 	while (env)
 	{
