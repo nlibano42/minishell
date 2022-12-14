@@ -6,30 +6,30 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 13:33:24 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/14 12:17:55 by xbasabe-         ###   ########.fr       */
+/*   Updated: 2022/12/14 19:43:37 by xbasabe-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void exec_in_child(char *input, t_stack *stack)
+void	exec_in_child(char *input, t_stack *stack)
 {
-	t_stack *node;
+	t_stack	*node;
 
 	node = stack;
-	if (node->next != NULL) // send stdout to the pipe to next comand
-		dup2(node->next->pipe.p[1],1);
-	if(node->prev != NULL)  //stdin entrada debe ser lo leido del pipe
+	if (node->next != NULL)
+		dup2(node->next->pipe.p[1], 1);
+	if (node->prev != NULL)
 		dup2(node->pipe.p[0], 0);
 	close(node->pipe.p[0]);
 	close(node->pipe.p[1]);
 	if (is_built(node->pipe.cmd) == 0)
-		exit(0); //close the process, it will be excecuted in the parent
-	if(is_built(node->pipe.cmd) == 1)
+		exit(0);
+	if (is_built(node->pipe.cmd) == 1)
 	{
-		if (launch(input, node) == -1) //get path and launch execve. -1 = error
+		if (launch(input, node) == -1)
 		{
-			fd_putstr_out("-Minishell: ", node); //printf para que salga siempre en pantalla?
+			fd_putstr_out("-Minishell: ", node);
 			fd_putstr_out(node->pipe.cmd, node);
 			fd_putstr_out(": command not found\n", node);
 			g_shell.num_quit = 127;
@@ -41,35 +41,27 @@ void exec_in_child(char *input, t_stack *stack)
 pid_t	child_launch(char *input, t_stack *stack)
 {
 	pid_t	ch_pid;
-	t_stack *node;
-	
+	t_stack	*node;
+
 	node = stack;
+	g_shell.pid = 1;
 	ch_pid = fork();
 	if (ch_pid == -1)
-	{
-		perror("fork");
 		exit(EXIT_FAILURE);
-	}
-	if (ch_pid == 0) //HIJO
+	if (ch_pid == 0)
 	{
-		g_shell.pid = getpid();
-		son_sig_handler();
+		rl_catch_signals = 1;
 		exec_in_child(input, stack);
 	}
-	if(ch_pid > 0) //PADRE
+	if (ch_pid > 0)
 	{
-		g_shell.pid = getpid();
 		close(node->pipe.p[1]);
 		if (is_built(node->pipe.cmd) == 0)
-		{
 			exec_built_in(input, node);
-		}
 		close(node->pipe.p[0]);
- 	}
-	//wait(NULL);
-	wait(&(g_shell.num_quit));
-	if(g_shell.num_quit == 32512)
-		g_shell.num_quit = 127;
+	}
+	waitpid(ch_pid, &g_shell.num_quit, 0);
+	get_exit_status();
 	return (ch_pid);
 }
 
@@ -90,13 +82,13 @@ void	exec_stack(t_stack *stack, char *input)
 	}
 }
 
-int is_built(char *cmd)
+int	is_built(char *cmd)
 {
-    int     r;
+	int	r;
 
 	cmd = lowercase(cmd);
-    r = 1;
-	if (str_cmp( cmd, "pwd") == 0)
+	r = 1;
+	if (str_cmp(cmd, "pwd") == 0)
 		r = 0;
 	else if (str_cmp(cmd, "echo") == 0)
 		r = 0;

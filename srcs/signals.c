@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+/*
 void	restore_prompt_c(int sig)
 {
 	g_shell.num_quit = 130;
@@ -22,11 +23,19 @@ void	restore_prompt_c(int sig)
 	(void)sig;
 }
 
-void	restore_prompt_d(int sig)
+void	restore_prompt_c_son(int sig)
 {
 	g_shell.num_quit = 130;
 	write(1, "\n", 1);
 	rl_replace_line("", 0);
+	rl_on_new_line();
+	(void)sig;
+}
+
+void	restore_prompt_d(int sig)
+{
+	g_shell.num_quit = 130;
+	rl_replace_line("exit", 0);
 	//rl_on_new_line();
 	rl_redisplay();
 	(void)sig;
@@ -45,54 +54,66 @@ void	ctrl_c(int sig)
 void	back_slash(int sig)
 {
 	g_shell.num_quit = 131;
-	printf("Quit (core dumped)\n");
+	printf("\b\bQuit (exit minishell)\n");
 	exit(131);
 	(void)sig;
 }
 
-void	sig_handler(int sig)
+
+void	signal_zeta(int sig)
 {
-	printf("\b\b  \b\b");
-	if (sig == 1)
-	{
-		signal(SIGINT, restore_prompt_c);
-		signal(SIGQUIT, SIG_IGN);
-	}
-	if (sig == 2)
-	{
-		signal(SIGINT, ctrl_c);
-		signal(SIGQUIT, back_slash);
-	}
-	if (sig == 3)
-	{
-		rl_on_new_line();
-		printf("\b\b\b\b\b\b\b\b\\b\b\b\bexit\n");
-		exit(0);
-	}
-}
-void	signal_zeta()
-{
-    printf("ctrl Ç CAPTURADA\n");
+	printf("ctrl Ç CAPTURADA\n");
     //printf("MiniShell$> ");
 	//rl_redisplay();
+	(void) sig;
 }
 
-void	son_sig_handler()
+void	son_sig_handler(int sig)
 {
-	printf("\b\b  \b\b");
-	signal(SIGINT, restore_prompt_c); //SIGN INT ctrl C
-	//signal(SIGQUIT, SIG_IGN);      //SIGQUIT  Ctrl Ç señal 3
+	printf("sonPID %d\n", g_shell.pid);
+	signal(SIGINT, restore_prompt_c_son);
 	signal(SIGQUIT, restore_prompt_d);
-	signal(3, signal_zeta);    //SIGTSTP Ctrl Z Ctrl Ç
-
+	g_shell.pid = 0;
 }
 
-void	parent_sig_handler()
+void	parent_sig_handler(int sig)
 {
-	printf("\b\b  \b\b");
-	//signal(SIGINT, ctrl_c);
 	signal(SIGINT, restore_prompt_c);
 	signal(SIGQUIT, back_slash);
-	signal(SIGSTOP, restore_prompt_d);
-	//exit(0);
+}
+
+void	both_sig_handler(int sig)
+{
+	if (g_shell.pid > 0)
+		parent_sig_handler(sig);
+	if (g_shell.pid == 0)
+		son_sig_handler(sig);
+}
+*/
+void	signal_handler(int sig)
+{
+	if (sig == SIGINT && g_shell.pid == 0)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	if (sig == SIGINT && g_shell.pid == 1)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		//g_data.sub_pid = 0;
+		g_shell.pid = 0;
+	}
+	//else if (sig == SIGQUIT && g_data.sub_pid);
+	else if (sig == SIGQUIT && g_shell.pid == 1)
+	{
+		printf("Quit: 3\n");
+		printf("\n");
+		//rl_on_new_line();
+		//rl_replace_line("", 0);
+		rl_redisplay();
+	}
 }

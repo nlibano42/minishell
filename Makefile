@@ -18,7 +18,7 @@ EXTLIB		= libft
 READLINE_DIR = ${HOME}/.brew/opt/readline
 
 
-SRCS		= main.c echo.c signals.c builtin.c cd_utils.c parse.c split_tokens.c\
+SRCS		= main.c echo.c signals.c builtin.c prueba_parseo.c cd_utils.c parse.c split_tokens.c lst_env_utils.c\
 			exebash.c stack.c in_out.c cd.c execv.c lexer.c chain.c reorder.c export.c enviroment.c lst_env.c parse_utils.c redirect.c\
 		
 

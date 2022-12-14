@@ -12,31 +12,6 @@
 
 #include "minishell.h"
 
-/*
-char	*no_blancks(char *txt)
-{
-	int		i;
-	int		j;
-	char	*ret;
-
-	ret = NULL;
-	i = 0;
-	j = 0;
-	while (txt[i])
-	{
-		if (txt[i] == ' ')
-		{
-			while (txt[j] == ' ')
-				j++;
-			i = i + j;
-		}
-		j = 0;
-		ret[i] = txt[i];
-	}
-	return (ret);
-}
-*/
-
 void	create_cmds(t_stack **node, char *token)
 {
 	char	**words;
@@ -92,11 +67,7 @@ void	cmd_path(t_stack **node)
 		relative_path(*node);
 	c = 0;
 	while ((*node)->pipe.cmd[i] != '\0')
-	{
-		comand[c] = (*node)->pipe.cmd[i];
-		i++;
-		c++;
-	}
+		comand[c++] = (*node)->pipe.cmd[i++];
 	comand[c] = '\0';
 	ft_strcpy((*node)->pipe.cmd, comand);
 }

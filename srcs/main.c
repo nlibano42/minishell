@@ -12,6 +12,22 @@
 
 #include "minishell.h"
 
+void	get_exit_status(void)
+{
+	int	temp_status;
+
+	temp_status = g_shell.num_quit;
+	if (WIFEXITED(temp_status))
+		g_shell.num_quit = WEXITSTATUS(temp_status);
+	if (WIFSIGNALED(temp_status))
+	{
+		if (WTERMSIG(temp_status) == 2)
+			g_shell.num_quit = 130;
+		else if ((WTERMSIG(temp_status) == 3))
+			g_shell.num_quit = 131;
+	}
+}
+
 void	clear(char **intro)
 {
 	int	i;
@@ -35,18 +51,27 @@ int	main(int argc, char **argv, char **env)
 	(void)argv;
 	stack = NULL;
 	tokens = NULL;
-	parent_sig_handler();
+	g_shell.pid = 0;
 	g_shell.env = NULL;
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, signal_handler);
 	set_envi(&(g_shell.env), env);
 	while (1)
 	{
 		input = readline("MiniShell $> ");
 		add_history(input);
 		if (!input)
-			exit(0);
+		{
+			printf("exit\n");
+			//usar vuestro builtin de exit
+			exit(g_shell.num_quit);
+		}
+		//	sig_handler(3);
+		
 		if (ft_strlen(input) > 0)
 		{
 			tokens = ft_split(input, ' ');
+			//tokens = split_tokens(input);
 			if (str_cmp(tokens[0], "exit") == 0)
 			{
 				exit(g_shell.num_quit);
@@ -60,6 +85,22 @@ int	main(int argc, char **argv, char **env)
 	return (g_shell.num_quit);
 }
 
+/*
+void	executor(char **input, char ***tokens, t_stack **stack)
+{
+	if (!input)
+		exit(0);
+	if (ft_strlen(input) > 0)
+	{
+		tokens = ft_split(input, ' ');
+		if (str_cmp(tokens[0], "exit") == 0)
+			exit(g_shell.num_quit);
+		stack = pipe_stack(input);
+		exec_stack(stack, input);
+	}
+	free_all_params(&stack, &input, &tokens);
+}
+*/
 void	free_all_params(t_stack **stack, char **input, char ***tokens)
 {
 	if (*stack)

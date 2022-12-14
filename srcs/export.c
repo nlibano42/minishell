@@ -80,13 +80,12 @@ void	export(t_stack *node)
 		export_no_args(node);
 		return ;
 	}
-	//comprobra si hay más de un argumento? cada argumento de node se toma como una variable a trata por export while arg[i]
 	var = ft_split(node->pipe.arg[0], '=');
 	exist = 0;
 	env = g_shell.env;
 	while (env)
 	{
-		if (str_cmp(env->name, var[0]) == 0) 
+		if (str_cmp(env->name, var[0]) == 0)
 		{
 			free(env->val);
 			env->val = ft_strdup((const char *)var[1]);

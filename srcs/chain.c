@@ -19,7 +19,6 @@ char	*stradd(char *s1, char *s2)
 	int		i;
 	int		j;
 
-	//len = (ft_strlen((const char *)s1) + ft_strlen((const char *)s2) + 1);
 	len = (ft_strlen((const char *)s1) + ft_strlen((const char *)s2));
 	i = ft_strlen((const char *)s1);
 	j = 0;
@@ -28,8 +27,7 @@ char	*stradd(char *s1, char *s2)
 		return (NULL);
 	ft_strcpy(united, s1);
 	j = 0;
-	//while (i < len)
-	while(s2[j] != '\0')
+	while (s2[j] != '\0')
 	{
 		united[i] = s2[j];
 		i++;
@@ -51,38 +49,9 @@ char	**str2add(char **s1, char *s2)
 		return (NULL);
 	i = -1;
 	while (s1[++i])
-		//united[i] = s1[i];
 		ft_strcpy(united[i], s1[i]);
 	ft_strcpy(united[i], s2);
-	//united[i] = s2;
 	united[i + 1] = NULL;
-	return (united);
-}
-
-char	**str3add(char **s1, char *s2)
-{
-	char	**united;
-	int		len;
-	int		i;
-
-	len = (ft_str2len(s1));
-	united = (char **)malloc(sizeof(char *) * (len + 1) + 1);
-	if (!united)
-		return (NULL);
-	i = 0;
-	ft_strcpy(united[i], s2);
-	while (s1[++i])
-		//united[i] = s1[i];
-		ft_strcpy(united[i], s1[i]);
-	ft_strcpy(united[i], s2);
-	//united[i] = s2;
-	united[i + 1] = NULL;
-	i = 0;
-	while (united[i])
-	{
-		printf("str3add  united[%d] %sn", i, united[i]);
-		i++;
-	}
 	return (united);
 }
 

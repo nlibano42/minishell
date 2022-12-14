@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 11:35:51 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/14 11:36:42 by xbasabe-         ###   ########.fr       */
+/*   Updated: 2022/12/14 16:48:06 by xbasabe-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	echo(t_stack *node, char *input)
 
 	(void)input;
 	output = node->pipe.parsed_input;
+	if (str_cmp(output, "opened quotes in command line") == 0)
+		return (1);
 	if (node->pipe.arg[0] == NULL)
 	{
 		fd_putstr_out("\n", node);

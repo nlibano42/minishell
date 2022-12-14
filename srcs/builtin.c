@@ -72,6 +72,7 @@ void	unset(char *input)
 void	exit_kill(t_stack *node)
 {
 	delete_all_nodes(node);
+	printf("exit\n");
 	exit(0);
 }
 

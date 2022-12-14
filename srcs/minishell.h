@@ -17,7 +17,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdbool.h>
-//# include <stdbool.h>
 # include <stdlib.h>
 # include "../libft/libft.h"
 # include <stddef.h>
@@ -42,7 +41,7 @@ typedef struct s_pipe
 	char	*input;
 	char	*parsed_input;
 	int		p[2];
-	char	**envi; //esto hay que quitar. trasladar todo a struct
+	char	**envi;
 	char	*ext_path;
 	char	*cmd;
 	char	**arg;
@@ -63,6 +62,8 @@ typedef struct s_shell
 }	t_shell;
 
 t_shell	g_shell;
+
+void	get_exit_status(void);
 
 //builtin
 int			echo(t_stack *stack, char *input);
@@ -109,6 +110,7 @@ int			write_pipe(int fd, char *str); //deshuso
 //main
 void		clear(char **intro);
 void		free_all_params(t_stack **stack, char **input, char ***tokens);
+//void		executor(char *input, char **tokens, t_stack *stack);
 
 //parse
 int			expand(char **txt);
@@ -162,7 +164,7 @@ t_stack		*reorder_stack(t_stack *stack);
 t_stack		*jump_to(t_stack *stack, int to);
 
 //signals
-void		sig_handler(int sig);
+void		signal_handler(int sig);
 void		new_sig_handler(void);
 void		restore_prompt_C(int sig);
 void		restore_prompt_D(int sig);
@@ -170,6 +172,8 @@ void		ctrl_c(int sig);
 void		back_slash(int sig);
 void		parent_sig_handler(void);
 void		son_sig_handler(void);
+void		both_sig_handler(void);
+void		restore_prompt_c_son(int sig);
 
 void		sig_int(int code);
 void		sig_quit(int code);
@@ -177,9 +181,6 @@ void		sig_init(void);
 
 //enviroment
 void		set_envi(t_env **envi, char **env);
-//t_env  *create_vble(char *envi);
-//void    insert_env(t_env *envi, t_env *vble);
-//void deleteEnviro(t_env *envi);
 
 //lst_env
 t_env		*ft_lstnew(char *name, char *val);
@@ -203,7 +204,16 @@ char		**split_tokens_add(char *txt);
 void		flag_change(char *txt, int *flags, int *i, int f);
 char		**token_add(char **dst, const char *s, size_t i, size_t len);
 char		**str3add(char **s1, char *s2);
-void		split_tokens_s(int *flags, char *txt, char *temp, int *i, int *d);
-void		split_tokens_d(int *flags, char *txt, char *temp, int *i, int *d);
+void		split_tokens_s(int *flags, char *txt, char *temp, int *index);
+void		split_tokens_d(int *flags, char *txt, char *temp, int *index);
+
+//prueba_parseo
+void	remove_quote(char *txt, int init);
+void	init_parser(int *index, int *flags);
+char	*parse_loop(char *txt);
+void	into_simple(int *flags, char *txt, char *temp, int *index);
+void	into_double(int *flags, char *txt, char *temp, int *index);
+void	flag_change(char *txt, int *flags, int *i, int f);
+char	*chard_to_chars(char **intro);
 
 #endif

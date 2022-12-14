@@ -6,11 +6,26 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 10:44:11 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/14 10:44:15 by xbasabe-         ###   ########.fr       */
+/*   Updated: 2022/12/14 17:59:53 by xbasabe-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	env_size(void)
+{
+	t_env	*env;
+	int		i;
+
+	env = g_shell.env;
+	i = 1;
+	while (env)
+	{
+		i++;
+		env = env ->next;
+	}
+	return (i);
+}
 
 char	**tab_env(void)
 {
@@ -20,13 +35,8 @@ char	**tab_env(void)
 	char	*s;
 	char	*s1;
 
-	env = g_shell.env; //crear funcion ebviroment size para recortar esta
-	i = 1;
-	while (env)
-	{
-		i++;
-		env = env ->next;
-	}
+	env = g_shell.env;
+	i = env_size();
 	tab = malloc(sizeof(char *) * i + 1);
 	if (!tab)
 		return (NULL);
@@ -63,39 +73,6 @@ void	path_in_enviroment(t_stack *node)
 	exit(127);
 }
 
-/*
-int	launch_variant(char *intro, t_stack *node)
-{
-	const char	*path;
-	char *const	*argus;
-	char		**envi;
-
-	(void)intro;
-	envi = tab_env();
-	path_in_enviroment(node);
-	argus = NULL;
-	argus = str3add(node->pipe.cmd, node->pipe.arg);
-	int i = 0;
-	while (argus[i])
-	{
-		printf("execve argus %s", argus[i]);
-		i++;
-	}
-	if (node->pipe.ext_path != NULL)
-		execve(node->pipe.input, argus, envi);
-	path = path_exe(node->pipe.cmd);
-	if (path == NULL)
-	{
-		clear((char **)argus);
-		free((char *)path);
-		clear(envi);
-		g_shell.num_quit = -1;
-		return (-1);
-	}
-	g_shell.num_quit = execve(path, argus, envi);
-	return (0);
-}*/
-
 int	launch(char *intro, t_stack *node)
 {
 	const char	*path;
@@ -108,12 +85,10 @@ int	launch(char *intro, t_stack *node)
 	path_in_enviroment(node);
 	arguments = NULL;
 	splited = ft_split((const char *)node->pipe.parsed_input, '|');
-	arguments = ft_split(splited[0], ' '); 
-	//arguments = str3add(node->pipe.arg, node->pipe.cmd);
-	if (node->pipe.ext_path != NULL) //(existe path en el comando introducido)
+	arguments = ft_split(splited[0], ' ');
+	if (node->pipe.ext_path != NULL)
 		execve(node->pipe.input, arguments, envi);
 	path = path_exe(node->pipe.cmd);
-	
 	if (path == NULL)
 	{
 		clear((char **)arguments);
@@ -124,34 +99,6 @@ int	launch(char *intro, t_stack *node)
 	}
 	g_shell.num_quit = execve(path, arguments, envi);
 	return (g_shell.num_quit);
-}
-
-int	old2_launch(char *intro, t_stack *node)
-{
-	const char	*path;
-	char *const	*arguments;
-	char		**tokens;
-	char	**envi;
-
-	envi = tab_env();
-	arguments = NULL;
-	tokens = ft_split(intro, ' ');
-	if (tokens[0] == NULL)
-		tokens[0] = node->pipe.cmd;
-	arguments = (char *const *)tokens;
-	if (node->pipe.ext_path != NULL) //(existe path en el comando introducido)
-		execve(node->pipe.input, arguments, envi); 
-	path = path_exe(node->pipe.cmd);
-	if(path == NULL)
-	{
-		clear((char **)arguments);
-		free((char *)path);
-		clear(envi);
-		return(-1) ;
-	}
-	execve(path, arguments, envi);
-	clear(envi);
-	return(0);
 }
 
 const char	*path_exe(char *txt)
@@ -176,7 +123,5 @@ const char	*path_exe(char *txt)
 		i++;
 	}
 	clear((char **)p);
-	//directory = NULL;
-	//return (directory);
 	return (NULL);
 }

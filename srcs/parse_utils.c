@@ -55,16 +55,15 @@ char	*expand_vble_out(char *txt, int *init)
 	j = j + *init;
 	i = *init + add;
 	*init = j - 2;
-	exp[j] = '\0';
-	j++;
+	exp[j] = ' ';
 	while (txt[i])
 	{
-		i++;
 		exp[j] = txt[i];
 		j++;
+		i++;
 	}
 	exp[j] = '\0';
-	txt = exp;
+	txt = strdup(exp);
 	return (txt);
 }
 
@@ -93,11 +92,10 @@ char	*expand_vble(char *txt, int *init)
 		}
 	}
 	j = j + *init;
-	i = *init + add;
-	*init = j - 1;
-	exp[j] = '"';
+	exp[j] = ' ';
 	exp[j + 1] = '\0';
 	j++;
+	i = *init + add;
 	while (txt[i])
 	{
 		i++;
@@ -109,42 +107,17 @@ char	*expand_vble(char *txt, int *init)
 	return (txt);
 }
 
-char *OLD_expand_vble(char *txt, int *init)
+void	quote_d_count(char *txt, int *count)
 {
-	char *value; //valor que tiene la vble tras el $
-	char exp[999]; //el nuevo txt expandido
-	int		i;
-	int		j;
-	int		add;
+	int	i;
 
 	i = 0;
-	add = *init;
-	while (txt[add] != ' ' && txt[add] != '\0' && txt[add] != '"' && txt[add] != '\'')
-		add++;
-	add = add - *init;
-	value = search_vble_env(txt, *init);
-	j = 0;
-	ft_strncpy(exp, txt, *init);
-	if(value != NULL)
+	while (txt[i] != '\0')
 	{
-		while(value[j])
-		{
-			exp[*init + j] = value[j];
-			j++;
-		}
-	}
-	j = j + *init;
-	exp[j] = ' '; //problema!!
-	exp[j + 1] = '\0';
-	j++;
-	i = *init + add;
-	while(txt[i])
-	{
+		if (txt[i] == '"')
+			count[0]++;
+		if (txt[i] == 39)
+			count[1]++;
 		i++;
-		exp[j] = txt[i];
-		j++;
 	}
-	exp[j] = '\0';
-	txt = exp;
-	return(txt);
 }
