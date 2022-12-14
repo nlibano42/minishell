@@ -86,3 +86,17 @@ void	expand_relative2(t_stack *node)
 	exp_dir = stradd(exp_dir, node->pipe.arg[0]);
 	node->pipe.arg[0] = exp_dir;
 }
+
+char	*active_dir(void)
+{
+	t_env	*env;
+
+	env = g_shell.env;
+	while (env)
+	{
+		if (str_cmp(env->name, "PWD") == 0)
+			return (env->val);
+		env = env->next;
+	}
+	return (env->val);
+}
