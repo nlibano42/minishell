@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/01 11:15:56 by marvin            #+#    #+#             */
-/*   Updated: 2022/12/08 17:55:50 by nlibano-         ###   ########.fr       */
+/*   Created: 2022/12/14 10:44:25 by xbasabe-          #+#    #+#             */
+/*   Updated: 2022/12/14 10:44:25 by xbasabe-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,13 @@ char	**sort_env(void)
 	{
 		j = -1;
 		while (sort[++j])
-		if (ft_strncmp(sort[i], sort[j], ft_strlen(sort[i])) < 0)
 		{
-			tmp = sort[i];
-			sort[i] = sort[j];
-			sort[j] = tmp;
+			if (ft_strncmp(sort[i], sort[j], ft_strlen(sort[i])) < 0)
+			{
+				tmp = sort[i];
+				sort[i] = sort[j];
+				sort[j] = tmp;
+			}
 		}
 	}
 	return (sort);
@@ -64,7 +66,7 @@ void	export_add(char *vbl)
 	vble = ft_split(vbl, '=');
 	new = ft_lstnew(vble[0], vble[1]);
 	clear(vble);
-    ft_lstadd_back(&(g_shell.env), new);
+	ft_lstadd_back(&(g_shell.env), new);
 }
 
 void	export(t_stack *node)
@@ -78,16 +80,15 @@ void	export(t_stack *node)
 		export_no_args(node);
 		return ;
 	}
-	//comprobra si hay más de un argumento? cada argumento de node se toma como una variable a trata por export while arg[i]
 	var = ft_split(node->pipe.arg[0], '=');
 	exist = 0;
 	env = g_shell.env;
 	while (env)
 	{
-		if (str_cmp(env->name, var[0]) == 0) 
+		if (str_cmp(env->name, var[0]) == 0)
 		{
 			free(env->val);
-			env->val = ft_strdup((const char*)var[1]);
+			env->val = ft_strdup((const char *)var[1]);
 			exist = 1;
 			break ;
 		}

@@ -6,7 +6,7 @@
 /*   By: xbasabe- <xbasabe-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 11:39:07 by xbasabe-          #+#    #+#             */
-/*   Updated: 2022/12/09 19:13:28 by nlibano-         ###   ########.fr       */
+/*   Updated: 2022/12/08 18:19:06 by nlibano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,25 +17,31 @@ t_stack	*pipe_stack(char *input)
 	t_stack	*stack;
 	t_stack	*tmp_node;
 	char	**tokens;
+	char 	*parse_input;
 	int		i;
 
-	input = pre_parse(input); //evitar redirecciones, tratarlas como pipes
-	input = parse(input);
-	tokens = ft_split(input, '|');
+	input = pre_parse(input);
+	parse_input = parse(g_shell.input);
+	tokens = split_tokens(input);
+	if (tokens == NULL)
+		exit (1);
 	if (tokens[0])
 	{
 		stack = create_node(tokens[0]);
-		create_cmds(&stack);
+		create_cmds(&stack, tokens[0]);
+		stack->pipe.parsed_input = strdup(parse_input);
 	}
-	i = 1;
-	while (tokens[i])
+	if (tokens[1] != NULL)
 	{
-		tmp_node = create_node(tokens[i]);
-		create_cmds(&tmp_node);
-		insert_l_pipe(tmp_node, stack);
-		i++;
+		i = 0;
+		while (tokens[++i])
+		{
+			tmp_node = create_node(tokens[i]);
+			create_cmds(&tmp_node, tokens[i]);
+			tmp_node->pipe.parsed_input = strdup(parse_input);
+			insert_l_pipe(tmp_node, stack);
+		}
 	}
-	clear(tokens);
 	return (stack);
 }
 
@@ -45,6 +51,8 @@ t_stack	*create_node(char *txt)
 
 	node = (t_stack *)malloc(sizeof(t_stack));
 	node->pipe.input = ft_strdup(txt);
+	//node->pipe.parsed_input = parse(txt);
+	node->pipe.parsed_input = NULL;
 	node->pipe.cmd = NULL;
 	node->pipe.arg = NULL;
 	node->pipe.ext_path = NULL;
@@ -81,6 +89,7 @@ void	free_node_content(t_stack *node)
 		clear(node->pipe.arg);
 	free(node->pipe.input);
 	free(node->pipe.cmd);
+	free(node->pipe.parsed_input);
 }
 
 void	delete_all_nodes(t_stack *start)

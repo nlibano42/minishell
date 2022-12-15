@@ -12,14 +12,14 @@
 
 #include "libft.h"
 
-void	ft_char(int	nb, char *str, int	i)
+void	ft_char(int nb, char *str, int i)
 {
 	if (nb / 10)
 		ft_char(nb / 10, str, i + 1);
 	str[i] = '0' + nb % 10;
 }
 
-void	ft_rev_str(char	*str, int	lenght)
+void	ft_rev_str(char	*str, int lenght)
 {
 	int	i;
 	int	temp;
@@ -43,22 +43,6 @@ int	n_len(int n, int i)
 	return (i);
 }
 
-/*
-static char	*ft_strcpy(char	*dest, char	*src)
-{
-	int	count;
-
-	count = 0;
-	while (*(src + count) != '\0')
-	{
-		*(dest + count) = *(src + count);
-		count++;
-	}
-	dest[count] = '\0';
-	return (dest);
-}
-*/
-
 char	*ft_itoa(int n)
 {
 	char	*s;
@@ -75,8 +59,6 @@ char	*ft_itoa(int n)
 	s = (char *)malloc(sizeof(char) * (len + 1 + ((sign - 1) * -1 - 1)));
 	if (!s)
 		return (NULL);
-	//if (n == -2147483648)
-	//	return (ft_strcpy(s, "-2147483648"));
 	ft_char(n, s, 0);
 	if (sign < 0)
 		s[len] = '-';

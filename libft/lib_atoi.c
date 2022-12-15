@@ -56,7 +56,7 @@ int	ft_strlen(const char *str)
 
 	len = 0;
 	if (!str[len])
-		return(0);
+		return (0);
 	while (str[len] != '\0')
 		len++;
 	return (len);

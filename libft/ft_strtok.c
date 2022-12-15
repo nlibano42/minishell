@@ -30,7 +30,7 @@ size_t	ft_strcpy(char *dst, char *src)
 
 size_t	ft_strncpy(char *dst, const char *src, int init)
 {
-	int	i;
+	int		i;
 	char	*csrc;
 
 	if (dst == NULL || src == NULL)
